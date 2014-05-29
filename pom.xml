@@ -73,6 +73,25 @@
 
 	<profiles>
 		<profile>
+			<id>combatlog</id>
+			<build>
+				<finalName>combatlog</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<configuration>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>skadistats.clarity.examples.combatlog.Main</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>dtinspector</id>
 			<build>
 				<finalName>dtinspector</finalName>

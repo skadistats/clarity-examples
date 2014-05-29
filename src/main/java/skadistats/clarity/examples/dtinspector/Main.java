@@ -7,7 +7,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import skadistats.clarity.Clarity;
 import skadistats.clarity.match.Match;
-import skadistats.clarity.parser.DemoInputStreamIterator;
+import skadistats.clarity.parser.PeekIterator;
 import skadistats.clarity.parser.Profile;
 
 public class Main {
@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         final Match match = new Match();
-        DemoInputStreamIterator iter = Clarity.iteratorForFile(args[0], Profile.SEND_TABLES);
+        PeekIterator iter = Clarity.peekIteratorForFile(args[0], Profile.SEND_TABLES);
         while(iter.hasNext()) {
             iter.next().apply(match);
         }
