@@ -63,6 +63,22 @@ you can run it with
 
 	java -jar target/simple.jar replay.dem
 	
+## Showing the combat log
+
+Caution: This is a new example that needs clarity 1.1 to work.
+It *almost* replicates what is shown on the combat log from the game.
+It still has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
+and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
+
+You can find it under `skadistats.clarity.examples.combatlog.Main.java`.
+After building it from the project root with
+
+	mvn -P combatlog package
+	
+you can run it with
+
+	java -jar target/combatlog.jar replay.dem
+
 ## Retrieving the game info
 
 For retrieving the basic game information (players, picks, bans, who won, basically all the stuff
