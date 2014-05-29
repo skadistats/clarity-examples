@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.Clarity;
 import skadistats.clarity.match.Match;
 import skadistats.clarity.model.GameEvent;
+import skadistats.clarity.model.GameEventDescriptor;
 import skadistats.clarity.parser.Profile;
 import skadistats.clarity.parser.TickIterator;
 
@@ -31,6 +32,7 @@ public class Main {
         Logger log = LoggerFactory.getLogger("combatlog");
 
         boolean initialized = false;
+        GameEventDescriptor combatLogDescriptor = null;
         Match match = new Match();
         TickIterator iter = Clarity.tickIteratorForFile(args[0], Profile.COMBAT_LOG);
         
@@ -38,15 +40,16 @@ public class Main {
             iter.next().apply(match);
 
             if (!initialized) {
+                combatLogDescriptor = match.getGameEventDescriptors().forName("dota_combatlog"); 
                 CombatLogEntry.init(
                     match.getStringTables().forName("CombatLogNames"), 
-                    match.getGameEventDescriptors().forName("dota_combatlog")
+                    combatLogDescriptor
                 );
                 initialized = true;
             }
             
             for (GameEvent g : match.getGameEvents()) {
-                if (!"dota_combatlog".equals(g.getName())) {
+                if (g.getEventId() != combatLogDescriptor.getEventId()) {
                     continue;
                 }
                 CombatLogEntry cle = new CombatLogEntry(g);
