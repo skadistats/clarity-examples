@@ -19,6 +19,13 @@ public class CombatLogEntry {
     private static int healthIdx;
     private static int timestampIdx;
     private static int targetSourceNameIdx;
+    private static Integer timestampRawIdx;
+    private static Integer attackerHeroIdx;
+    private static Integer targetHeroIdx;
+    private static Integer abilityToggleOnIdx;
+    private static Integer abilityToggleOffIdx;
+    private static Integer abilityLevelIdx;
+    private static Integer goldReasonIdx;
     
     public static void init(StringTable combatLogNamesTable, GameEventDescriptor descriptor) {
         combatLogNames = combatLogNamesTable;
@@ -33,6 +40,14 @@ public class CombatLogEntry {
         healthIdx = descriptor.getIndexForKey("health");
         timestampIdx = descriptor.getIndexForKey("timestamp");
         targetSourceNameIdx = descriptor.getIndexForKey("targetsourcename");
+
+        timestampRawIdx = descriptor.getIndexForKey("timestampraw");
+        attackerHeroIdx = descriptor.getIndexForKey("attackerhero");
+        targetHeroIdx = descriptor.getIndexForKey("targethero");
+        abilityToggleOnIdx = descriptor.getIndexForKey("ability_toggle_on");
+        abilityToggleOffIdx = descriptor.getIndexForKey("ability_toggle_off");
+        abilityLevelIdx = descriptor.getIndexForKey("ability_level");
+        goldReasonIdx = descriptor.getIndexForKey("gold_reason");
     }
     
     private final GameEvent event;
@@ -100,6 +115,34 @@ public class CombatLogEntry {
     
     public String getTargetSourceName() {
         return translate(readCombatLogName((int)event.getProperty(targetSourceNameIdx)));
+    }
+    
+    public float getTimestampRaw() {
+        return event.getProperty(timestampRawIdx);
+    }
+    
+    public boolean isAttackerHero() {
+        return event.getProperty(attackerHeroIdx);
+    }
+
+    public boolean isTargetHero() {
+        return event.getProperty(targetHeroIdx);
+    }
+    
+    public boolean isAbilityToggleOn() {
+        return event.getProperty(abilityToggleOnIdx);
+    }
+
+    public boolean isAbilityToggleOff() {
+        return event.getProperty(abilityToggleOffIdx);
+    }
+
+    public int getAbilityLevel() {
+        return event.getProperty(abilityLevelIdx);
+    }
+
+    public int getGoldReason() {
+        return event.getProperty(goldReasonIdx);
     }
     
 }
