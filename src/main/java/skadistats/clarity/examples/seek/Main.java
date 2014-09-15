@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.Clarity;
 import skadistats.clarity.match.Match;
 import skadistats.clarity.parser.DemoIndex;
+import skadistats.clarity.parser.Profile;
 
 public class Main {
     
@@ -17,7 +18,7 @@ public class Main {
 
         Logger log = LoggerFactory.getLogger("TEST");
 
-        DemoIndex idx = Clarity.indexForFile(args[0]);
+        DemoIndex idx = Clarity.indexForFile(args[0], Profile.ALL);
 
         long tIndex = System.currentTimeMillis() - tStart;
         log.info("index built in {}s", tIndex / 1000.0);
