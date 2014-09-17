@@ -79,11 +79,25 @@ you can run it with
 
 	java -jar target/combatlog.jar replay.dem
 
+## Show stats at the end of the game
+
+This example shows how to use the PlayerResource entity.
+It outputs the score table at the end of the game, almost as complete as dotabuff.
+It could be improved since it iterates over the complete replay to get to the end of the game,
+which takes a while.
+You can find it under `skadistats.clarity.examples.matchend.Main.java`.
+After building it from the project root with
+
+	mvn -P matchend package
+	
+you can run it with
+
+	java -jar target/matchend.jar replay.dem
+
 ## Retrieving the game info
 
-For retrieving the basic game information (players, picks, bans, who won, basically all the stuff
-you see on dotabuff for a single match), you do not need to iterate the complete replay. You can
-retrieve that info with the following code
+For retrieving the basic game information (players, picks, bans, who won), 
+you do not need to iterate the complete replay. You can retrieve that info with the following code
 
 ```Java
 public class Main {
