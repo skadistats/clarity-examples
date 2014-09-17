@@ -55,7 +55,7 @@ public class Main {
         for (ColDef c : columns) {
         	c.values = new ArrayList<String>();
         	int baseIndex = ps.getDtClass().getPropertyIndex(c.propertyName + ".0000");
-        	for (int p = 0; p < 9; p++) {
+        	for (int p = 0; p < 10; p++) {
         		String v = new String(ps.getState()[baseIndex + p].toString().getBytes("ISO-8859-1"));
         		c.values.add(v);
         		c.width = Math.max(c.width, v.length());
@@ -69,7 +69,7 @@ public class Main {
         	buf.append(space, 0, c.width - c.columnName.length() + 2);
         }
     	System.out.println(buf);
-        for (int p = 0; p < 9; p++) {
+        for (int p = 0; p < 10; p++) {
         	buf.setLength(0);
             for (ColDef c : columns) {
             	buf.append(c.values.get(p));
