@@ -1,63 +1,19 @@
 package skadistats.clarity.examples.combatlog;
 
 import skadistats.clarity.model.GameEvent;
-import skadistats.clarity.model.GameEventDescriptor;
-import skadistats.clarity.model.StringTable;
 
 public class CombatLogEntry {
 
-    private static StringTable combatLogNames;
-
-    private static int typeIdx;
-    private static int sourceNameIdx;
-    private static int targetNameIdx;
-    private static int attackerNameIdx;
-    private static int inflictorNameIdx;
-    private static int attackerIllusionIdx;
-    private static int targetIllusionIdx;
-    private static int valueIdx;
-    private static int healthIdx;
-    private static int timestampIdx;
-    private static int targetSourceNameIdx;
-    private static Integer timestampRawIdx;
-    private static Integer attackerHeroIdx;
-    private static Integer targetHeroIdx;
-    private static Integer abilityToggleOnIdx;
-    private static Integer abilityToggleOffIdx;
-    private static Integer abilityLevelIdx;
-    private static Integer goldReasonIdx;
-    
-    public static void init(StringTable combatLogNamesTable, GameEventDescriptor descriptor) {
-        combatLogNames = combatLogNamesTable;
-        typeIdx = descriptor.getIndexForKey("type");
-        sourceNameIdx = descriptor.getIndexForKey("sourcename");
-        targetNameIdx = descriptor.getIndexForKey("targetname");
-        attackerNameIdx = descriptor.getIndexForKey("attackername");
-        inflictorNameIdx = descriptor.getIndexForKey("inflictorname");
-        attackerIllusionIdx = descriptor.getIndexForKey("attackerillusion");
-        targetIllusionIdx = descriptor.getIndexForKey("targetillusion");
-        valueIdx = descriptor.getIndexForKey("value");
-        healthIdx = descriptor.getIndexForKey("health");
-        timestampIdx = descriptor.getIndexForKey("timestamp");
-        targetSourceNameIdx = descriptor.getIndexForKey("targetsourcename");
-
-        timestampRawIdx = descriptor.getIndexForKey("timestampraw");
-        attackerHeroIdx = descriptor.getIndexForKey("attackerhero");
-        targetHeroIdx = descriptor.getIndexForKey("targethero");
-        abilityToggleOnIdx = descriptor.getIndexForKey("ability_toggle_on");
-        abilityToggleOffIdx = descriptor.getIndexForKey("ability_toggle_off");
-        abilityLevelIdx = descriptor.getIndexForKey("ability_level");
-        goldReasonIdx = descriptor.getIndexForKey("gold_reason");
-    }
-    
+	private final CombatLogContext ctx;
     private final GameEvent event;
     
-    public CombatLogEntry(GameEvent event) {
+    public CombatLogEntry(CombatLogContext ctx, GameEvent event) {
+    	this.ctx = ctx;
         this.event = event;
     }
     
     private String readCombatLogName(int idx) {
-        return idx == 0 ? null : combatLogNames.getNameByIndex(idx);
+        return idx == 0 ? null : ctx.combatLogNames.getNameByIndex(idx);
     }
     
     private String translate(String in) {
@@ -66,15 +22,15 @@ public class CombatLogEntry {
     }
     
     public int getType() {
-        return event.getProperty(typeIdx);
+        return event.getProperty(ctx.typeIdx);
     }
     
     public String getSourceName() {
-        return translate(readCombatLogName((int)event.getProperty(sourceNameIdx)));
+        return translate(readCombatLogName((int)event.getProperty(ctx.sourceNameIdx)));
     }
     
     public String getTargetName() {
-        return translate(readCombatLogName((int)event.getProperty(targetNameIdx)));
+        return translate(readCombatLogName((int)event.getProperty(ctx.targetNameIdx)));
     }
     
     public String getTargetNameCompiled() {
@@ -82,7 +38,7 @@ public class CombatLogEntry {
     }
 
     public String getAttackerName() {
-        return translate(readCombatLogName((int)event.getProperty(attackerNameIdx)));
+        return translate(readCombatLogName((int)event.getProperty(ctx.attackerNameIdx)));
     }
     
     public String getAttackerNameCompiled() {
@@ -90,59 +46,59 @@ public class CombatLogEntry {
     }
 
     public String getInflictorName() {
-        return translate(readCombatLogName((int)event.getProperty(inflictorNameIdx)));
+        return translate(readCombatLogName((int)event.getProperty(ctx.inflictorNameIdx)));
     }
     
     public boolean isAttackerIllusion() {
-        return event.getProperty(attackerIllusionIdx);
+        return event.getProperty(ctx.attackerIllusionIdx);
     }
     
     public boolean isTargetIllusion() {
-        return event.getProperty(targetIllusionIdx);
+        return event.getProperty(ctx.targetIllusionIdx);
     }
     
     public int getValue() {
-        return event.getProperty(valueIdx);
+        return event.getProperty(ctx.valueIdx);
     }
     
     public int getHealth() {
-        return event.getProperty(healthIdx);
+        return event.getProperty(ctx.healthIdx);
     }
     
     public float getTimestamp() {
-        return event.getProperty(timestampIdx);
+        return event.getProperty(ctx.timestampIdx);
     }
     
     public String getTargetSourceName() {
-        return translate(readCombatLogName((int)event.getProperty(targetSourceNameIdx)));
+        return translate(readCombatLogName((int)event.getProperty(ctx.targetSourceNameIdx)));
     }
     
     public float getTimestampRaw() {
-        return event.getProperty(timestampRawIdx);
+        return event.getProperty(ctx.timestampRawIdx);
     }
     
     public boolean isAttackerHero() {
-        return event.getProperty(attackerHeroIdx);
+        return event.getProperty(ctx.attackerHeroIdx);
     }
 
     public boolean isTargetHero() {
-        return event.getProperty(targetHeroIdx);
+        return event.getProperty(ctx.targetHeroIdx);
     }
     
     public boolean isAbilityToggleOn() {
-        return event.getProperty(abilityToggleOnIdx);
+        return event.getProperty(ctx.abilityToggleOnIdx);
     }
 
     public boolean isAbilityToggleOff() {
-        return event.getProperty(abilityToggleOffIdx);
+        return event.getProperty(ctx.abilityToggleOffIdx);
     }
 
     public int getAbilityLevel() {
-        return event.getProperty(abilityLevelIdx);
+        return event.getProperty(ctx.abilityLevelIdx);
     }
 
     public int getGoldReason() {
-        return event.getProperty(goldReasonIdx);
+        return event.getProperty(ctx.goldReasonIdx);
     }
     
 }

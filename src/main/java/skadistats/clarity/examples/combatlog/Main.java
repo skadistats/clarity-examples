@@ -36,6 +36,7 @@ public class Main {
 
         boolean initialized = false;
         GameEventDescriptor combatLogDescriptor = null;
+        CombatLogContext ctx = null;
         Match match = new Match();
         TickIterator iter = Clarity.tickIteratorForFile(args[0], Profile.COMBAT_LOG);
         
@@ -43,10 +44,10 @@ public class Main {
             iter.next().apply(match);
 
             if (!initialized) {
-                combatLogDescriptor = match.getGameEventDescriptors().forName("dota_combatlog"); 
-                CombatLogEntry.init(
-                    match.getStringTables().forName("CombatLogNames"), 
-                    combatLogDescriptor
+                combatLogDescriptor = match.getGameEventDescriptors().forName("dota_combatlog");
+                ctx = new CombatLogContext(
+	                match.getStringTables().forName("CombatLogNames"), 
+	                combatLogDescriptor
                 );
                 initialized = true;
             }
@@ -55,7 +56,7 @@ public class Main {
                 if (g.getEventId() != combatLogDescriptor.getEventId()) {
                     continue;
                 }
-                CombatLogEntry cle = new CombatLogEntry(g);
+                CombatLogEntry cle = new CombatLogEntry(ctx, g);
                 String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int)(1000.0f * cle.getTimestamp())).toPeriod()) +  "]";
                 switch(cle.getType()) {
                     case 0:
