@@ -7,7 +7,7 @@
 
 	<logger name="org.reflections" level="warn" />
 
-	<logger name="skadistats.clarity.parser.Peek" level="info" />
+	<logger name="skadistats.clarity.parser.Peek" level="trace" />
 	<logger name="skadistats.clarity.parser.HandlerRegistry" level="info" />
 
 	<logger name="skadistats.clarity.decoder.StringTableApplier" level="info" />
