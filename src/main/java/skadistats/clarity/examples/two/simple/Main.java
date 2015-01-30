@@ -1,5 +1,6 @@
 package skadistats.clarity.examples.two.simple;
 
+import com.dota2.proto.Netmessages;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,16 @@ import java.io.FileInputStream;
 public class Main {
 
     public static class Test {
-        @OnMessage
-        public void message(Context ctx, GeneratedMessage message) {
-            //System.out.println(message.getClass().getName());
+        @OnMessage(Netmessages.CSVCMsg_CreateStringTable.class)
+        public void message(Context context, GeneratedMessage message) {
+            System.out.println(message.getClass().getName());
         }
+
+        @OnMessage(Netmessages.CSVCMsg_PacketEntities.class)
+        public void message2(Context context, GeneratedMessage message) {
+            System.out.println(message.getClass().getName());
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
