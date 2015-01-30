@@ -186,6 +186,25 @@
 				</plugins>
 			</build>
 		</profile>
+        <profile>
+            <id>twosimple</id>
+            <build>
+                <finalName>twosimple</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>skadistats.clarity.examples.two.simple.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 	</profiles>
 	
 </project>

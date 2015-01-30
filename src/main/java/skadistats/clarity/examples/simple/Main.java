@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import skadistats.clarity.Clarity;
 import skadistats.clarity.match.Match;
+import skadistats.clarity.parser.PeekIterator;
 import skadistats.clarity.parser.Profile;
 import skadistats.clarity.parser.TickIterator;
 
@@ -17,7 +18,7 @@ public class Main {
         Logger log = LoggerFactory.getLogger("simple");
 
         Match match = new Match();
-        TickIterator iter = Clarity.tickIteratorForFile(args[0], Profile.ALL);
+        PeekIterator iter = Clarity.iteratorForFile(args[0], Profile.ALL);
         
         while(iter.hasNext()) {
             iter.next().apply(match);
