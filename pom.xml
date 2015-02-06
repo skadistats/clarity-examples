@@ -205,6 +205,27 @@
             </build>
         </profile>
         <profile>
+            <id>findclasses</id>
+            <build>
+                <finalName>findclasses</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>skadistats.clarity.examples.findclasses.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>twosimple</id>
             <build>
                 <finalName>twosimple</finalName>
