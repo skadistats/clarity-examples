@@ -1,4 +1,4 @@
-package skadistats.clarity.examples.two.simple;
+package skadistats.clarity.examples.simple;
 
 import com.dota2.proto.Networkbasetypes;
 import org.slf4j.Logger;

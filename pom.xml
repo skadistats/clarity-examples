@@ -237,7 +237,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.two.simple.Main</mainClass>
+                                    <mainClass>skadistats.clarity.examples.simple.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
