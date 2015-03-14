@@ -1,5 +1,6 @@
 package skadistats.clarity.examples.dump;
 
+import com.dota2.proto.Netmessages;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,10 @@ public class Main {
 
     @OnMessage(GeneratedMessage.class)
     public void onMessage(Context ctx, GeneratedMessage message) {
+        if (message instanceof Netmessages.CSVCMsg_VoiceData) {
+            return;
+        }
+        log.info(message.getClass().getName());
         log.info(message.toString());
     }
 

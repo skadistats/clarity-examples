@@ -54,7 +54,7 @@ public class Main {
 }
 ```
 
-You can find this example under `skadistats.clarity.examples.simple.Main.java`.
+You can find this example under `skadistats.clarity.examples.dump.Main.java`.
 After building it from the project root with
 
 	mvn -P simple package

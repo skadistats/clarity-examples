@@ -185,9 +185,9 @@
             </build>
         </profile>
         <profile>
-            <id>simple</id>
+            <id>dump</id>
             <build>
-                <finalName>simple</finalName>
+                <finalName>dump</finalName>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -196,7 +196,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.simple.Main</mainClass>
+                                    <mainClass>skadistats.clarity.examples.dump.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
