@@ -4,9 +4,7 @@ import com.dota2.proto.Netmessages;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.reader.event.OnFileInfoOffset;
-import skadistats.clarity.two.processor.reader.event.OnMessage;
-import skadistats.clarity.two.processor.reader.event.OnMessageContainer;
+import skadistats.clarity.two.processor.reader.OnMessage;
 import skadistats.clarity.two.runner.Context;
 import skadistats.clarity.two.runner.Runner;
 
@@ -16,15 +14,9 @@ public class Main {
 
     public static class Test {
         @OnMessage(Netmessages.CSVCMsg_CreateStringTable.class)
-        public void message(Context context, GeneratedMessage message) {
-            System.out.println(message.getClass().getName());
+        public void message(Context context, Netmessages.CSVCMsg_CreateStringTable message) {
+            System.out.println(message.getName());
         }
-
-        @OnMessage(Netmessages.CSVCMsg_PacketEntities.class)
-        public void message2(Context context, GeneratedMessage message) {
-            System.out.println(message.getClass().getName());
-        }
-
     }
 
     public static void main(String[] args) throws Exception {
