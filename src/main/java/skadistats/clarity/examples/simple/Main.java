@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.two.processor.reader.OnMessage;
 import skadistats.clarity.two.processor.runner.Context;
 import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.two.processor.sendtables.UsesDTClasses;
 
 import java.io.FileInputStream;
 
 public class Main {
 
+    @UsesDTClasses
     public static class Test {
 
         @OnMessage(Networkbasetypes.CNETMsg_Tick.class)
