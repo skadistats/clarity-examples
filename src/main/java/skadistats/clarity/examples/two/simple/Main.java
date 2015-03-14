@@ -1,27 +1,16 @@
 package skadistats.clarity.examples.two.simple;
 
-import com.dota2.proto.Netmessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.reader.OnMessage;
-import skadistats.clarity.two.runner.Context;
+import skadistats.clarity.two.processor.stringtables.UseStringTable;
 import skadistats.clarity.two.runner.Runner;
 
 import java.io.FileInputStream;
 
 public class Main {
 
+    @UseStringTable("CombatLogNames")
     public static class Test {
-        @OnMessage(Netmessages.CSVCMsg_CreateStringTable.class)
-        public void message(Context context, Netmessages.CSVCMsg_CreateStringTable message) {
-            System.out.println("create " + message.getName());
-        }
-
-        @OnMessage(Netmessages.CSVCMsg_UpdateStringTable.class)
-        public void message(Context context, Netmessages.CSVCMsg_UpdateStringTable message) {
-            System.out.println("update + "+ message.getTableId());
-        }
-
     }
 
     public static void main(String[] args) throws Exception {
