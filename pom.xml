@@ -54,31 +54,31 @@
     </dependencies>
 
     <build>
+        <finalName>${exampleName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.2</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>skadistats.clarity.examples.${exampleName}.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.jolira</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <version>1.4.4</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>one-jar</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <transformers>
-                        <transformer implementation="org.atteo.classindex.ClassIndexTransformer"/>
-                    </transformers>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.atteo.classindex</groupId>
-                        <artifactId>classindex-transformer</artifactId>
-                        <version>3.3</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -86,184 +86,70 @@
     <profiles>
         <profile>
             <id>combatlog</id>
-            <build>
-                <finalName>combatlog</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.combatlog.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties>
+                <exampleName>combatlog</exampleName>
+            </properties>
         </profile>
         <profile>
             <id>dtinspector</id>
-            <build>
-                <finalName>dtinspector</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.dtinspector.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>info</id>
-            <build>
-                <finalName>info</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.info.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>seek</id>
-            <build>
-                <finalName>seek</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.seek.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>matchend</id>
-            <build>
-                <finalName>matchend</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.matchend.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <exampleName>dtinspector</exampleName>
+            </properties>
         </profile>
         <profile>
             <id>dump</id>
-            <build>
-                <finalName>dump</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.dump.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>simple</id>
-            <build>
-                <finalName>simple</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.simple.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <exampleName>dump</exampleName>
+            </properties>
         </profile>
         <profile>
             <id>findclasses</id>
-            <build>
-                <finalName>findclasses</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.findclasses.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <exampleName>findclasses</exampleName>
+            </properties>
         </profile>
-
         <profile>
-            <id>twosimple</id>
-            <build>
-                <finalName>twosimple</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>skadistats.clarity.examples.simple.Main</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <id>gameevent</id>
+            <properties>
+                <exampleName>gameevent</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>info</id>
+            <properties>
+                <exampleName>info</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>matchend</id>
+            <properties>
+                <exampleName>matchend</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>modifiers</id>
+            <properties>
+                <exampleName>modifiers</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>particles</id>
+            <properties>
+                <exampleName>particles</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>tempentities</id>
+            <properties>
+                <exampleName>tempentities</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>tick</id>
+            <properties>
+                <exampleName>tick</exampleName>
+            </properties>
         </profile>
     </profiles>
 
