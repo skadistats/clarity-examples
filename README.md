@@ -80,6 +80,10 @@ public class UselessProcessor {
 }
 ```
 
+Notice that the @UsesStringTable annotation makes the StringTables processor appear among the list of processors, and it
+also instructs this processor that you are only interested in the "ActiveModifiers"-StringTable, which makes it ignore other
+StringTables in the replay.
+
 # Examples
 
 ### Building
