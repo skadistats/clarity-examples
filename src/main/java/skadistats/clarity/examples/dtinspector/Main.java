@@ -1,31 +1,31 @@
 package skadistats.clarity.examples.dtinspector;
 
-import java.awt.EventQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import skadistats.clarity.two.processor.runner.Context;
+import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.two.processor.sendtables.DTClasses;
+import skadistats.clarity.two.processor.sendtables.UsesDTClasses;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
+import java.io.FileInputStream;
 
-import skadistats.clarity.Clarity;
-import skadistats.clarity.match.Match;
-import skadistats.clarity.parser.PeekIterator;
-import skadistats.clarity.parser.Profile;
 
+@UsesDTClasses
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-        final Match match = new Match();
-        PeekIterator iter = Clarity.peekIteratorForFile(args[0], Profile.SEND_TABLES);
-        while(iter.hasNext()) {
-            iter.next().apply(match);
-        }
-        
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());        
+    public void run(String[] args) throws Exception {
+        final Context ctx = new Runner().runWith(new FileInputStream(args[0]), this);
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     MainWindow window = new MainWindow();
-                    window.getClassTree().setModel(new DefaultTreeModel(new TreeConstructor(match).construct()));
+                    window.getClassTree().setModel(new DefaultTreeModel(new TreeConstructor(ctx.getProcessor(DTClasses.class)).construct()));
                     window.getFrame().setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -34,5 +34,9 @@ public class Main {
         });
 
     }
-    
+
+    public static void main(String[] args) throws Exception {
+        new Main().run(args);
+    }
+
 }

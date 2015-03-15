@@ -1,17 +1,11 @@
 package skadistats.clarity.examples.dtinspector;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import skadistats.clarity.model.DTClass;
+import skadistats.clarity.two.processor.sendtables.DTClasses;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
-
-import skadistats.clarity.match.Match;
-import skadistats.clarity.model.DTClass;
+import java.util.*;
 
 public class TreeConstructor {
 
@@ -41,8 +35,8 @@ public class TreeConstructor {
         }
     };
 
-    public TreeConstructor(Match match) {
-        Iterator<DTClass> dtClasses = match.getDtClasses().iterator();
+    public TreeConstructor(DTClasses classes) {
+        Iterator<DTClass> dtClasses = classes.iterator();
         while(dtClasses.hasNext()) {
             DTClass c = dtClasses.next();
             DTClass s = c.getSuperClass();
