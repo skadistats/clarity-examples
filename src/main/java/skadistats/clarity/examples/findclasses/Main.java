@@ -14,7 +14,7 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Logger log = LoggerFactory.getLogger("simple");
+        Logger log = LoggerFactory.getLogger("findclasses");
         Set<Class<? extends GeneratedMessage>> foundClasses = new HashSet<>();
         for (File demoFile : new File("replays").listFiles(new FilenameFilter() {
             @Override
@@ -26,7 +26,7 @@ public class Main {
             PacketTypeStream pts = new PacketTypeStream(new FileInputStream(demoFile));
             pts.bootstrap();
             Class<? extends GeneratedMessage> foundClass;
-            while((foundClass = pts.read()) != null) {
+            while ((foundClass = pts.read()) != null) {
                 if (foundClasses.add(foundClass)) {
                     log.info("-- new class " + foundClass.getSimpleName());
                 }
