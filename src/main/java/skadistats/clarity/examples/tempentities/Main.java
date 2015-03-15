@@ -3,9 +3,9 @@ package skadistats.clarity.examples.tempentities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
-import skadistats.clarity.two.processor.tempentities.OnTempEntity;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.tempentities.OnTempEntity;
 
 import java.io.FileInputStream;
 

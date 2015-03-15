@@ -5,13 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.ParticleAttachmentType;
-import skadistats.clarity.two.processor.entities.Entities;
-import skadistats.clarity.two.processor.entities.UsesEntities;
-import skadistats.clarity.two.processor.reader.OnMessage;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
-import skadistats.clarity.two.processor.stringtables.StringTables;
-import skadistats.clarity.two.processor.stringtables.UsesStringTable;
+import skadistats.clarity.processor.entities.Entities;
+import skadistats.clarity.processor.entities.UsesEntities;
+import skadistats.clarity.processor.reader.OnMessage;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.stringtables.StringTables;
+import skadistats.clarity.processor.stringtables.UsesStringTable;
 
 import java.io.FileInputStream;
 

@@ -2,10 +2,10 @@ package skadistats.clarity.examples.dtinspector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
-import skadistats.clarity.two.processor.sendtables.DTClasses;
-import skadistats.clarity.two.processor.sendtables.UsesDTClasses;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.sendtables.DTClasses;
+import skadistats.clarity.processor.sendtables.UsesDTClasses;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;

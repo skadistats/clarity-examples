@@ -2,7 +2,6 @@ package skadistats.clarity.examples.findclasses;
 
 import com.dota2.proto.Demo.CDemoPacket;
 import com.dota2.proto.Demo.CDemoSendTables;
-import com.dota2.proto.Demo.CDemoStringTables;
 import com.dota2.proto.Demo.EDemoCommands;
 import com.dota2.proto.Networkbasetypes.CSVCMsg_UserMessage;
 import com.google.protobuf.CodedInputStream;
@@ -10,8 +9,7 @@ import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xerial.snappy.Snappy;
-import skadistats.clarity.parser.PacketTypes;
-import skadistats.clarity.parser.Profile;
+import skadistats.clarity.wire.PacketTypes;
 
 import java.io.Closeable;
 import java.io.IOException;

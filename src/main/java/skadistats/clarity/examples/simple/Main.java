@@ -3,9 +3,9 @@ package skadistats.clarity.examples.simple;
 import com.dota2.proto.DotaUsermessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.reader.OnMessage;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.processor.reader.OnMessage;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
 
 import java.io.FileInputStream;
 

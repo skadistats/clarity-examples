@@ -3,10 +3,10 @@ package skadistats.clarity.examples.matchend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.two.processor.entities.Entities;
-import skadistats.clarity.two.processor.entities.UsesEntities;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.processor.entities.Entities;
+import skadistats.clarity.processor.entities.UsesEntities;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
 
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;

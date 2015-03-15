@@ -3,9 +3,9 @@ package skadistats.clarity.examples.gameevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.GameEvent;
-import skadistats.clarity.two.processor.gameevents.OnGameEvent;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.processor.gameevents.OnGameEvent;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
 
 import java.io.FileInputStream;
 

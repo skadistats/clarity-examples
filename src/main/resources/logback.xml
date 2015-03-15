@@ -5,7 +5,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="skadistats.clarity.two" level="info" />
+	<logger name="skadistats.clarity" level="info" />
 
 	<root level="info">
 		<appender-ref ref="stdout" />

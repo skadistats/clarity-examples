@@ -3,11 +3,11 @@ package skadistats.clarity.examples.tick;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.reader.OnMessage;
-import skadistats.clarity.two.processor.reader.OnTickEnd;
-import skadistats.clarity.two.processor.reader.OnTickStart;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.processor.reader.OnMessage;
+import skadistats.clarity.processor.reader.OnTickEnd;
+import skadistats.clarity.processor.reader.OnTickStart;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
 
 import java.io.FileInputStream;
 

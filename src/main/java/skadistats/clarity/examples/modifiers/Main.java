@@ -3,9 +3,9 @@ package skadistats.clarity.examples.modifiers;
 import com.dota2.proto.DotaModifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.two.processor.modifiers.OnModifierTableEntry;
-import skadistats.clarity.two.processor.runner.Context;
-import skadistats.clarity.two.processor.runner.Runner;
+import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.Runner;
 
 import java.io.FileInputStream;
 
