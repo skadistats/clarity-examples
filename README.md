@@ -4,6 +4,8 @@ This project contains example code for the [clarity replay parser](https://githu
 
 # Changes in version 2:
 
+### Processors
+
 Clarity 2 now uses an event based approach to replay analysis. To use it, you have to supply one or more
 processors to clarity, which declare what data they are interested in via annotations:
 
@@ -19,12 +21,11 @@ public class AllChatProcessor {
     }
 }
 ```
+Runner is the class that bootstraps the processing run. You need to supply it with one or more instances of processors
+you want to take part in the run. It will then find out what events you requested and instantiate other (built-in) processors that
+provide the events you requested.
 
-In version 1, profiles were needed to explicitly tell clarity which replay data you were interested in.
-By looking at how your processor is annotated, clarity can figure this out by itself, so profiles not needed anymore.
-
-Clarity itself also uses annotated processor classes to supply all the functionality, so it is easy to extend it and
-build more specialized events on top. To illustrate, this is a stripped down example of how clarity uses the
+To illustrate, this is a stripped down example of how clarity uses the
 @OnMessage event to listen for occurrences of CSVCMsg_GameEventList and CSVCMsg_GameEvent and uses them to 
 supply a new event @OnGameEvent:
  
@@ -43,6 +44,40 @@ public class GameEvents {
         // some more code to fill the GameEvent
         ctx.createEvent(OnGameEvent.class, GameEvent.class).raise(e);
     }
+```
+
+Notice the @Provides annotation: It tells clarity that an instance of this class has to be part of a run where another
+processor is annotated with @OnGameEvent. If you write a processor that emits custom events, this is how you make them known 
+to clarity.
+
+### Context
+
+By decree of the gods the first parameter on any event listener in clarity shall be the Context.
+At the moment, it doesn't contain much functionality, but is likely to grow into part of what Match was in clarity 1.
+```java
+public class Context {
+    public <T> T getProcessor(Class<T> processorClass) {}
+    public int getTick() {}
+    public <A extends Annotation> Event<A> createEvent(Class<A> eventType, Class... parameterTypes) {}
+}
+```
+
+With getProcessor() you can get a reference to a processor taking part in the run. For example, you could write a processor
+```java
+public class UselessProcessor {
+    @OnTickStart
+    @UsesStringTable("ActiveModifiers");
+    public void onMessage(Context ctx) {
+        StringTables stringTables = ctx.getProcessor(StringTables.class);
+        StringTable table = stringTables.forName("ActiveModifiers");
+        if (table != null) {
+            // if we knew what, we could do something with the table here...
+        }
+    }
+    public static void main(String[] args) throws Exception {
+        new Runner().runWith(new FileInputStream(args[0]), new UselessProcessor());
+    }
+}
 ```
 
 # Examples
@@ -66,7 +101,7 @@ It *almost* replicates what is shown on the combat log from the game.
 It still has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
 
-You can find it under `skadistats.clarity.examples.combatlog.Main.java`.
+You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
 After building it from the project root with
 
 	mvn -P combatlog package
@@ -81,7 +116,7 @@ This example shows how to use the PlayerResource entity.
 It outputs the score table at the end of the game, almost as complete as dotabuff.
 It could be improved since it iterates over the complete replay to get to the end of the game,
 which takes a while.
-You can find it under `skadistats.clarity.examples.matchend.Main.java`.
+You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/matchend/Main.java).
 After building it from the project root with
 
 	mvn -P matchend package
@@ -104,7 +139,7 @@ public class Main {
 }
 ```
 
-You can find this example under `skadistats.clarity.examples.info.Main.java`.
+You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/info/Main.java).
 After building it from the project root with
 
 	mvn -P info package
@@ -129,7 +164,7 @@ called send tables.
 
 This example shows the format of the entity data in a certain replay.
 
-You can find it under `skadistats.clarity.examples.dtinspector.Main.java`.
+You can find it under [skadistats.clarity.examples.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/dtinspector/Main.java).
 After building it from the project root with
 
 	mvn -P dtinspector package
