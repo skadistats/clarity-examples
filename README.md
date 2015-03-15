@@ -1,71 +1,67 @@
-# clarity-examples
+# Clarity-examples (2.0 beta)
 
 This project contains example code for the [clarity replay parser](https://github.com/skadistats/clarity).
 
-# General
+# Changes in version 2:
+
+Clarity 2 now uses an event based approach to replay analysis. To use it, you have to supply one or more
+processors to clarity, which declare what data they are interested in via annotations:
+
+This simple processor that prints all messages from all chat:
+```java
+public class AllChatProcessor {
+    @OnMessage(Usermessages.CUserMsg_SayText2.class)
+    public void onMessage(Context ctx, Usermessages.CUserMsg_SayText2.class message) {
+        log.info(message.getText());
+    }
+    public static void main(String[] args) throws Exception {
+        new Runner().runWith(new FileInputStream(args[0]), new AllChatProcessor());
+    }
+}
+```
+
+In version 1, profiles were needed to explicitly tell clarity which replay data you were interested in.
+By looking at how your processor is annotated, clarity can figure this out by itself, so profiles not needed anymore.
+
+Clarity itself also uses annotated processor classes to supply all the functionality, so it is easy to extend it and
+build more specialized events on top. To illustrate, this is a stripped down example of how clarity uses the
+@OnMessage event to listen for occurrences of CSVCMsg_GameEventList and CSVCMsg_GameEvent and uses them to 
+supply a new event @OnGameEvent:
+ 
+```java
+@Provides(OnGameEvent.class)
+public class GameEvents {
+    private final Map<Integer, GameEventDescriptor> byId = new TreeMap<>();
+    @OnMessage(Netmessages.CSVCMsg_GameEventList.class)
+    public void onGameEventList(Context ctx, Netmessages.CSVCMsg_GameEventList message) {
+        // some code here to fill the Map "byId"  
+    }
+    @OnMessage(Networkbasetypes.CSVCMsg_GameEvent.class)
+    public void onGameEvent(Context ctx, Networkbasetypes.CSVCMsg_GameEvent message) {
+        GameEventDescriptor desc = byId.get(message.getEventid());
+        GameEvent e = new GameEvent(desc);
+        // some more code to fill the GameEvent
+        ctx.createEvent(OnGameEvent.class, GameEvent.class).raise(e);
+    }
+```
+
+# Examples
+
+### Building
 
 All provided examples can be build with Maven. The build process yields an "uber-jar", that is a jar 
 containing all the dependencies, which can be called from the command line easily without having to 
 set a correct classpath. 
 
-## Logging
+### Logging
 
 Clarity uses the logback-library for logging. You can enable logging for certain packets by changing 
 `src/main/resources/logback.xml`. Changing the log-level to *debug* will output parsed data for almost all
 handlers, while putting the level to *trace* will output the raw content of the protobuf messages a
 handler is assigned to. 
 
-## Profiles
-
-Often times, you only need a subset of the data available in the replay. Not processing the rest will result
-in faster execution times. So, when loading up a replay, you have to tell clarity what part of the replay 
-data you are interested in. For example, if you are interested in chat messages and entities, you would
-initialize your iterator like this:
-
-	DemoInputStreamIterator iter = Clarity.iteratorForFile(fileName, Profile.ENTITIES, Profile.CHAT_EVENTS); 
-
-Please take a look at `skadistats.clarity.parser.Profile.java` to see what
-profiles are available. You can also create a custom profile by copying and adapting the code found there.
-
-# Examples
-
-## Simple Replay Iteration
-
-This is the most basic way to invoke a complete parsing run over a replay.
-Please notice that it will just load the replay, and handle each packet once, but not 
-output anything. If you want to have output, please adjust the log-level or add some
-code.
-
-```Java
-public class Main {
-    public static void main(String[] args) throws Exception {
-    	// Match is a container for all the data clarity provides.
-        Match match = new Match();
-        // set up an iterator for reading all packets from the file
-        DemoInputStreamIterator iter = Clarity.iteratorForFile(args[0], Profile.ALL);
-        while (iter.hasNext()) {
-	        // read the next Peek from the iterator
-            Peek p = iter.next();
-	        // and apply it to the match, changing it's state
-            p.apply(match);
-            // now, it's your turn to do something with match here.
-        }
-    }
-}
-```
-
-You can find this example under `skadistats.clarity.examples.dump.Main.java`.
-After building it from the project root with
-
-	mvn -P simple package
-	
-you can run it with
-
-	java -jar target/simple.jar replay.dem
-	
 ## Showing the combat log
 
-Caution: This is a new example that needs clarity 1.1 to work.
 It *almost* replicates what is shown on the combat log from the game.
 It still has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
@@ -77,7 +73,7 @@ After building it from the project root with
 	
 you can run it with
 
-	java -jar target/combatlog.jar replay.dem
+	java -jar target/combatlog.one-jar.jar replay.dem
 
 ## Show stats at the end of the game
 
@@ -92,7 +88,7 @@ After building it from the project root with
 	
 you can run it with
 
-	java -jar target/matchend.jar replay.dem
+	java -jar target/matchend.one-jar.jar replay.dem
 
 ## Retrieving the game info
 
@@ -115,12 +111,12 @@ After building it from the project root with
 	
 you can run it with
 
-	java -jar target/info.jar replay.dem
+	java -jar target/info.one-jar.jar replay.dem
 
 
 ## Send table inspection
 
-Dota2 is a game made with the Source engine from Valve. Source manages a set of networked entities
+Dota 2 is a game made with the Source engine from Valve. Source manages a set of networked entities
 which exist on the server and are propagated to the client. A lot of stuff you see in a dota match is a networked entity,
 for example the heros, creeps and buildings, but also statistical information about the game, like
 the current game time, scoreboard, etc. You can find some information about networked entities in the 
@@ -140,7 +136,7 @@ After building it from the project root with
 	
 you can run it with
 
-	java -jar target/dtinspector.jar replay.dem
+	java -jar target/dtinspector.one-jar.jar replay.dem
 	
 and it will open a window which lets you explore the send tables in an interactive manner.
 
