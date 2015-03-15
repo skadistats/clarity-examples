@@ -21,6 +21,8 @@ public class Main {
     private final PeriodFormatter GAMETIME_FORMATTER = new PeriodFormatterBuilder()
         .minimumPrintedDigits(2)
         .printZeroAlways()
+        .appendHours()
+        .appendLiteral(":")
         .appendMinutes()
         .appendLiteral(":")
         .appendSeconds()
