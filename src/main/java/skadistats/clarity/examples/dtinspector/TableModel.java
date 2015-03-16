@@ -1,10 +1,10 @@
 package skadistats.clarity.examples.dtinspector;
 
-import javax.swing.table.AbstractTableModel;
-
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.PropFlag;
 import skadistats.clarity.model.ReceiveProp;
+
+import javax.swing.table.AbstractTableModel;
 
 public class TableModel extends AbstractTableModel {
     private static final long serialVersionUID = 2946867068203801119L;
@@ -56,16 +56,7 @@ public class TableModel extends AbstractTableModel {
         case 3:
             return p.getPriority();
         case 4:
-            StringBuffer buf = new StringBuffer();
-            for (PropFlag f : PropFlag.values()) {
-                if (p.isFlagSet(f)) {
-                    if (buf.length() > 0) {
-                        buf.append(", ");
-                    }
-                    buf.append(f.name());
-                }
-            }
-            return buf.toString();
+            return PropFlag.descriptionForFlags(p.getFlags());
         default:
             return "";
         }
