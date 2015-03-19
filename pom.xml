@@ -156,6 +156,12 @@
                 <exampleName>tick</exampleName>
             </properties>
         </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <exampleName>test</exampleName>
+            </properties>
+        </profile>
     </profiles>
 
 </project>
