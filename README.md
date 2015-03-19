@@ -9,12 +9,12 @@ This project contains example code for the [clarity replay parser](https://githu
 Clarity 2 now uses an event based approach to replay analysis. To use it, you have to supply one or more
 processors to clarity, which declare what data they are interested in via annotations:
 
-This simple processor that prints all messages from all chat:
+This simple yet fully working processor prints all messages from all chat:
 ```java
 public class AllChatProcessor {
     @OnMessage(Usermessages.CUserMsg_SayText2.class)
     public void onMessage(Context ctx, Usermessages.CUserMsg_SayText2.class message) {
-        log.info(message.getText());
+        System.out.println(message.getText());
     }
     public static void main(String[] args) throws Exception {
         new Runner().runWith(new FileInputStream(args[0]), new AllChatProcessor());
