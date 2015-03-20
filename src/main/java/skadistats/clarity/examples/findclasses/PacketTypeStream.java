@@ -4,6 +4,7 @@ import com.dota2.proto.Demo.CDemoPacket;
 import com.dota2.proto.Demo.CDemoSendTables;
 import com.dota2.proto.Demo.EDemoCommands;
 import com.dota2.proto.Networkbasetypes.CSVCMsg_UserMessage;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public class PacketTypeStream implements Closeable {
                                 throw new IOException("according to snappy, the compressed packet is not valid!");
                             }
                         }
-                        GeneratedMessage message = PacketTypes.parse(topClazz, data);
+                        GeneratedMessage message = PacketTypes.parse(topClazz, ByteString.copyFrom(data));
                         if (message instanceof CDemoPacket) {
                             es = CodedInputStream.newInstance(((CDemoPacket) message).getData().toByteArray());
                             state = State.EMBED;
@@ -100,7 +101,7 @@ public class PacketTypeStream implements Closeable {
                     }
                     if (subClazz == CSVCMsg_UserMessage.class) {
                         byte[] subData = es.readRawBytes(subSize);
-                        GeneratedMessage subMessage = PacketTypes.parse(subClazz, subData);
+                        GeneratedMessage subMessage = PacketTypes.parse(subClazz, ByteString.copyFrom(subData));
                         CSVCMsg_UserMessage userMessage = (CSVCMsg_UserMessage) subMessage;
                         Class<? extends GeneratedMessage> umClazz = PacketTypes.USERMSG.get(userMessage.getMsgType());
                         if (umClazz == null) {
