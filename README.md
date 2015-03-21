@@ -105,7 +105,7 @@ It *almost* replicates what is shown on the combat log from the game.
 It still has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
 
-You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
+You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
 After building it from the project root with
 
 	mvn -P combatlog package
@@ -120,7 +120,7 @@ This example shows how to use the PlayerResource entity.
 It outputs the score table at the end of the game, almost as complete as dotabuff.
 It could be improved since it iterates over the complete replay to get to the end of the game,
 which takes a while.
-You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/matchend/Main.java).
+You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/matchend/Main.java).
 After building it from the project root with
 
 	mvn -P matchend package
@@ -143,7 +143,7 @@ public class Main {
 }
 ```
 
-You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/info/Main.java).
+You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/info/Main.java).
 After building it from the project root with
 
 	mvn -P info package
@@ -168,7 +168,7 @@ called send tables.
 
 This example shows the format of the entity data in a certain replay.
 
-You can find it under [skadistats.clarity.examples.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/2.0-dev/src/main/java/skadistats/clarity/examples/dtinspector/Main.java).
+You can find it under [skadistats.clarity.examples.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/dtinspector/Main.java).
 After building it from the project root with
 
 	mvn -P dtinspector package
