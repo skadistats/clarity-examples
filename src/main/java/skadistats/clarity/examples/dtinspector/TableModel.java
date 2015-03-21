@@ -17,7 +17,7 @@ public class TableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return dtClass.getReceiveProps().size();
+        return dtClass.getReceiveProps().length;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ReceiveProp p = dtClass.getReceiveProps().get(rowIndex);
+        ReceiveProp p = dtClass.getReceiveProps()[rowIndex];
         switch (columnIndex) {
         case 0:
             return p.getVarName();
