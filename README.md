@@ -1,6 +1,6 @@
 # clarity-examples
 
-This project contains example code for the [clarity replay parser](https://github.com/skadistats/clarity).
+This project contains example code for the [clarity replay parser](https://github.com/skadistats/clarity/tree/v1).
 
 # General
 
