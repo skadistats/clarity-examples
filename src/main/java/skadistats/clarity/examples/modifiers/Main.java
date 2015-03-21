@@ -1,11 +1,11 @@
 package skadistats.clarity.examples.modifiers;
 
-import com.dota2.proto.DotaModifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.wire.proto.DotaModifiers;
 
 import java.io.FileInputStream;
 

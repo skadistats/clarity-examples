@@ -1,9 +1,5 @@
 package skadistats.clarity.examples.findclasses;
 
-import com.dota2.proto.Demo.CDemoPacket;
-import com.dota2.proto.Demo.CDemoSendTables;
-import com.dota2.proto.Demo.EDemoCommands;
-import com.dota2.proto.Networkbasetypes.CSVCMsg_UserMessage;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.GeneratedMessage;
@@ -11,6 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xerial.snappy.Snappy;
 import skadistats.clarity.wire.PacketTypes;
+import skadistats.clarity.wire.proto.Demo.CDemoPacket;
+import skadistats.clarity.wire.proto.Demo.CDemoSendTables;
+import skadistats.clarity.wire.proto.Demo.EDemoCommands;
+import skadistats.clarity.wire.proto.Networkbasetypes.CSVCMsg_UserMessage;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -1,6 +1,5 @@
 package skadistats.clarity.examples.particles;
 
-import com.dota2.proto.DotaUsermessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
@@ -12,6 +11,7 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.Runner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
+import skadistats.clarity.wire.proto.DotaUsermessages;
 
 import java.io.FileInputStream;
 

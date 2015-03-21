@@ -1,6 +1,5 @@
 package skadistats.clarity.examples.combatlog;
 
-import com.dota2.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
 import org.joda.time.Duration;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
@@ -11,6 +10,7 @@ import skadistats.clarity.processor.gameevents.CombatLog;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.wire.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
 
 import java.io.FileInputStream;
 
@@ -146,6 +146,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
+        if (System.console() != null) System.console().readLine();
         new Main().run(args);
     }
 
