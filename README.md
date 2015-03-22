@@ -2,6 +2,10 @@
 
 This project contains example code for the [clarity replay parser](https://github.com/skadistats/clarity/tree/v1).
 
+### Note
+These are the examples for version 1 of the library, so you might wanna check out
+[examples for version 2](https://github.com/skadistats/clarity-examples).
+
 # General
 
 All provided examples can be build with Maven. The build process yields an "uber-jar", that is a jar 
