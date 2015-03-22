@@ -7,7 +7,7 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.reader.OnTickEnd;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.runner.SimpleRunner;
 
 import java.io.FileInputStream;
 
@@ -36,7 +36,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new Runner().runWith(new FileInputStream(args[0]), this);
+        new SimpleRunner().runWith(new FileInputStream(args[0]), this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

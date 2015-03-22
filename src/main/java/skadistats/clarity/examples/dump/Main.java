@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.wire.proto.Netmessages;
 
 import java.io.FileInputStream;
@@ -25,7 +25,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new Runner().runWith(new FileInputStream(args[0]), this);
+        new SimpleRunner().runWith(new FileInputStream(args[0]), this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

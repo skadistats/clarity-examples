@@ -3,7 +3,7 @@ package skadistats.clarity.examples.dtinspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.Runner;
+import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.sendtables.DTClasses;
 import skadistats.clarity.processor.sendtables.UsesDTClasses;
 
@@ -19,7 +19,7 @@ public class Main {
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     public void run(String[] args) throws Exception {
-        final Context ctx = new Runner().runWith(new FileInputStream(args[0]), this);
+        final Context ctx = new SimpleRunner().runWith(new FileInputStream(args[0]), this);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         EventQueue.invokeLater(new Runnable() {
             public void run() {
