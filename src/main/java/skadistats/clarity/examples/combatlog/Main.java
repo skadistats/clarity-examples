@@ -5,7 +5,6 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import skadistats.clarity.Clarity;
 import skadistats.clarity.match.Match;
 import skadistats.clarity.model.GameEvent;
@@ -13,8 +12,7 @@ import skadistats.clarity.model.GameEventDescriptor;
 import skadistats.clarity.model.GameRulesStateType;
 import skadistats.clarity.parser.Profile;
 import skadistats.clarity.parser.TickIterator;
-
-import com.dota2.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
+import skadistats.clarity.wire.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
 
 public class Main {
     

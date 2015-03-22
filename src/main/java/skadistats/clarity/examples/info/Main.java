@@ -1,8 +1,7 @@
 package skadistats.clarity.examples.info;
 
 import skadistats.clarity.Clarity;
-
-import com.dota2.proto.Demo.CDemoFileInfo;
+import skadistats.clarity.wire.proto.Demo.CDemoFileInfo;
 
 public class Main {
     
