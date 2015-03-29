@@ -146,7 +146,6 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        if (System.console() != null) System.console().readLine();
         new Main().run(args);
     }
 
