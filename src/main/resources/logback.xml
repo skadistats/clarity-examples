@@ -6,8 +6,9 @@
 	</appender>
 
 	<logger name="skadistats.clarity" level="info" />
+    <logger name="skadistats.clarity.processor.entities" level="debug" />
 
-	<root level="info">
+	<root level="debug">
 		<appender-ref ref="stdout" />
 	</root>
 	
