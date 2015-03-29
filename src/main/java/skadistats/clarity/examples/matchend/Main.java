@@ -20,7 +20,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        Context ctx = new SimpleRunner().runWith(new FileInputStream(args[0]), this).getContext();
+        Context ctx = new SimpleRunner(new FileInputStream(args[0])).runWith(this).getContext();
         summary(ctx);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);

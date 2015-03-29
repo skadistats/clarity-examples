@@ -17,7 +17,7 @@ public class AllChatProcessor {
         System.out.println(message.getText());
     }
     public static void main(String[] args) throws Exception {
-        new SimpleRunner().runWith(new FileInputStream(args[0]), new AllChatProcessor());
+        new SimpleRunner(new FileInputStream(args[0])).runWith(new AllChatProcessor());
     }
 }
 ```
