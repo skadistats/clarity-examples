@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
 
-import java.io.FileInputStream;
+import java.io.File;
 
 @UsesEntities
 public class Main {
@@ -18,7 +18,7 @@ public class Main {
 //    }
 //
     public void run(String[] args) throws Exception {
-        ControllableRunner runner = new ControllableRunner(new FileInputStream(args[0])).runWith(this);
+        ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
         while(!runner.isAtEnd()) {
             long tStart = System.nanoTime();
             runner.tick();
@@ -28,8 +28,17 @@ public class Main {
         runner.halt();
     }
 
+    public void runSeek(String[] args) throws Exception {
+        ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
+        int lastTick = runner.getLastTick();
+        runner.seek(5000);
+        log.info("last tick = {}", lastTick);
+        runner.halt();
+    }
+
+
     public static void main(String[] args) throws Exception {
-        new Main().run(args);
+        new Main().runSeek(args);
     }
 
 }
