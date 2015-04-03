@@ -6,6 +6,7 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
 
 import java.io.File;
+import java.util.Random;
 
 @UsesEntities
 public class Main {
@@ -31,8 +32,15 @@ public class Main {
     public void runSeek(String[] args) throws Exception {
         ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
         int lastTick = runner.getLastTick();
-        runner.seek(5000);
-        log.info("last tick = {}", lastTick);
+        Random r = new Random();
+        int i = 100;
+        while (i > 0) {
+            long tStart = System.nanoTime();
+            runner.seek(r.nextInt(lastTick));
+            long tTick = System.nanoTime() - tStart;
+            log.info("seek to {} took {} microseconds", runner.getTick(), tTick / 1000.0f);
+            i--;
+        }
         runner.halt();
     }
 
