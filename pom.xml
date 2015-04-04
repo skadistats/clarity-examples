@@ -145,21 +145,27 @@
             </properties>
         </profile>
         <profile>
+            <id>seek</id>
+            <properties>
+                <exampleName>seek</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>tempentities</id>
             <properties>
                 <exampleName>tempentities</exampleName>
             </properties>
         </profile>
         <profile>
-            <id>tick</id>
-            <properties>
-                <exampleName>tick</exampleName>
-            </properties>
-        </profile>
-        <profile>
             <id>test</id>
             <properties>
                 <exampleName>test</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>tick</id>
+            <properties>
+                <exampleName>tick</exampleName>
             </properties>
         </profile>
     </profiles>
