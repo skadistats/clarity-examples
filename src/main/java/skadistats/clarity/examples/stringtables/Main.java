@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.StringTableDecoder;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.StringTableEntry;
-import skadistats.clarity.processor.reader.OnFullPacket;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.proto.Demo;
 import skadistats.clarity.wire.proto.Netmessages;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-@UsesStringTable("*")
+@UsesStringTable("instancebaseline")
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
@@ -35,7 +33,7 @@ public class Main {
 
     @OnMessage(Netmessages.CSVCMsg_UpdateStringTable.class)
     public void onUpdate(Context ctx, Netmessages.CSVCMsg_UpdateStringTable message) {
-        if (names.get(message.getTableId()).equals("ActiveModifiers")) {
+        if (!names.get(message.getTableId()).equals("instancebaseline")) {
             return;
         }
         StringTable table = ctx.getProcessor(StringTables.class).forId(message.getTableId());
@@ -48,14 +46,14 @@ public class Main {
         log.info("table updated: {} with {} entries: {}", names.get(message.getTableId()), message.getNumChangedEntries(), indices);
     }
 
-    @OnFullPacket
-    public void onFullPacket(Context ctx, Demo.CDemoFullPacket message) {
-        log.info("full packet received");
-        Demo.CDemoStringTables dst = message.getStringTable();
-        for (Demo.CDemoStringTables.table_t t : dst.getTablesList()) {
-            log.info("- table {} updated with {} items and {} clientside items", t.getTableName(), t.getItemsCount(), t.getItemsClientsideCount());
-        }
-    }
+//    @OnFullPacket
+//    public void onFullPacket(Context ctx, Demo.CDemoFullPacket message) {
+//        log.info("full packet received");
+//        Demo.CDemoStringTables dst = message.getStringTable();
+//        for (Demo.CDemoStringTables.table_t t : dst.getTablesList()) {
+//            log.info("- table {} updated with {} items and {} clientside items", t.getTableName(), t.getItemsCount(), t.getItemsClientsideCount());
+//        }
+//    }
 
 
     public void run(String[] args) throws Exception {

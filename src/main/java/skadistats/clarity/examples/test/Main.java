@@ -13,11 +13,6 @@ public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-//    @OnMessage
-//    public void onMessage(Context ctx, GeneratedMessage message) {
-//        //System.out.println(message.getClass().getSimpleName());
-//    }
-//
     public void run(String[] args) throws Exception {
         ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
         while(!runner.isAtEnd()) {
