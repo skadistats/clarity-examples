@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
+import skadistats.clarity.source.MappedFileSource;
 
-import java.io.File;
 import java.util.Random;
 
 @UsesEntities
@@ -19,7 +19,7 @@ public class Main {
 //    }
 //
     public void run(String[] args) throws Exception {
-        ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
+        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
         while(!runner.isAtEnd()) {
             long tStart = System.nanoTime();
             runner.tick();
@@ -30,7 +30,7 @@ public class Main {
     }
 
     public void runSeek(String[] args) throws Exception {
-        ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
+        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
         int lastTick = runner.getLastTick();
         Random r = new Random();
         int i = 100;

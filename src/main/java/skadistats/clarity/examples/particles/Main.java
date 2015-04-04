@@ -11,9 +11,8 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
+import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.proto.DotaUsermessages;
-
-import java.io.FileInputStream;
 
 @UsesEntities
 @UsesStringTable("ParticleEffectNames")
@@ -159,7 +158,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new FileInputStream(args[0])).runWith(this);
+        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

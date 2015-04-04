@@ -7,8 +7,8 @@ import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.source.MappedFileSource;
 
-import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        Context ctx = new SimpleRunner(new FileInputStream(args[0])).runWith(this).getContext();
+        Context ctx = new SimpleRunner(new MappedFileSource(args[0])).runWith(this).getContext();
         summary(ctx);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);

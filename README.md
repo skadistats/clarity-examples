@@ -17,7 +17,7 @@ public class AllChatProcessor {
         System.out.println(message.getText());
     }
     public static void main(String[] args) throws Exception {
-        new SimpleRunner(new FileInputStream(args[0])).runWith(new AllChatProcessor());
+        new SimpleRunner(new MappedFileSource(args[0])).runWith(new AllChatProcessor());
     }
 }
 ```
@@ -75,7 +75,7 @@ public class UselessProcessor {
         }
     }
     public static void main(String[] args) throws Exception {
-        new SimpleRunner().runWith(new FileInputStream(args[0]), new UselessProcessor());
+        new SimpleRunner().runWith(new MappedFileSource(args[0]), new UselessProcessor());
     }
 }
 ```

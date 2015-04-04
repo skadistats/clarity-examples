@@ -11,10 +11,10 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
+import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.proto.Demo;
 import skadistats.clarity.wire.proto.Netmessages;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +59,7 @@ public class Main {
 
 
     public void run(String[] args) throws Exception {
-        ControllableRunner runner = new ControllableRunner(new File(args[0])).runWith(this);
+        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
         while(!runner.isAtEnd()) {
             runner.tick();
         }

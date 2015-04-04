@@ -5,9 +5,8 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.proto.DotaModifiers;
-
-import java.io.FileInputStream;
 
 
 public class Main {
@@ -21,7 +20,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new FileInputStream(args[0])).runWith(this);
+        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

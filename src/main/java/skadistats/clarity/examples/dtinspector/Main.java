@@ -6,11 +6,11 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.sendtables.DTClasses;
 import skadistats.clarity.processor.sendtables.UsesDTClasses;
+import skadistats.clarity.source.MappedFileSource;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.io.FileInputStream;
 
 
 @UsesDTClasses
@@ -19,7 +19,7 @@ public class Main {
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     public void run(String[] args) throws Exception {
-        final Context ctx = new SimpleRunner(new FileInputStream(args[0])).runWith(this).getContext();
+        final Context ctx = new SimpleRunner(new MappedFileSource(args[0])).runWith(this).getContext();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         EventQueue.invokeLater(new Runnable() {
             public void run() {
