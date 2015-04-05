@@ -11,7 +11,7 @@ import java.util.Random;
 @UsesEntities
 public class Main {
 
-    private final int N_SEEKS = 10000;
+    private final int N_SEEKS = 1000;
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
