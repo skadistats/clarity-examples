@@ -11,7 +11,6 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.InputStreamSource;
 import skadistats.clarity.util.TextTable;
 
-import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
 @UsesEntities
@@ -21,7 +20,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        AbstractRunner<SimpleRunner> r = new SimpleRunner(new InputStreamSource(new FileInputStream(args[0]))).runWith(this);
+        AbstractRunner<SimpleRunner> r = new SimpleRunner(new InputStreamSource(System.in)).runWith(this);
         summary(r.getContext());
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
