@@ -8,10 +8,9 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.util.TextTable;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 @UsesEntities
 public class Main {
@@ -30,56 +29,35 @@ public class Main {
 
     private void summary(Context ctx) throws UnsupportedEncodingException {
 
-        class ColDef {
-            String columnName;
-            String propertyName;
-            List<String> values;
-            int width;
-            public ColDef(String columnName, String propertyName) {
-                this.columnName = columnName;
-                this.propertyName = propertyName;
-                this.width = columnName.length();
-            }
-        }
-
-        ColDef[] columns = new ColDef[] {
-            new ColDef("Name", "m_iszPlayerNames"),
-            new ColDef("Level", "m_iLevel"),
-            new ColDef("K", "m_iKills"),
-            new ColDef("D", "m_iDeaths"),
-            new ColDef("A", "m_iAssists"),
-            new ColDef("Gold", "EndScoreAndSpectatorStats.m_iTotalEarnedGold"),
-            new ColDef("LH", "m_iLastHitCount"),
-            new ColDef("DN", "m_iDenyCount"),
-        };
-
         Entity ps = ctx.getProcessor(Entities.class).getByDtName("DT_DOTA_PlayerResource");
 
-        for (ColDef c : columns) {
-            c.values = new ArrayList<>();
-            int baseIndex = ps.getDtClass().getPropertyIndex(c.propertyName + ".0000");
-            for (int p = 0; p < 10; p++) {
-                String v = new String(ps.getState()[baseIndex + p].toString().getBytes("ISO-8859-1"));
-                c.values.add(v);
-                c.width = Math.max(c.width, v.length());
+        String[][] columns = new String[][]{
+            {"Name", "m_iszPlayerNames"},
+            {"Level", "m_iLevel"},
+            {"K", "m_iKills"},
+            {"D", "m_iDeaths"},
+            {"A", "m_iAssists"},
+            {"Gold", "EndScoreAndSpectatorStats.m_iTotalEarnedGold"},
+            {"LH", "m_iLastHitCount"},
+            {"DN", "m_iDenyCount"},
+        };
+
+        TextTable.Builder b = new TextTable.Builder();
+        for (int c = 0; c < columns.length; c++) {
+            b.addColumn(columns[c][0], c == 0 ? TextTable.Alignment.LEFT : TextTable.Alignment.RIGHT);
+        }
+        TextTable t = b.build();
+
+        for (int c = 0; c < columns.length; c++) {
+            int baseIndex = ps.getDtClass().getPropertyIndex(columns[c][1] + ".0000");
+            for (int r = 0; r < 10; r++) {
+                Object val = ps.getState()[baseIndex + r];
+                String str = new String(val.toString().getBytes("ISO-8859-1"));
+                t.setData(r, c, str);
             }
         }
 
-        StringBuffer buf = new StringBuffer();
-        String space = "                                                                  ";
-        for (ColDef c : columns) {
-            buf.append(c.columnName);
-            buf.append(space, 0, c.width - c.columnName.length() + 2);
-        }
-        System.out.println(buf);
-        for (int p = 0; p < 10; p++) {
-            buf.setLength(0);
-            for (ColDef c : columns) {
-                buf.append(c.values.get(p));
-                buf.append(space, 0, c.width - c.values.get(p).length() + 2);
-            }
-            System.out.println(buf);
-        }
+        System.out.println(t);
     }
 
     public static void main(String[] args) throws Exception {
