@@ -19,14 +19,20 @@ public class Main {
     private int count;
 
     @OnTickStart
-    public void onTickStart(Context ctx) {
+    public void onTickStart(Context ctx, boolean synthetic) {
         tick = ctx.getTick();
         count = 0;
     }
 
     @OnTickEnd
-    public void onTickEnd(Context ctx) {
-        log.info("tick {} had {} messages", tick, count);
+    public void onTickEnd(Context ctx, boolean synthetic) {
+        log.info("tick {}, synthetic {}, had {} messages", tick, synthetic, count);
+        if (synthetic && count > 0) {
+            throw new RuntimeException("oops 1");
+        }
+        if (!synthetic && count == 0) {
+            throw new RuntimeException("oops 2");
+        }
     }
 
     @OnMessage
@@ -53,7 +59,7 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
-        new Main().runControlled(args);
+        new Main().run(args);
     }
 
 }
