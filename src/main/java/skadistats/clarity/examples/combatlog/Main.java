@@ -29,15 +29,24 @@ public class Main {
         .appendMillis3Digit()
         .toFormatter();
 
+    private String getAttackerNameCompiled(CombatLog.Entry cle) {
+        return cle.getAttackerName() + (cle.isAttackerIllusion() ? " (illusion)" : "");
+    }
+
+    private String getTargetNameCompiled(CombatLog.Entry cle) {
+        return cle.getTargetName() + (cle.isTargetIllusion() ? " (illusion)" : "");
+    }
+
+
     @OnCombatLogEntry
     public void onCombatLogEntry(Context ctx, CombatLog.Entry cle) {
-        String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int)(1000.0f * cle.getTimestamp())).toPeriod()) +  "]";
-        switch(cle.getType()) {
+        String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int) (1000.0f * cle.getTimestamp())).toPeriod()) + "]";
+        switch (cle.getType()) {
             case 0:
                 log.info("{} {} hits {}{} for {} damage{}",
                     time,
-                    cle.getAttackerNameCompiled(),
-                    cle.getTargetNameCompiled(),
+                    getAttackerNameCompiled(cle),
+                    getTargetNameCompiled(cle),
                     cle.getInflictorName() != null ? String.format(" with %s", cle.getInflictorName()) : "",
                     cle.getValue(),
                     cle.getHealth() != 0 ? String.format(" (%s->%s)", cle.getHealth() + cle.getValue(), cle.getHealth()) : ""
@@ -46,9 +55,9 @@ public class Main {
             case 1:
                 log.info("{} {}'s {} heals {} for {} health ({}->{})",
                     time,
-                    cle.getAttackerNameCompiled(),
+                    getAttackerNameCompiled(cle),
                     cle.getInflictorName(),
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getValue(),
                     cle.getHealth() - cle.getValue(),
                     cle.getHealth()
@@ -57,47 +66,47 @@ public class Main {
             case 2:
                 log.info("{} {} receives {} buff/debuff from {}",
                     time,
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getInflictorName(),
-                    cle.getAttackerNameCompiled()
+                    getAttackerNameCompiled(cle)
                 );
                 break;
             case 3:
                 log.info("{} {} loses {} buff/debuff",
                     time,
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getInflictorName()
                 );
                 break;
             case 4:
                 log.info("{} {} is killed by {}",
                     time,
-                    cle.getTargetNameCompiled(),
-                    cle.getAttackerNameCompiled()
+                    getTargetNameCompiled(cle),
+                    getAttackerNameCompiled(cle)
                 );
                 break;
             case 5:
                 log.info("{} {} {} ability {} (lvl {}){}{}",
                     time,
-                    cle.getAttackerNameCompiled(),
+                    getAttackerNameCompiled(cle),
                     cle.isAbilityToggleOn() || cle.isAbilityToggleOff() ? "toggles" : "casts",
                     cle.getInflictorName(),
                     cle.getAbilityLevel(),
                     cle.isAbilityToggleOn() ? " on" : cle.isAbilityToggleOff() ? " off" : "",
-                    cle.getTargetName() != null ? " on " + cle.getTargetNameCompiled() : ""
+                    cle.getTargetName() != null ? " on " + getAttackerNameCompiled(cle) : ""
                 );
                 break;
             case 6:
                 log.info("{} {} uses {}",
                     time,
-                    cle.getAttackerNameCompiled(),
+                    getAttackerNameCompiled(cle),
                     cle.getInflictorName()
                 );
                 break;
             case 8:
                 log.info("{} {} {} {} gold",
                     time,
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getValue() < 0 ? "looses" : "receives",
                     Math.abs(cle.getValue())
                 );
@@ -111,14 +120,14 @@ public class Main {
             case 10:
                 log.info("{} {} gains {} XP",
                     time,
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getValue()
                 );
                 break;
             case 11:
                 log.info("{} {} buys item {}",
                     time,
-                    cle.getTargetNameCompiled(),
+                    getTargetNameCompiled(cle),
                     cle.getValue()
                 );
                 break;
