@@ -7,7 +7,7 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.proto.Netmessages;
+import skadistats.clarity.wire.s1.proto.Netmessages;
 
 public class Main {
 

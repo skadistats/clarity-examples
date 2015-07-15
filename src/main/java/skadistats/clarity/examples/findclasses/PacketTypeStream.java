@@ -6,11 +6,11 @@ import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xerial.snappy.Snappy;
-import skadistats.clarity.wire.PacketTypes;
-import skadistats.clarity.wire.proto.Demo.CDemoPacket;
-import skadistats.clarity.wire.proto.Demo.CDemoSendTables;
-import skadistats.clarity.wire.proto.Demo.EDemoCommands;
-import skadistats.clarity.wire.proto.Networkbasetypes.CSVCMsg_UserMessage;
+import skadistats.clarity.wire.s1.PacketTypes;
+import skadistats.clarity.wire.s1.proto.Demo.CDemoPacket;
+import skadistats.clarity.wire.s1.proto.Demo.CDemoSendTables;
+import skadistats.clarity.wire.s1.proto.Demo.EDemoCommands;
+import skadistats.clarity.wire.s1.proto.Networkbasetypes.CSVCMsg_UserMessage;
 
 import java.io.Closeable;
 import java.io.IOException;

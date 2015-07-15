@@ -6,7 +6,7 @@ import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.proto.DotaModifiers;
+import skadistats.clarity.wire.s1.proto.DotaModifiers;
 
 
 public class Main {

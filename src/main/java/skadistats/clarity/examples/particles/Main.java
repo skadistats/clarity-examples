@@ -12,7 +12,7 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.proto.DotaUsermessages;
+import skadistats.clarity.wire.s1.proto.DotaUsermessages;
 
 @UsesEntities
 @UsesStringTable("ParticleEffectNames")

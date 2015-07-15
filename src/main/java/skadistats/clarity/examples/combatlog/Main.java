@@ -11,7 +11,7 @@ import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
+import skadistats.clarity.wire.s1.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
 
 public class Main {
 
