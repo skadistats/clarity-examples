@@ -12,7 +12,7 @@ import skadistats.clarity.model.GameEventDescriptor;
 import skadistats.clarity.model.GameRulesStateType;
 import skadistats.clarity.parser.Profile;
 import skadistats.clarity.parser.TickIterator;
-import skadistats.clarity.wire.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
+import skadistats.clarity.wire.s1.proto.DotaUsermessages.DOTA_COMBATLOG_TYPES;
 
 public class Main {
     
