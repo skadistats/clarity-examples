@@ -10,6 +10,7 @@ import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.wire.common.proto.DotaUsermessagesCommon;
 
 public class Main {
 
@@ -137,7 +138,8 @@ public class Main {
                 break;
 
             default:
-                log.info("\nUNKNOWN {}: {}\n", cle.getType(), cle.getGameEvent());
+                DotaUsermessagesCommon.DOTA_COMBATLOG_TYPES type = DotaUsermessagesCommon.DOTA_COMBATLOG_TYPES.valueOf(cle.getType());
+                log.info("\n{} ({}): {}\n", type.name(), type.ordinal(), cle.getGameEvent());
                 break;
 
         }
