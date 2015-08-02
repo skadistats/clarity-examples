@@ -1,25 +1,33 @@
 package skadistats.clarity.examples.test;
 
-import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.processor.reader.OnMessage;
+import skadistats.clarity.model.GameEvent;
+import skadistats.clarity.model.GameEventDescriptor;
+import skadistats.clarity.processor.gameevents.OnGameEvent;
+import skadistats.clarity.processor.gameevents.OnGameEventDescriptor;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-    @OnMessage
-    public void onFullPacket(Context ctx, GeneratedMessage message) {
-        //System.out.println(message.getClass().getName());
+    @OnGameEventDescriptor()
+    public void onGameEventDescriptor(Context ctx, GameEventDescriptor descriptor) {
+        System.out.println(descriptor);
+    }
+
+    @OnGameEvent
+    public void onGameEvent(Context ctx, GameEvent event) {
+        System.out.println(event);
     }
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
+        runner.tick();
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

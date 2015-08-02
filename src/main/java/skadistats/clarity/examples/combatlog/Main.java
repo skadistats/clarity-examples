@@ -5,7 +5,6 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.model.GameRulesStateType;
 import skadistats.clarity.processor.gameevents.CombatLog;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.Context;
@@ -114,7 +113,7 @@ public class Main {
             case 9:
                 log.info("{} game state is now {}",
                     time,
-                    GameRulesStateType.values()[cle.getValue() - 1]
+                    cle.getValue()
                 );
                 break;
             case 10:
