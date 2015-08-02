@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.info;
 
 import skadistats.clarity.Clarity;
-import skadistats.clarity.wire.s1.proto.Demo.CDemoFileInfo;
+import skadistats.clarity.wire.common.proto.Demo.CDemoFileInfo;
 
 public class Main {
     
