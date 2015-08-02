@@ -8,8 +8,10 @@ import skadistats.clarity.processor.gameevents.OnGameEvent;
 import skadistats.clarity.processor.gameevents.OnGameEventDescriptor;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
+import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
 
+@UsesStringTable("instancebaseline")
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
