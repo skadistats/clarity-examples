@@ -6,13 +6,13 @@ import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.s1.proto.DotaModifiers;
+import skadistats.clarity.wire.s1.proto.S1DotaModifiers;
 
 
 public class Main {
 
     @OnModifierTableEntry()
-    public void doIt(Context ctx, DotaModifiers.CDOTAModifierBuffTableEntry e) {
+    public void doIt(Context ctx, S1DotaModifiers.CDOTAModifierBuffTableEntry e) {
         System.out.println(e);
     }
 

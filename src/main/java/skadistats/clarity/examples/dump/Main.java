@@ -7,7 +7,8 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.s1.proto.Netmessages;
+import skadistats.clarity.wire.s1.proto.S1NetMessages;
+import skadistats.clarity.wire.s2.proto.S2NetMessages;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
 
     @OnMessage(GeneratedMessage.class)
     public void onMessage(Context ctx, GeneratedMessage message) {
-        if (message instanceof Netmessages.CSVCMsg_VoiceData) {
+        if (message instanceof S1NetMessages.CSVCMsg_VoiceData || message instanceof S2NetMessages.CSVCMsg_VoiceData) {
             return;
         }
         log.info(message.getClass().getName());

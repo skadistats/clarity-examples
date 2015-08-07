@@ -12,7 +12,7 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.s1.proto.DotaUsermessages;
+import skadistats.clarity.wire.s1.proto.S1DotaUserMessages;
 
 @UsesEntities
 @UsesStringTable("ParticleEffectNames")
@@ -20,8 +20,8 @@ public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-    @OnMessage(DotaUsermessages.CDOTAUserMsg_ParticleManager.class)
-    public void onMessage(Context ctx, DotaUsermessages.CDOTAUserMsg_ParticleManager message) {
+    @OnMessage(S1DotaUserMessages.CDOTAUserMsg_ParticleManager.class)
+    public void onMessage(Context ctx, S1DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         switch(message.getType()) {
             case DOTA_PARTICLE_MANAGER_EVENT_CREATE:
                 logCreate(message, ctx);
@@ -66,7 +66,7 @@ public class Main {
 
     }
 
-    private void logCreate(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logCreate(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         int entityHandle = message.getCreateParticle().getEntityHandle();
 //        int entityIndex = Handle.indexForHandle(entityHandle);
 //        int entitySerial = Handle.serialForHandle(entityHandle);
@@ -84,7 +84,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdate(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdate(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         log.info("{} {} [index={}, controlPoint={}, position=[{}, {}, {}]]",
             ctx.getTick(),
             "PARTICLE_UPDATE",
@@ -97,7 +97,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateOrientation(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdateOrientation(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         log.info("{} {} [index={}, controlPoint={}, forward=[{}, {}, {}], right=[{}, {}, {}], up=[{}, {}, {}]]",
             ctx.getTick(),
             "PARTICLE_UPDATE_ORIENT",
@@ -116,7 +116,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateEnt(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdateEnt(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         int entityHandle = message.getUpdateParticleEnt().getEntityHandle();
         Entity parent = ctx.getProcessor(Entities.class).getByHandle(entityHandle);
         log.info("{} {} [index={}, entity={}({}), controlPoint={}, attachmentType={}, attachment={}, includeWearables={}]",
@@ -133,7 +133,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logDestroy(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logDestroy(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         log.info("{} {} [index={}, immediately={}]",
             ctx.getTick(),
             "PARTICLE_DESTROY",
@@ -143,7 +143,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logRelease(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logRelease(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         log.info("{} {} [index={}]",
             ctx.getTick(),
             "PARTICLE_RELEASE",
@@ -152,7 +152,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUnhanded(DotaUsermessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUnhanded(S1DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
         log.info(message.toString());
     }
 

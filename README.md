@@ -9,11 +9,11 @@ This project contains example code for the [clarity replay parser](https://githu
 Clarity 2 now uses an event based approach to replay analysis. To use it, you have to supply one or more
 processors to clarity, which declare what data they are interested in via annotations:
 
-This simple yet fully working processor prints all messages from all chat:
+This simple yet fully working processor prints all messages from all chat (Source 1):
 ```java
 public class AllChatProcessor {
-    @OnMessage(Usermessages.CUserMsg_SayText2.class)
-    public void onMessage(Context ctx, Usermessages.CUserMsg_SayText2.class message) {
+    @OnMessage(S1UserMessages.CUserMsg_SayText2.class)
+    public void onMessage(Context ctx, S1UserMessages.CUserMsg_SayText2.class message) {
         System.out.println(message.getText());
     }
     public static void main(String[] args) throws Exception {
@@ -33,12 +33,12 @@ supply a new event @OnGameEvent:
 @Provides(OnGameEvent.class)
 public class GameEvents {
     private final Map<Integer, GameEventDescriptor> byId = new TreeMap<>();
-    @OnMessage(Netmessages.CSVCMsg_GameEventList.class)
+    @OnMessage(NetMessages.CSVCMsg_GameEventList.class)
     public void onGameEventList(Context ctx, Netmessages.CSVCMsg_GameEventList message) {
         // some code here to fill the Map "byId"  
     }
-    @OnMessage(Networkbasetypes.CSVCMsg_GameEvent.class)
-    public void onGameEvent(Context ctx, Networkbasetypes.CSVCMsg_GameEvent message) {
+    @OnMessage(NetworkBaseTypes.CSVCMsg_GameEvent.class)
+    public void onGameEvent(Context ctx, NetworkBaseTypes.CSVCMsg_GameEvent message) {
         GameEventDescriptor desc = byId.get(message.getEventid());
         GameEvent e = new GameEvent(desc);
         // some more code to fill the GameEvent
@@ -67,7 +67,7 @@ With getProcessor() you can get a reference to a processor taking part in the ru
 public class UselessProcessor {
     @OnTickStart
     @UsesStringTable("ActiveModifiers");
-    public void onMessage(Context ctx) {
+    public void onTickStart(Context ctx) {
         StringTables stringTables = ctx.getProcessor(StringTables.class);
         StringTable table = stringTables.forName("ActiveModifiers");
         if (table != null) {
