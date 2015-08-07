@@ -50,13 +50,13 @@ public class TableModel extends AbstractTableModel {
         case 0:
             return p.getVarName();
         case 1:
-            return p.getType();
+            return p.getSendProp().getType();
         case 2:
             return p.getSrc();
         case 3:
-            return p.getPriority();
+            return p.getSendProp().getPriority();
         case 4:
-            return PropFlag.descriptionForFlags(p.getFlags());
+            return PropFlag.descriptionForFlags(p.getSendProp().getFlags());
         default:
             return "";
         }
