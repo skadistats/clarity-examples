@@ -52,7 +52,7 @@ public class TableModel extends AbstractTableModel {
         case 1:
             return p.getSendProp().getType();
         case 2:
-            return p.getSrc();
+            return p.getSendProp().getSrc();
         case 3:
             return p.getSendProp().getPriority();
         case 4:
