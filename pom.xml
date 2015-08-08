@@ -151,6 +151,12 @@
             </properties>
         </profile>
         <profile>
+            <id>serializers</id>
+            <properties>
+                <exampleName>serializers</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>tempentities</id>
             <properties>
                 <exampleName>tempentities</exampleName>
