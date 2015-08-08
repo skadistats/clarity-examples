@@ -3,7 +3,7 @@ package skadistats.clarity.examples.particles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.model.ParticleAttachmentType;
+import skadistats.clarity.model.s1.ParticleAttachmentType;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;

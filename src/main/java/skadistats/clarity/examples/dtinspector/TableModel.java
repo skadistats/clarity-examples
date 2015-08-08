@@ -1,8 +1,8 @@
 package skadistats.clarity.examples.dtinspector;
 
 import skadistats.clarity.model.DTClass;
-import skadistats.clarity.model.PropFlag;
-import skadistats.clarity.model.ReceiveProp;
+import skadistats.clarity.model.s1.PropFlag;
+import skadistats.clarity.model.s1.ReceiveProp;
 
 import javax.swing.table.AbstractTableModel;
 
