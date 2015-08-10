@@ -27,7 +27,7 @@ public class Main {
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
             StringTable baseline = stringTables.forName("instancebaseline");
 
-            for (int idx = 10; idx < baseline.getEntryCount(); idx++) {
+            for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
                 int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
                 System.out.println(dtClasses.forClassId(clsId).getDtName());
                 BitStream bs = new BitStream(baseline.getValueByIndex(idx));
