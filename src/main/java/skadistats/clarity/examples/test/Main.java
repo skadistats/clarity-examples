@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
 import skadistats.clarity.decoder.s2.FieldPathDecoder;
+import skadistats.clarity.decoder.s2.HuffmanGraph;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
@@ -22,16 +23,19 @@ public class Main {
 
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) {
-        if (ctx.getTick() == 1) {
+        if (ctx.getTick() == 5000) {
+            System.out.println(new HuffmanGraph(FieldPathDecoder.HUFFMAN_ROOT).generate());
             StringTables stringTables = ctx.getProcessor(StringTables.class);
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
             StringTable baseline = stringTables.forName("instancebaseline");
 
             for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
                 int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
-                System.out.println(dtClasses.forClassId(clsId).getDtName());
-                BitStream bs = new BitStream(baseline.getValueByIndex(idx));
-                FieldPathDecoder.decode(bs);
+                if (baseline.getValueByIndex(idx) != null) {
+                    System.out.println(dtClasses.forClassId(clsId).getDtName());
+                    BitStream bs = new BitStream(baseline.getValueByIndex(idx));
+                    FieldPathDecoder.decode(bs);
+                }
             }
         }
     }
