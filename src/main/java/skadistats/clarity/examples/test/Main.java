@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
 import skadistats.clarity.decoder.s2.FieldPathDecoder;
 import skadistats.clarity.model.StringTable;
+import skadistats.clarity.model.s2.FieldPath;
+import skadistats.clarity.model.s2.S2DTClass;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -13,6 +15,8 @@ import skadistats.clarity.processor.sendtables.UsesDTClasses;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
+
+import java.util.List;
 
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
@@ -31,9 +35,15 @@ public class Main {
             for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
                 int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
                 if (baseline.getValueByIndex(idx) != null) {
-                    System.out.println(dtClasses.forClassId(clsId).getDtName());
+                    S2DTClass dtClass = (S2DTClass) dtClasses.forClassId(clsId);
+                    System.out.println(dtClass.getDtName());
                     BitStream bs = new BitStream(baseline.getValueByIndex(idx));
-                    FieldPathDecoder.decode(bs);
+                    List<FieldPath> fieldPaths = FieldPathDecoder.decode(bs);
+                    for (FieldPath fp : fieldPaths) {
+                        System.out.format(" %s -> %s (%s)\n", fp, dtClass.getNameForFieldPath(fp), dtClass.getFieldForFieldPath(fp).getType().getBaseType());
+                    }
+
+
                 }
             }
         }
