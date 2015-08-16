@@ -20,6 +20,11 @@ import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.TextTable;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,13 +44,15 @@ public class Main {
         decoders.put("CDOTAGameManager", new BoolDecoder());
         decoders.put("CDOTASpectatorGraphManager", new BoolDecoder());
         decoders.put("CEntityIdentity", new UInt64Decoder());
+        decoders.put("CDOTA_AbilityDraftAbilityState", new UInt64Decoder());
+        decoders.put("C_DOTA_ItemStockInfo", new UInt64Decoder());
 
-        decoders.put("uint8", new UInt64Decoder());
+        decoders.put("uint8", new ByteDecoder());
         decoders.put("uint16", new UInt64Decoder());
         decoders.put("uint32", new UInt64Decoder());
         decoders.put("uint64", new UInt64Decoder());
 
-        decoders.put("int8", new SInt64Decoder());
+        decoders.put("int8", new ByteDecoder());
         decoders.put("int16", new SInt64Decoder());
         decoders.put("int32", new SInt64Decoder());
         decoders.put("int64", new SInt64Decoder());
@@ -67,7 +74,7 @@ public class Main {
 
 
         decoders.put("CUtlSymbolLarge", new StringDecoder());
-        decoders.put("char", new UInt64Decoder());
+        decoders.put("char", new StringDecoder());
 
         decoders.put("CHandle", new UInt64Decoder());
         decoders.put("CStrongHandle", new UInt64Decoder());
@@ -94,8 +101,6 @@ public class Main {
         decoders.put("DOTA_PlayerChallengeInfo", new UInt64Decoder());
 
         decoders.put("m_SpeechBubbles", new UInt64Decoder());
-        decoders.put("C_DOTA_ItemStockInfo", new BoolDecoder());
-        decoders.put("CDOTA_AbilityDraftAbilityState", new UInt64Decoder());
 
 
 
@@ -104,20 +109,34 @@ public class Main {
 
 
     @OnTickStart
-    public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException {
-        if (ctx.getTick() == 1) {
+    public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
+        if (ctx.getTick() == 8000) {
             //System.out.println(new HuffmanGraph(FieldPathDecoder.HUFFMAN_TREE).generate());
             StringTables stringTables = ctx.getProcessor(StringTables.class);
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
             StringTable baseline = stringTables.forName("instancebaseline");
+
+
+            PrintStream[] ps = new PrintStream[] {
+                System.out,
+                new PrintStream(new FileOutputStream("baselines.txt"), true, "UTF-8")
+            };
+
+            //List<String> onlyThese = new ArrayList<>();
+            List<String> onlyThese = Arrays.asList("CDOTAGamerulesProxy");
 
             for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
                 int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
                 if (baseline.getValueByIndex(idx) != null) {
                     S2DTClass dtClass = (S2DTClass) dtClasses.forClassId(clsId);
 
+                    if (onlyThese.size() != 0 && !onlyThese.contains(dtClass.getDtName())) {
+                        continue;
+                    }
+
                     TextTable.Builder b = new TextTable.Builder();
                     b.setTitle(dtClass.getDtName());
+                    b.setFrame(TextTable.FRAME_COMPAT);
                     b.addColumn("FieldPath");
                     b.addColumn("Name");
                     b.addColumn("Type");
@@ -156,10 +175,11 @@ public class Main {
                         }
                         r++;
                     }
-                    t.print(System.out);
-                    System.out.format("%s/%s remaining\n", bs.remaining(), bs.len());
-                    System.out.println();
-                    System.out.println();
+
+                    for (PrintStream s : ps) {
+                        t.print(s);
+                        s.format("%s/%s remaining\n\n\n", bs.remaining(), bs.len());
+                    }
 
                     //System.exit(1);
                 }
