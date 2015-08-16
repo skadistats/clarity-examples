@@ -24,18 +24,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
-public class Main {
+public class Main2 {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main2.class.getPackage().getClass());
 
     private final Map<String, FieldDecoder<?>> decoders = new HashMap<>();
+
     {
         decoders.put("bool", new BoolDecoder());
 
@@ -77,10 +75,18 @@ public class Main {
         decoders.put("SolidType_t", new UInt64Decoder());
 
 
-
         decoders.put("CHandle", new VarUDecoder(32));
         decoders.put("CGameSceneNodeHandle", new VarUDecoder(32));
 
+
+        decoders.put("HSequence", new SkipDecoder(1));
+        decoders.put("CStrongHandle", new VarUDecoder(32));
+
+        decoders.put("CEntityIdentity", new SkipDecoder(1));
+
+
+        decoders.put("Color", new UInt64Decoder());
+        decoders.put("color32", new UInt64Decoder());
 
         decoders.put("CBodyComponent", new BoolDecoder());
         decoders.put("CPhysicsComponent", new UInt64Decoder());
@@ -97,73 +103,67 @@ public class Main {
         decoders.put("m_SpeechBubbles", new UInt64Decoder());
 
 
-
-
-
-        decoders.put("HSequence", new BinBlockDecoder());
-        decoders.put("CStrongHandle", new SkipDecoder(64));
-
-        decoders.put("CEntityIdentity", new BoolDecoder());
-
-
-        decoders.put("Color", new UInt64Decoder());
-        decoders.put("color32", new UInt64Decoder());
-
-
     }
 
-
+    public static void main(String[] args) throws Exception {
+        new Main2().run(args);
+    }
 
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
-        if (ctx.getTick() == 50000) {
+        if (ctx.getTick() == 8000) {
             //System.out.println(new HuffmanGraph(FieldPathDecoder.HUFFMAN_TREE).generate());
             StringTables stringTables = ctx.getProcessor(StringTables.class);
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
             StringTable baseline = stringTables.forName("instancebaseline");
 
 
-            PrintStream[] ps = new PrintStream[] {
+            PrintStream[] ps = new PrintStream[]{
                 System.out,
-                null,
+                null
             };
 
             List<String> onlyThese = new ArrayList<>();
-            //onlyThese = Arrays.asList("CBaseAnimating");
+            onlyThese = Arrays.asList("CDOTA_BaseNPC");
 
-            Exception exx;
-            for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
-                int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
-                if (baseline.getValueByIndex(idx) != null) {
-                    S2DTClass dtClass = (S2DTClass) dtClasses.forClassId(clsId);
 
-                    if (onlyThese.size() != 0 && !onlyThese.contains(dtClass.getDtName())) {
-                        continue;
-                    }
+            for (int skip = 1; skip < 500; skip++) {
+                decoders.put("CEntityIdentity", new SkipDecoder(skip));
 
-                    ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
+                for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
+                    int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
+                    if (baseline.getValueByIndex(idx) != null) {
+                        S2DTClass dtClass = (S2DTClass) dtClasses.forClassId(clsId);
 
-                    TextTable.Builder b = new TextTable.Builder();
-                    b.setTitle(dtClass.getDtName());
-                    b.setFrame(TextTable.FRAME_COMPAT);
-                    b.setPadding(0, 0);
-                    b.addColumn("FP");
-                    b.addColumn("Name");
-                    b.addColumn("L", TextTable.Alignment.RIGHT);
-                    b.addColumn("H", TextTable.Alignment.RIGHT);
-                    b.addColumn("BC", TextTable.Alignment.RIGHT);
-                    b.addColumn("Flags", TextTable.Alignment.RIGHT);
-                    b.addColumn("Decoder");
-                    b.addColumn("Type");
-                    b.addColumn("Value");
-                    b.addColumn("#", TextTable.Alignment.RIGHT);
-                    b.addColumn("read");
-                    TextTable t = b.build();
+                        if (onlyThese.size() != 0 && !onlyThese.contains(dtClass.getDtName())) {
+                            continue;
+                        }
+                        if (ps[1] == null)
+                            ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
 
-                    BitStream bs = new BitStream(baseline.getValueByIndex(idx));
-                    exx = null;
-                    try {
+                        TextTable.Builder b = new TextTable.Builder();
+                        b.setTitle(dtClass.getDtName());
+                        b.setFrame(TextTable.FRAME_COMPAT);
+                        b.setPadding(0, 0);
+                        b.addColumn("FP");
+                        b.addColumn("Name");
+                        b.addColumn("L", TextTable.Alignment.RIGHT);
+                        b.addColumn("H", TextTable.Alignment.RIGHT);
+                        b.addColumn("BC", TextTable.Alignment.RIGHT);
+                        b.addColumn("Flags", TextTable.Alignment.RIGHT);
+                        b.addColumn("Decoder");
+                        b.addColumn("Type");
+                        b.addColumn("Value");
+                        b.addColumn("#", TextTable.Alignment.RIGHT);
+                        b.addColumn("read");
+                        TextTable t = b.build();
+
+                        BitStream bs = new BitStream(baseline.getValueByIndex(idx));
                         List<FieldPath> fieldPaths = FieldPathDecoder.decode(bs);
+
+                        boolean allHandlesOk = true;
+                        boolean found = false;
+
                         int r = 0;
                         for (FieldPath fp : fieldPaths) {
                             Field f = dtClass.getFieldForFieldPath(fp);
@@ -175,10 +175,12 @@ public class Main {
                             t.setData(r, 4, f.getBitCount());
                             t.setData(r, 5, f.getEncodeFlags());
                             t.setData(r, 7, f.getType().getBaseType() + (f.getType().isPointer() ? "*" : ""));
+                            Object value = null;
                             if (fieldDecoder != null) {
                                 t.setData(r, 6, fieldDecoder.getClass().getSimpleName());
                                 int offsBefore = bs.pos();
-                                t.setData(r, 8, fieldDecoder.decode(bs, f));
+                                value = fieldDecoder.decode(bs, f);
+                                t.setData(r, 8, value);
                                 t.setData(r, 9, bs.pos() - offsBefore);
                                 t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
                             }
@@ -188,18 +190,20 @@ public class Main {
                                 System.exit(1);
                             }
                             r++;
-                        }
-                    } catch (Exception e) {
-                        exx = e;
-                    } finally {
-                        for (PrintStream s : ps) {
-                            t.print(s);
-                            s.format("%s/%s remaining\n", bs.remaining(), bs.len());
-                            if (exx != null) {
-                                exx.printStackTrace(s);
+
+                            if ((fp.path[0] == 37) && (long) value != 16777215L) {
+                                allHandlesOk = false;
                             }
-                            s.format("\n\n\n");
                         }
+                        if (allHandlesOk || found) {
+                            for (PrintStream s : ps) {
+                                s.format("SKIP: %s %s/%s\n", skip, allHandlesOk ? "ALLZERO" : "", found ? "FOUND" : "");
+                                t.print(s);
+                                s.format("%s/%s remaining\n\n\n", bs.remaining(), bs.len());
+                            }
+                        }
+
+                        //System.exit(1);
                     }
                 }
             }
@@ -211,10 +215,6 @@ public class Main {
         new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
-    }
-
-    public static void main(String[] args) throws Exception {
-        new Main().run(args);
     }
 
 }
