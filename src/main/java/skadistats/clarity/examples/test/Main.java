@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,67 +39,68 @@ public class Main {
     {
         decoders.put("bool", new BoolDecoder());
 
-        // POINTERS
         decoders.put("CDOTAGamerules", new BoolDecoder());
         decoders.put("CDOTAGameManager", new BoolDecoder());
         decoders.put("CDOTASpectatorGraphManager", new BoolDecoder());
-        decoders.put("CEntityIdentity", new UInt64Decoder());
         decoders.put("CDOTA_AbilityDraftAbilityState", new UInt64Decoder());
         decoders.put("C_DOTA_ItemStockInfo", new UInt64Decoder());
 
-        decoders.put("uint8", new ByteDecoder());
-        decoders.put("uint16", new UInt64Decoder());
-        decoders.put("uint32", new UInt64Decoder());
+        decoders.put("uint8", new ConstantLengthDecoder(8));
+        decoders.put("uint16", new VarUDecoder(16));
+        decoders.put("uint32", new VarUDecoder(32));
         decoders.put("uint64", new UInt64Decoder());
 
-        decoders.put("int8", new ByteDecoder());
-        decoders.put("int16", new SInt64Decoder());
-        decoders.put("int32", new SInt64Decoder());
+        decoders.put("int8", new ConstantLengthDecoder(8));
+        decoders.put("int16", new VarSDecoder(16));
+        decoders.put("int32", new VarSDecoder(32));
         decoders.put("int64", new SInt64Decoder());
+
+        decoders.put("CUtlSymbolLarge", new StringDecoder());
+        decoders.put("char", new StringDecoder());
 
         decoders.put("float32", new Float32Decoder());
         decoders.put("CNetworkedQuantizedFloat", new Float32Decoder());
 
         decoders.put("gender_t", new UInt64Decoder());
         decoders.put("DamageOptions_t", new UInt64Decoder());
-        decoders.put("MoveCollide_t", new UInt64Decoder());
-        decoders.put("MoveType_t", new UInt64Decoder());
         decoders.put("RenderMode_t", new UInt64Decoder());
         decoders.put("RenderFx_t", new UInt64Decoder());
-        decoders.put("SolidType_t", new UInt64Decoder());
         decoders.put("SurroundingBoundsType_t", new UInt64Decoder());
         decoders.put("DOTA_SHOP_TYPE", new UInt64Decoder());
         decoders.put("DOTA_HeroPickState", new UInt64Decoder());
+        decoders.put("attributeprovidertypes_t", new UInt64Decoder());
+        decoders.put("CourierState_t", new UInt64Decoder());
+        decoders.put("MoveCollide_t", new UInt64Decoder());
+        decoders.put("MoveType_t", new UInt64Decoder());
+
+
+        decoders.put("SolidType_t", new UInt64Decoder());
 
 
 
-        decoders.put("CUtlSymbolLarge", new StringDecoder());
-        decoders.put("char", new StringDecoder());
-
-        decoders.put("CHandle", new UInt64Decoder());
+        decoders.put("CHandle", new VarUDecoder(32));
         decoders.put("CStrongHandle", new UInt64Decoder());
-        decoders.put("CGameSceneNodeHandle", new UInt64Decoder());
+        decoders.put("CGameSceneNodeHandle", new VarUDecoder(32));
         decoders.put("HSequence", new UInt64Decoder());
+
+        decoders.put("CEntityIdentity", new BoolDecoder());
+
 
         decoders.put("Color", new UInt64Decoder());
         decoders.put("color32", new UInt64Decoder());
 
-        decoders.put("CBodyComponent", new UInt64Decoder());
+        decoders.put("CBodyComponent", new BoolDecoder());
         decoders.put("CPhysicsComponent", new UInt64Decoder());
         decoders.put("CRenderComponent", new UInt64Decoder());
 
+        //decoders.put("CUtlStringToken", new ConstantLengthDecoder(13));
         decoders.put("CUtlStringToken", new UInt64Decoder());
-
-
-
 
         decoders.put("CUtlVector", new UInt64Decoder());
         decoders.put("Vector", new VectorDecoder());
         decoders.put("QAngle", new QAngleDecoder());
 
-
         decoders.put("DOTA_PlayerChallengeInfo", new UInt64Decoder());
-
         decoders.put("m_SpeechBubbles", new UInt64Decoder());
 
 
@@ -119,11 +120,11 @@ public class Main {
 
             PrintStream[] ps = new PrintStream[] {
                 System.out,
-                new PrintStream(new FileOutputStream("baselines.txt"), true, "UTF-8")
+                null,
             };
 
-            //List<String> onlyThese = new ArrayList<>();
-            List<String> onlyThese = Arrays.asList("CDOTAGamerulesProxy");
+            List<String> onlyThese = new ArrayList<>();
+            //List<String> onlyThese = Arrays.asList("CWorld");
 
             for (int idx = 0; idx < baseline.getEntryCount(); idx++) {
                 int clsId = Integer.valueOf(baseline.getNameByIndex(idx));
@@ -134,19 +135,23 @@ public class Main {
                         continue;
                     }
 
+                    ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
+
                     TextTable.Builder b = new TextTable.Builder();
                     b.setTitle(dtClass.getDtName());
                     b.setFrame(TextTable.FRAME_COMPAT);
-                    b.addColumn("FieldPath");
+                    b.setPadding(0, 0);
+                    b.addColumn("FP");
                     b.addColumn("Name");
-                    b.addColumn("Type");
-                    b.addColumn("Low");
-                    b.addColumn("High");
-                    b.addColumn("BitCount");
-                    b.addColumn("Flags");
+                    b.addColumn("L", TextTable.Alignment.RIGHT);
+                    b.addColumn("H", TextTable.Alignment.RIGHT);
+                    b.addColumn("BC", TextTable.Alignment.RIGHT);
+                    b.addColumn("Flags", TextTable.Alignment.RIGHT);
                     b.addColumn("Decoder");
-                    b.addColumn("Decoded Value");
-                    b.addColumn("Bits Read");
+                    b.addColumn("Type");
+                    b.addColumn("Value");
+                    b.addColumn("#", TextTable.Alignment.RIGHT);
+                    b.addColumn("read");
                     TextTable t = b.build();
 
                     BitStream bs = new BitStream(baseline.getValueByIndex(idx));
@@ -157,16 +162,17 @@ public class Main {
                         FieldDecoder<?> fieldDecoder = decoders.get(f.getType().getBaseType());
                         t.setData(r, 0, fp);
                         t.setData(r, 1, dtClass.getNameForFieldPath(fp));
-                        t.setData(r, 2, f.getType().getBaseType() + (f.getType().isPointer() ? " (POINTER)" : ""));
-                        t.setData(r, 3, f.getLowValue());
-                        t.setData(r, 4, f.getHighValue());
-                        t.setData(r, 5, f.getBitCount());
-                        t.setData(r, 6, f.getEncodeFlags());
+                        t.setData(r, 2, f.getLowValue());
+                        t.setData(r, 3, f.getHighValue());
+                        t.setData(r, 4, f.getBitCount());
+                        t.setData(r, 5, f.getEncodeFlags());
+                        t.setData(r, 7, f.getType().getBaseType() + (f.getType().isPointer() ? "*" : ""));
                         if (fieldDecoder != null) {
-                            t.setData(r, 7, fieldDecoder.getClass().getSimpleName());
+                            t.setData(r, 6, fieldDecoder.getClass().getSimpleName());
                             int offsBefore = bs.pos();
                             t.setData(r, 8, fieldDecoder.decode(bs, f));
                             t.setData(r, 9, bs.pos() - offsBefore);
+                            t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
                         }
                         if (fieldDecoder == null) {
                             Thread.sleep(100L);
