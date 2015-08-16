@@ -61,22 +61,20 @@ public class Main {
         decoders.put("float32", new Float32Decoder());
         decoders.put("CNetworkedQuantizedFloat", new Float32Decoder());
 
-        decoders.put("gender_t", new UInt64Decoder());
-        decoders.put("DamageOptions_t", new UInt64Decoder());
-        decoders.put("RenderMode_t", new UInt64Decoder());
-        decoders.put("RenderFx_t", new UInt64Decoder());
-        decoders.put("SurroundingBoundsType_t", new UInt64Decoder());
+        decoders.put("gender_t", new EnumDecoder());
+        decoders.put("DamageOptions_t", new EnumDecoder());
+        decoders.put("RenderMode_t", new EnumDecoder());
+        decoders.put("RenderFx_t", new EnumDecoder());
+        decoders.put("attributeprovidertypes_t", new EnumDecoder());
+        decoders.put("CourierState_t", new EnumDecoder());
+        decoders.put("MoveCollide_t", new EnumDecoder());
+        decoders.put("MoveType_t", new EnumDecoder());
+        decoders.put("SolidType_t", new EnumDecoder());
+        decoders.put("SurroundingBoundsType_t", new EnumDecoder());
+
+
         decoders.put("DOTA_SHOP_TYPE", new UInt64Decoder());
         decoders.put("DOTA_HeroPickState", new UInt64Decoder());
-        decoders.put("attributeprovidertypes_t", new UInt64Decoder());
-        decoders.put("CourierState_t", new UInt64Decoder());
-        decoders.put("MoveCollide_t", new UInt64Decoder());
-        decoders.put("MoveType_t", new UInt64Decoder());
-
-
-        decoders.put("SolidType_t", new UInt64Decoder());
-
-
 
         decoders.put("CHandle", new VarUDecoder(32));
         decoders.put("CGameSceneNodeHandle", new VarUDecoder(32));
@@ -100,8 +98,8 @@ public class Main {
 
 
 
-        decoders.put("HSequence", new BinBlockDecoder());
-        decoders.put("CStrongHandle", new SkipDecoder(64));
+        decoders.put("HSequence", new BoolDecoder());
+        decoders.put("CStrongHandle", new BoolDecoder());
 
         decoders.put("CEntityIdentity", new BoolDecoder());
 
