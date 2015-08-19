@@ -56,10 +56,10 @@ public class Main {
         decoders.put("int64", new SInt64Decoder());
 
         decoders.put("CUtlSymbolLarge", new StringDecoder());
-        decoders.put("char", new StringDecoder());
+        decoders.put("char", new ConstantLengthDecoder(8));
 
-        decoders.put("float32", new Float32Decoder());
-        decoders.put("CNetworkedQuantizedFloat", new Float32Decoder());
+        decoders.put("float32", new FloatDecoder());
+        decoders.put("CNetworkedQuantizedFloat", new QFloatDecoder());
 
         decoders.put("gender_t", new EnumDecoder());
         decoders.put("DamageOptions_t", new EnumDecoder());
@@ -84,8 +84,8 @@ public class Main {
         decoders.put("CPhysicsComponent", new UInt64Decoder());
         decoders.put("CRenderComponent", new UInt64Decoder());
 
-        //decoders.put("CUtlStringToken", new ConstantLengthDecoder(10));
-        decoders.put("CUtlStringToken", new VarUDecoder(32));
+        decoders.put("CUtlStringToken", new VarUDecoder(64));
+        //decoders.put("CUtlStringToken", new VarUDecoder(32));
 
         decoders.put("CUtlVector", new UInt64Decoder());
         decoders.put("Vector", new VectorDecoder());
@@ -98,8 +98,8 @@ public class Main {
 
 
 
-        decoders.put("HSequence", new BoolDecoder());
-        decoders.put("CStrongHandle", new BoolDecoder());
+        decoders.put("HSequence", new VarUDecoder(64));
+        decoders.put("CStrongHandle", new VarUDecoder(64));
 
         decoders.put("CEntityIdentity", new BoolDecoder());
 

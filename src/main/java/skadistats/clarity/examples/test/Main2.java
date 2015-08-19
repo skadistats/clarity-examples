@@ -56,8 +56,8 @@ public class Main2 {
         decoders.put("CUtlSymbolLarge", new StringDecoder());
         decoders.put("char", new StringDecoder());
 
-        decoders.put("float32", new Float32Decoder());
-        decoders.put("CNetworkedQuantizedFloat", new Float32Decoder());
+        decoders.put("float32", new QFloatDecoder());
+        decoders.put("CNetworkedQuantizedFloat", new QFloatDecoder());
 
         decoders.put("gender_t", new UInt64Decoder());
         decoders.put("DamageOptions_t", new UInt64Decoder());
