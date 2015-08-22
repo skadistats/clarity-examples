@@ -194,8 +194,7 @@ public class Main {
                     } finally {
                         for (PrintStream s : ps) {
                             t.print(s);
-                            s.format("%s/%s remaining\n", bs.remaining(), bs.len());
-                            s.format("%s\n", bs.toString(bs.pos(), bs.len()));
+                            s.format("%s/%s remaining: %s\n", bs.remaining(), bs.len(), bs.toString(bs.pos(), bs.len()));
                             if (exx != null) {
                                 exx.printStackTrace(s);
                             }
