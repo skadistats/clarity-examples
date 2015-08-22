@@ -45,18 +45,18 @@ public class Main {
         decoders.put("CDOTA_AbilityDraftAbilityState", new UInt64Decoder());
         decoders.put("C_DOTA_ItemStockInfo", new UInt64Decoder());
 
-        decoders.put("uint8", new ConstantLengthDecoder(8));
+        decoders.put("uint8", new VarUDecoder(8));
         decoders.put("uint16", new VarUDecoder(16));
         decoders.put("uint32", new VarUDecoder(32));
         decoders.put("uint64", new UInt64Decoder());
 
-        decoders.put("int8", new ConstantLengthDecoder(8));
+        decoders.put("int8", new VarSDecoder(8));
         decoders.put("int16", new VarSDecoder(16));
         decoders.put("int32", new VarSDecoder(32));
         decoders.put("int64", new SInt64Decoder());
 
         decoders.put("CUtlSymbolLarge", new StringDecoder());
-        decoders.put("char", new ConstantLengthDecoder(8));
+        decoders.put("char", new StringDecoder());
 
         decoders.put("float32", new FloatDecoder());
         decoders.put("CNetworkedQuantizedFloat", new QFloatDecoder());
@@ -80,9 +80,8 @@ public class Main {
         decoders.put("CGameSceneNodeHandle", new VarUDecoder(32));
 
 
-        decoders.put("CBodyComponent", new BoolDecoder());
-        decoders.put("CPhysicsComponent", new UInt64Decoder());
-        decoders.put("CRenderComponent", new UInt64Decoder());
+        decoders.put("CPhysicsComponent", new BoolDecoder());
+        decoders.put("CRenderComponent", new BoolDecoder());
 
         decoders.put("CUtlStringToken", new VarUDecoder(64));
         //decoders.put("CUtlStringToken", new VarUDecoder(32));
@@ -95,6 +94,9 @@ public class Main {
         decoders.put("m_SpeechBubbles", new UInt64Decoder());
 
 
+
+
+        decoders.put("CBodyComponent", new BoolDecoder());
 
 
 
@@ -139,6 +141,14 @@ public class Main {
                         continue;
                     }
 
+                    if ("CParticleSystem".equals(dtClass.getDtName())) {
+                        decoders.put("CBodyComponent", new SkipDecoder(241));
+                    } else if ("CDOTA_BaseNPC_Fort".equals(dtClass.getDtName())) {
+                            decoders.put("CBodyComponent", new SkipDecoder(220));
+                    } else {
+                        decoders.put("CBodyComponent", new BoolDecoder());
+                    }
+
                     ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
 
                     TextTable.Builder b = new TextTable.Builder();
@@ -171,8 +181,8 @@ public class Main {
                             t.setData(r, 2, f.getLowValue());
                             t.setData(r, 3, f.getHighValue());
                             t.setData(r, 4, f.getBitCount());
-                            t.setData(r, 5, f.getEncodeFlags());
-                            t.setData(r, 7, f.getType().getBaseType() + (f.getType().isPointer() ? "*" : ""));
+                            t.setData(r, 5, Integer.toHexString(f.getEncodeFlags()));
+                            t.setData(r, 7, String.format("%s%s%s", f.getType().getBaseType(), (f.getType().isPointer() ? "*" : ""), f.getEncoder() != null ? String.format(" (%s)", f.getEncoder()) : ""));
                             if (fieldDecoder != null) {
                                 t.setData(r, 6, fieldDecoder.getClass().getSimpleName());
                                 int offsBefore = bs.pos();
@@ -193,6 +203,7 @@ public class Main {
                         for (PrintStream s : ps) {
                             t.print(s);
                             s.format("%s/%s remaining\n", bs.remaining(), bs.len());
+                            s.format("%s\n", bs.toString(bs.pos(), bs.len()));
                             if (exx != null) {
                                 exx.printStackTrace(s);
                             }
