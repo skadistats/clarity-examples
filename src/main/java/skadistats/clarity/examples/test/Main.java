@@ -141,14 +141,6 @@ public class Main {
                         continue;
                     }
 
-                    if ("CParticleSystem".equals(dtClass.getDtName())) {
-                        decoders.put("CBodyComponent", new SkipDecoder(241));
-                    } else if ("CDOTA_BaseNPC_Fort".equals(dtClass.getDtName())) {
-                            decoders.put("CBodyComponent", new SkipDecoder(220));
-                    } else {
-                        decoders.put("CBodyComponent", new BoolDecoder());
-                    }
-
                     ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
 
                     TextTable.Builder b = new TextTable.Builder();
