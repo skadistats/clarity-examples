@@ -59,7 +59,7 @@ public class Main {
                 S2NetMessages.ProtoFlattenedSerializerField_t f = fs.getFields(fi);
                 String line = String.format(
                     "type: %-50s name: %-30s node: %-41s serializer: %-35s flags: %8s bitcount: %3s low: %9s high: %9s",
-                    fs.getSymbols(f.getVarTypeSym()),
+                    String.format("%s%s", fs.getSymbols(f.getVarTypeSym()), f.hasVarEncoderSym() ? String.format(" {%s}", fs.getSymbols(f.getVarEncoderSym())) : ""),
                     fs.getSymbols(f.getVarNameSym()),
                     fs.getSymbols(f.getSendNodeSym()),
                     f.hasFieldSerializerNameSym() ? String.format("%s(%s)", fs.getSymbols(f.getFieldSerializerNameSym()), f.getFieldSerializerVersion()) : "-",
