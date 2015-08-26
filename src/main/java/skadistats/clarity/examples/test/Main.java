@@ -3,6 +3,7 @@ package skadistats.clarity.examples.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
+import skadistats.clarity.decoder.field.s2.S2DecoderFactory;
 import skadistats.clarity.decoder.s2.FieldDecoder;
 import skadistats.clarity.decoder.s2.FieldPathDecoder;
 import skadistats.clarity.decoder.s2.prop.*;
@@ -24,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -167,7 +169,6 @@ public class Main {
                         int r = 0;
                         for (FieldPath fp : fieldPaths) {
                             Field f = dtClass.getFieldForFieldPath(fp);
-                            FieldDecoder<?> fieldDecoder = decoders.get(f.getType().getBaseType());
                             t.setData(r, 0, fp);
                             t.setData(r, 1, dtClass.getNameForFieldPath(fp));
                             t.setData(r, 2, f.getLowValue());
@@ -175,18 +176,19 @@ public class Main {
                             t.setData(r, 4, f.getBitCount());
                             t.setData(r, 5, Integer.toHexString(f.getEncodeFlags()));
                             t.setData(r, 7, String.format("%s%s%s", f.getType().getBaseType(), (f.getType().isPointer() ? "*" : ""), f.getEncoder() != null ? String.format(" (%s)", f.getEncoder()) : ""));
-                            if (fieldDecoder != null) {
-                                t.setData(r, 6, fieldDecoder.getClass().getSimpleName());
-                                int offsBefore = bs.pos();
-                                t.setData(r, 8, fieldDecoder.decode(bs, f));
-                                t.setData(r, 9, bs.pos() - offsBefore);
-                                t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
+
+                            int offsBefore = bs.pos();
+                            MethodHandle decoder = S2DecoderFactory.createDecoder(f);
+                            Object data;
+                            try {
+                                data = decoder.invoke(bs);
+                            } catch (Throwable th) {
+                                throw new RuntimeException(th);
                             }
-                            if (fieldDecoder == null) {
-                                Thread.sleep(100L);
-                                System.err.println("NO FIELD DECODER FOR " + f.getType().getBaseType());
-                                System.exit(1);
-                            }
+                            t.setData(r, 6, decoder.type().returnType().getSimpleName().toString());
+                            t.setData(r, 8, data);
+                            t.setData(r, 9, bs.pos() - offsBefore);
+                            t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
                             r++;
                         }
                     } catch (Exception e) {
