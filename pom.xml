@@ -109,6 +109,12 @@
             </properties>
         </profile>
         <profile>
+            <id>entityrun</id>
+            <properties>
+                <exampleName>entityrun</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>findclasses</id>
             <properties>
                 <exampleName>findclasses</exampleName>

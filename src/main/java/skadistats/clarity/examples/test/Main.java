@@ -3,10 +3,9 @@ package skadistats.clarity.examples.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
-import skadistats.clarity.decoder.field.s2.S2DecoderFactory;
-import skadistats.clarity.decoder.s2.FieldDecoder;
 import skadistats.clarity.decoder.s2.FieldPathDecoder;
-import skadistats.clarity.decoder.s2.prop.*;
+import skadistats.clarity.decoder.s2.S2UnpackerFactory;
+import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s2.Field;
 import skadistats.clarity.model.s2.FieldPath;
@@ -25,96 +24,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
-
-    private final Map<String, FieldDecoder<?>> decoders = new HashMap<>();
-    {
-        decoders.put("bool", new BoolDecoder());
-
-        decoders.put("CDOTAGamerules", new BoolDecoder());
-        decoders.put("CDOTAGameManager", new BoolDecoder());
-        decoders.put("CDOTASpectatorGraphManager", new BoolDecoder());
-        decoders.put("CDOTA_AbilityDraftAbilityState", new UInt64Decoder());
-        decoders.put("C_DOTA_ItemStockInfo", new UInt64Decoder());
-
-        decoders.put("uint8", new VarUDecoder(8));
-        decoders.put("uint16", new VarUDecoder(16));
-        decoders.put("uint32", new VarUDecoder(32));
-        decoders.put("uint64", new UInt64Decoder());
-
-        decoders.put("int8", new VarSDecoder(8));
-        decoders.put("int16", new VarSDecoder(16));
-        decoders.put("int32", new VarSDecoder(32));
-        decoders.put("int64", new SInt64Decoder());
-
-        decoders.put("CUtlSymbolLarge", new StringDecoder());
-        decoders.put("char", new StringDecoder());
-
-        decoders.put("float32", new FloatDecoder());
-        decoders.put("CNetworkedQuantizedFloat", new QFloatDecoder());
-
-        decoders.put("gender_t", new EnumDecoder());
-        decoders.put("DamageOptions_t", new EnumDecoder());
-        decoders.put("RenderMode_t", new EnumDecoder());
-        decoders.put("RenderFx_t", new EnumDecoder());
-        decoders.put("attributeprovidertypes_t", new EnumDecoder());
-        decoders.put("CourierState_t", new EnumDecoder());
-        decoders.put("MoveCollide_t", new EnumDecoder());
-        decoders.put("MoveType_t", new EnumDecoder());
-        decoders.put("SolidType_t", new EnumDecoder());
-        decoders.put("SurroundingBoundsType_t", new EnumDecoder());
-
-
-        decoders.put("DOTA_SHOP_TYPE", new UInt64Decoder());
-        decoders.put("DOTA_HeroPickState", new UInt64Decoder());
-
-        decoders.put("CHandle", new VarUDecoder(32));
-        decoders.put("CGameSceneNodeHandle", new VarUDecoder(32));
-
-
-        decoders.put("CPhysicsComponent", new BoolDecoder());
-        decoders.put("CRenderComponent", new BoolDecoder());
-
-        decoders.put("CUtlStringToken", new VarUDecoder(64));
-        //decoders.put("CUtlStringToken", new VarUDecoder(32));
-
-        decoders.put("CUtlVector", new UInt64Decoder());
-        decoders.put("Vector", new VectorDecoder());
-        decoders.put("QAngle", new QAngleDecoder());
-
-        decoders.put("DOTA_PlayerChallengeInfo", new UInt64Decoder());
-        decoders.put("m_SpeechBubbles", new UInt64Decoder());
-
-
-
-
-        decoders.put("CBodyComponent", new BoolDecoder());
-
-
-
-        decoders.put("HSequence", new VarUDecoder(64));
-        decoders.put("CStrongHandle", new VarUDecoder(64));
-
-        decoders.put("CEntityIdentity", new BoolDecoder());
-
-
-        decoders.put("Color", new UInt64Decoder());
-        decoders.put("color32", new UInt64Decoder());
-
-
-    }
-
-
 
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
@@ -178,14 +95,9 @@ public class Main {
                             t.setData(r, 7, String.format("%s%s%s", f.getType().getBaseType(), (f.getType().isPointer() ? "*" : ""), f.getEncoder() != null ? String.format(" (%s)", f.getEncoder()) : ""));
 
                             int offsBefore = bs.pos();
-                            MethodHandle decoder = S2DecoderFactory.createDecoder(f);
-                            Object data;
-                            try {
-                                data = decoder.invoke(bs);
-                            } catch (Throwable th) {
-                                throw new RuntimeException(th);
-                            }
-                            t.setData(r, 6, decoder.type().returnType().getSimpleName().toString());
+                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f);
+                            Object data = unpacker.unpack(bs);
+                            t.setData(r, 6, unpacker.getClass().getSimpleName().toString());
                             t.setData(r, 8, data);
                             t.setData(r, 9, bs.pos() - offsBefore);
                             t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
