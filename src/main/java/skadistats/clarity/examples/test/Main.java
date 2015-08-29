@@ -60,7 +60,7 @@ public class Main {
                         continue;
                     }
 
-                    ps[1] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
+                    ps[0] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
 
                     TextTable.Builder b = new TextTable.Builder();
                     b.setTitle(dtClass.getDtName());
@@ -107,6 +107,9 @@ public class Main {
                         exx = e;
                     } finally {
                         for (PrintStream s : ps) {
+                            if (s == null) {
+                                continue;
+                            }
                             t.print(s);
                             s.format("%s/%s remaining: %s\n", bs.remaining(), bs.len(), bs.toString(bs.pos(), bs.len()));
                             if (exx != null) {
