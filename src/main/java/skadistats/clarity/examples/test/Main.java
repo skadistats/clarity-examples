@@ -3,11 +3,12 @@ package skadistats.clarity.examples.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
-import skadistats.clarity.decoder.s2.FieldPathDecoder;
+import skadistats.clarity.decoder.s2.HuffmanTree;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s2.Field;
+import skadistats.clarity.model.s2.FieldOpType;
 import skadistats.clarity.model.s2.FieldPath;
 import skadistats.clarity.model.s2.S2DTClass;
 import skadistats.clarity.processor.reader.OnTickStart;
@@ -30,6 +31,8 @@ import java.util.List;
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
 public class Main {
+
+    public static final HuffmanTree HUFFMAN_TREE = new HuffmanTree();
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
@@ -82,9 +85,20 @@ public class Main {
                     BitStream bs = new BitStream(baseline.getValueByIndex(idx));
                     exx = null;
                     try {
-                        List<FieldPath> fieldPaths = FieldPathDecoder.decode(bs);
-                        int r = 0;
-                        for (FieldPath fp : fieldPaths) {
+                        List<FieldPath> fieldPaths = new ArrayList<>();
+                        FieldPath fp = new FieldPath();
+                        while (true) {
+                            FieldOpType op = HUFFMAN_TREE.decodeOp(bs);
+                            op.execute(fp, bs);
+                            if (op == FieldOpType.FieldPathEncodeFinish) {
+                                break;
+                            }
+                            fieldPaths.add(fp);
+                            fp = new FieldPath(fp);
+                        }
+
+                        for (int r = 0; r < fieldPaths.size(); r++) {
+                            fp = fieldPaths.get(r);
                             Field f = dtClass.getFieldForFieldPath(fp);
                             t.setData(r, 0, fp);
                             t.setData(r, 1, dtClass.getNameForFieldPath(fp));
@@ -101,7 +115,6 @@ public class Main {
                             t.setData(r, 8, data);
                             t.setData(r, 9, bs.pos() - offsBefore);
                             t.setData(r, 10, bs.toString(offsBefore, bs.pos()));
-                            r++;
                         }
                     } catch (Exception e) {
                         exx = e;
