@@ -19,7 +19,12 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().run(args);
+        try {
+            new Main().run(args);
+        } catch (Exception e) {
+            Thread.sleep(200);
+            throw e;
+        }
     }
 
 }
