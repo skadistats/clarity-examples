@@ -1,21 +1,13 @@
 package skadistats.clarity.examples.dtinspector;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import skadistats.clarity.examples.dtinspector.TreeConstructor.TreePayload;
+import skadistats.clarity.model.s1.S1DTClass;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import skadistats.clarity.examples.dtinspector.TreeConstructor.TreePayload;
-import skadistats.clarity.model.DTClass;
+import java.awt.*;
 
 public class MainWindow {
 
@@ -49,9 +41,8 @@ public class MainWindow {
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
                 TreePayload p = (TreePayload) node.getUserObject();
-                final DTClass dtClass = p.getDtClass();
+                final S1DTClass dtClass = (S1DTClass) p.getDtClass();
                 table.setModel(new TableModel(dtClass));
-
             }
         });
         scrollPaneLeft.setViewportView(classTree);

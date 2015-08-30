@@ -1,6 +1,7 @@
 package skadistats.clarity.examples.dtinspector;
 
 import skadistats.clarity.model.DTClass;
+import skadistats.clarity.model.s1.S1DTClass;
 import skadistats.clarity.processor.sendtables.DTClasses;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -38,11 +39,11 @@ public class TreeConstructor {
     public TreeConstructor(DTClasses classes) {
         Iterator<DTClass> dtClasses = classes.iterator();
         while(dtClasses.hasNext()) {
-            DTClass c = dtClasses.next();
+            S1DTClass c = (S1DTClass) dtClasses.next();
             DTClass s = c.getSuperClass();
             Set<DTClass> forSuper = tree.get(s);
             if (forSuper == null) {
-                forSuper = new TreeSet<DTClass>(COMPARATOR);
+                forSuper = new TreeSet<>(COMPARATOR);
                 tree.put(s, forSuper);
             }
             forSuper.add(c);

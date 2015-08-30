@@ -1,17 +1,17 @@
 package skadistats.clarity.examples.dtinspector;
 
-import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.s1.PropFlag;
 import skadistats.clarity.model.s1.ReceiveProp;
+import skadistats.clarity.model.s1.S1DTClass;
 
 import javax.swing.table.AbstractTableModel;
 
 public class TableModel extends AbstractTableModel {
     private static final long serialVersionUID = 2946867068203801119L;
 
-    private final DTClass dtClass;
+    private final S1DTClass dtClass;
 
-    public TableModel(DTClass dtClass) {
+    public TableModel(S1DTClass dtClass) {
         this.dtClass = dtClass;
     }
 
