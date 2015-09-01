@@ -10,6 +10,7 @@ import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s2.Field;
 import skadistats.clarity.model.s2.FieldPath;
+import skadistats.clarity.model.s2.FieldType;
 import skadistats.clarity.model.s2.S2DTClass;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
@@ -38,7 +39,7 @@ public class Main {
 
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
-        if (ctx.getTick() == 1) {
+        if (ctx.getTick() == 50000) {
             //System.out.println(new HuffmanGraph(FieldPathDecoder.HUFFMAN_TREE).generate());
             StringTables stringTables = ctx.getProcessor(StringTables.class);
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
@@ -100,13 +101,14 @@ public class Main {
                         for (int r = 0; r < fieldPaths.size(); r++) {
                             fp = fieldPaths.get(r);
                             Field f = dtClass.getFieldForFieldPath(fp);
+                            FieldType ft = dtClass.getTypeForFieldPath(fp);
                             t.setData(r, 0, fp);
                             t.setData(r, 1, dtClass.getNameForFieldPath(fp));
                             t.setData(r, 2, f.getLowValue());
                             t.setData(r, 3, f.getHighValue());
                             t.setData(r, 4, f.getBitCount());
                             t.setData(r, 5, f.getEncodeFlags() != null ? Integer.toHexString(f.getEncodeFlags()) : "-");
-                            t.setData(r, 7, String.format("%s%s%s", f.getType().getBaseType(), (f.getType().isPointer() ? "*" : ""), f.getEncoder() != null ? String.format(" (%s)", f.getEncoder()) : ""));
+                            t.setData(r, 7, String.format("%s%s", ft.toString(true), f.getEncoder() != null ? String.format(" {%s}", f.getEncoder()) : ""));
 
                             int offsBefore = bs.pos();
                             Unpacker unpacker = S2UnpackerFactory.createUnpacker(f, f.getType().getBaseType());
