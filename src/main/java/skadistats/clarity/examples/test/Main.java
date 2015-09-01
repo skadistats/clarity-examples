@@ -109,7 +109,7 @@ public class Main {
                             t.setData(r, 7, String.format("%s%s%s", f.getType().getBaseType(), (f.getType().isPointer() ? "*" : ""), f.getEncoder() != null ? String.format(" (%s)", f.getEncoder()) : ""));
 
                             int offsBefore = bs.pos();
-                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f);
+                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f, f.getType().getBaseType());
                             Object data = unpacker.unpack(bs);
                             t.setData(r, 6, unpacker.getClass().getSimpleName().toString());
                             t.setData(r, 8, data);
