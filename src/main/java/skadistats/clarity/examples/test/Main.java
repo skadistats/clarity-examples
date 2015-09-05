@@ -9,7 +9,7 @@ import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s2.S2DTClass;
-import skadistats.clarity.model.s2.field.Field;
+import skadistats.clarity.model.s2.field.FieldProperties;
 import skadistats.clarity.model.s2.field.FieldType;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
@@ -99,7 +99,7 @@ public class Main {
 
                         for (int r = 0; r < fieldPaths.size(); r++) {
                             fp = fieldPaths.get(r);
-                            Field f = dtClass.getFieldForFieldPath(fp);
+                            FieldProperties f = dtClass.getFieldForFieldPath(fp).getProperties();
                             FieldType ft = dtClass.getTypeForFieldPath(fp);
                             t.setData(r, 0, fp);
                             t.setData(r, 1, dtClass.getNameForFieldPath(fp));
