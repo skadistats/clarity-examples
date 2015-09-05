@@ -8,10 +8,10 @@ import skadistats.clarity.decoder.s2.HuffmanTree;
 import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.StringTable;
-import skadistats.clarity.model.s2.Field;
 import skadistats.clarity.model.s2.FieldPath;
-import skadistats.clarity.model.s2.FieldType;
 import skadistats.clarity.model.s2.S2DTClass;
+import skadistats.clarity.model.s2.field.Field;
+import skadistats.clarity.model.s2.field.FieldType;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -111,7 +111,7 @@ public class Main {
                             t.setData(r, 7, String.format("%s%s", ft.toString(true), f.getEncoder() != null ? String.format(" {%s}", f.getEncoder()) : ""));
 
                             int offsBefore = bs.pos();
-                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f, f.getType().getBaseType());
+                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f.getProperties(), f.getType().getBaseType());
                             Object data = unpacker.unpack(bs);
                             t.setData(r, 6, unpacker.getClass().getSimpleName().toString());
                             t.setData(r, 8, data);

@@ -4,7 +4,7 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ZeroCopy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.model.s2.FieldType;
+import skadistats.clarity.model.s2.field.FieldType;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
