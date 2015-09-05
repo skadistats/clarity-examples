@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.BitStream;
 import skadistats.clarity.decoder.s2.FieldOpType;
 import skadistats.clarity.decoder.s2.HuffmanTree;
-import skadistats.clarity.decoder.s2.S2UnpackerFactory;
 import skadistats.clarity.decoder.unpacker.Unpacker;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s2.FieldPath;
@@ -111,7 +110,11 @@ public class Main {
                             t.setData(r, 7, String.format("%s%s", ft.toString(true), f.getEncoder() != null ? String.format(" {%s}", f.getEncoder()) : ""));
 
                             int offsBefore = bs.pos();
-                            Unpacker unpacker = S2UnpackerFactory.createUnpacker(f.getProperties(), f.getType().getBaseType());
+                            Unpacker unpacker = dtClass.getUnpackerForFieldPath(fp);
+                            if (unpacker == null) {
+                                System.out.format("no unpacker for field %s with type %s!", f.getName(), f.getType());
+                                System.exit(1);
+                            }
                             Object data = unpacker.unpack(bs);
                             t.setData(r, 6, unpacker.getClass().getSimpleName().toString());
                             t.setData(r, 8, data);
