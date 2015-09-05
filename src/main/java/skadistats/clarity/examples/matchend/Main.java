@@ -3,6 +3,7 @@ package skadistats.clarity.examples.matchend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
+import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.Context;
@@ -49,9 +50,11 @@ public class Main {
         TextTable t = b.build();
 
         for (int c = 0; c < columns.length; c++) {
-            int baseIndex = ps.getDtClass().getPropertyIndex(columns[c][1] + ".0000");
+            FieldPath base = ps.getDtClass().getFieldPathForName(columns[c][1] + ".0000");
             for (int r = 0; r < 10; r++) {
-                Object val = ps.getState()[baseIndex + r];
+                FieldPath fp = new FieldPath(base);
+                fp.path[0] += r;
+                Object val = ps.getPropertyForFieldPath(fp);
                 String str = new String(val.toString().getBytes("ISO-8859-1"));
                 t.setData(r, c, str);
             }
