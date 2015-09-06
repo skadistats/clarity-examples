@@ -38,7 +38,7 @@ public class Main {
 
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) throws InterruptedException, FileNotFoundException, UnsupportedEncodingException {
-        if (ctx.getTick() == 50000) {
+        if (ctx.getTick() == 30000) {
             //System.out.println(new HuffmanGraph(FieldPathDecoder.HUFFMAN_TREE).generate());
             StringTables stringTables = ctx.getProcessor(StringTables.class);
             DTClasses dtClasses = ctx.getProcessor(DTClasses.class);

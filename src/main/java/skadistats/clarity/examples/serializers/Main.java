@@ -49,11 +49,11 @@ public class Main {
                 }
             }
         }
-        dump(fs);
+        dump(ctx, fs);
     }
 
-    private void dump(S2NetMessages.CSVCMsg_FlattenedSerializer fs) throws FileNotFoundException {
-        PrintStream out = new PrintStream(new FileOutputStream("flattables.txt"));
+    private void dump(Context ctx, S2NetMessages.CSVCMsg_FlattenedSerializer fs) throws FileNotFoundException {
+        PrintStream out = new PrintStream(new FileOutputStream("flattables_" + ctx.getBuildNumber() + ".txt"));
         for (S2NetMessages.ProtoFlattenedSerializer_t s : fs.getSerializersList()) {
             out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             out.format("%s(%s)\n", fs.getSymbols(s.getSerializerNameSym()), s.getSerializerVersion());
