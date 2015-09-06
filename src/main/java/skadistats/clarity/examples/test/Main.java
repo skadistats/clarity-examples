@@ -21,10 +21,7 @@ import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.TextTable;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +42,11 @@ public class Main {
             StringTable baseline = stringTables.forName("instancebaseline");
 
 
+            File dir = new File("baselines/" + ctx.getBuildNumber());
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
             PrintStream[] ps = new PrintStream[] {
                 System.out,
                 null,
@@ -63,7 +65,7 @@ public class Main {
                         continue;
                     }
 
-                    ps[0] = new PrintStream(new FileOutputStream("baselines/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
+                    ps[0] = new PrintStream(new FileOutputStream("baselines/" + ctx.getBuildNumber() + "/" + dtClass.getDtName() + ".txt"), true, "UTF-8");
 
                     TextTable.Builder b = new TextTable.Builder();
                     b.setTitle(dtClass.getDtName());
