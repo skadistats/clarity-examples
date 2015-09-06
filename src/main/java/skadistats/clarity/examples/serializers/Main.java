@@ -13,7 +13,10 @@ import skadistats.clarity.wire.Packet;
 import skadistats.clarity.wire.common.proto.Demo;
 import skadistats.clarity.wire.s2.proto.S2NetMessages;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -46,15 +49,15 @@ public class Main {
                 }
             }
         }
-        System.out.println(baseTypes);
         dump(fs);
     }
 
-    private void dump(S2NetMessages.CSVCMsg_FlattenedSerializer fs) {
+    private void dump(S2NetMessages.CSVCMsg_FlattenedSerializer fs) throws FileNotFoundException {
+        PrintStream out = new PrintStream(new FileOutputStream("flattables.txt"));
         for (S2NetMessages.ProtoFlattenedSerializer_t s : fs.getSerializersList()) {
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.format("%s(%s)\n", fs.getSymbols(s.getSerializerNameSym()), s.getSerializerVersion());
-            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            out.format("%s(%s)\n", fs.getSymbols(s.getSerializerNameSym()), s.getSerializerVersion());
+            out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             for (int fi : s.getFieldsIndexList()) {
                 S2NetMessages.ProtoFlattenedSerializerField_t f = fs.getFields(fi);
                 String line = String.format(
@@ -68,10 +71,10 @@ public class Main {
                     f.hasLowValue() ? f.getLowValue() : "-",
                     f.hasHighValue() ? f.getHighValue() : "-"
                 );
-                System.out.println(line);
+                out.println(line);
             }
-            System.out.println();
-            System.out.println();
+            out.println();
+            out.println();
         }
     }
 
