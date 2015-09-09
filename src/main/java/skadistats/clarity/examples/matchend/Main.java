@@ -66,7 +66,7 @@ public class Main {
                     e = ps;
                     idx = r;
                 } else {
-                    e = r < 5 ? dd : dr;
+                    e = r < 5 ? dr : dd;
                     idx = r % 5;
                 }
                 FieldPath fp = e.getDtClass().getFieldPathForName(columns[c][2].replace("%i", Util.arrayIdxToString(idx)));
