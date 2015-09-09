@@ -36,13 +36,19 @@ public class Main {
 
     private void summary2(Context ctx) throws UnsupportedEncodingException {
         Entity ps = ctx.getProcessor(Entities.class).getByDtName("CDOTA_PlayerResource");
+        Entity dr = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataRadiant");
+        Entity dd = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataDire");
+
 
         String[][] columns = new String[][]{
-            {"Name", "m_vecPlayerData.%i.m_iszPlayerName"},
-            {"Level", "m_vecPlayerTeamData.%i.m_iLevel"},
-            {"K", "m_vecPlayerTeamData.%i.m_iKills"},
-            {"D", "m_vecPlayerTeamData.%i.m_iDeaths"},
-            {"A", "m_vecPlayerTeamData.%i.m_iAssists"}
+            {"Name", "ps", "m_vecPlayerData.%i.m_iszPlayerName"},
+            {"Level", "ps", "m_vecPlayerTeamData.%i.m_iLevel"},
+            {"K", "ps",  "m_vecPlayerTeamData.%i.m_iKills"},
+            {"D", "ps", "m_vecPlayerTeamData.%i.m_iDeaths"},
+            {"A", "ps", "m_vecPlayerTeamData.%i.m_iAssists"},
+            {"Gold", "d", "m_vecDataTeam.%i.m_iTotalEarnedGold"},
+            {"LH", "d", "m_vecDataTeam.%i.m_iLastHitCount"},
+            {"DN", "d", "m_vecDataTeam.%i.m_iDenyCount"},
         };
 
         TextTable.Builder b = new TextTable.Builder();
@@ -53,8 +59,18 @@ public class Main {
 
         for (int c = 0; c < columns.length; c++) {
             for (int r = 0; r < 10; r++) {
-                FieldPath fp = ps.getDtClass().getFieldPathForName(columns[c][1].replace("%i", Util.arrayIdxToString(r)));
-                Object val = ps.getPropertyForFieldPath(fp);
+                String entityStr = columns[c][1];
+                Entity e;
+                int idx;
+                if ("ps".equals(entityStr)) {
+                    e = ps;
+                    idx = r;
+                } else {
+                    e = r < 5 ? dd : dr;
+                    idx = r % 5;
+                }
+                FieldPath fp = e.getDtClass().getFieldPathForName(columns[c][2].replace("%i", Util.arrayIdxToString(idx)));
+                Object val = e.getPropertyForFieldPath(fp);
                 String str = new String(val.toString().getBytes("ISO-8859-1"));
                 t.setData(r, c, str);
             }
