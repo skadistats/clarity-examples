@@ -114,9 +114,9 @@ public class Main {
                         throw new RuntimeException("CLASS " + clsId + " NOT KNOWN!");
                     }
                     serial = stream.readUBitInt(engineType.getSerialBits());
-                    if (engineType.getSerialExtraBits() != 0) {
-                        // TODO: there is an extra 15 bits encoded here for S2, figure out what it is
-                        stream.skip(engineType.getSerialExtraBits());
+                    if (engineType == EngineType.SOURCE2) {
+                        // TODO: there is an extra VarInt encoded here for S2, figure out what it is
+                        stream.readVarUInt();
                     }
                     state = Util.clone(getBaseline(dtClasses, cls.getClassId()));
                     fieldReader.readFields(stream, cls, fieldPaths, state, dumpTicks.contains(ctx.getTick()));
