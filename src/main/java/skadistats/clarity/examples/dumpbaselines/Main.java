@@ -1,0 +1,67 @@
+package skadistats.clarity.examples.dumpbaselines;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import skadistats.clarity.decoder.BitStream;
+import skadistats.clarity.decoder.FieldReader;
+import skadistats.clarity.model.DTClass;
+import skadistats.clarity.model.StringTable;
+import skadistats.clarity.processor.runner.Context;
+import skadistats.clarity.processor.runner.ControllableRunner;
+import skadistats.clarity.processor.sendtables.DTClasses;
+import skadistats.clarity.processor.sendtables.UsesDTClasses;
+import skadistats.clarity.processor.stringtables.StringTables;
+import skadistats.clarity.processor.stringtables.UsesStringTable;
+import skadistats.clarity.source.MappedFileSource;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
+@UsesDTClasses
+@UsesStringTable("instancebaseline")
+public class Main {
+
+    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+
+    public void run(String[] args) throws Exception {
+        long tStart = System.currentTimeMillis();
+
+        int tick = Integer.valueOf(args[0]);
+        String demoName = args[1];
+
+        ControllableRunner r = new ControllableRunner(new MappedFileSource(demoName)).runWith(this);
+        r.seek(tick);
+        r.halt();
+
+        Context ctx = r.getContext();
+
+        File dir = new File("baselines" + File.separator + ctx.getBuildNumber());
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        FieldReader fieldReader = ctx.getEngineType().getNewFieldReader();
+
+        StringTables stringTables = ctx.getProcessor(StringTables.class);
+        DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
+        StringTable baselines = stringTables.forName("instancebaseline");
+
+        for (int i = 0; i < baselines.getEntryCount(); i++) {
+            DTClass dtClass = dtClasses.forClassId(Integer.valueOf(baselines.getNameByIndex(i)));
+            String fileName = String.format("%s%s%s.txt", dir.getPath(), File.separator, dtClass.getDtName());
+            fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
+            BitStream bs = new BitStream(baselines.getValueByIndex(i));
+            fieldReader.readFields(bs, dtClass, dtClass.getEmptyStateArray(), true);
+            fieldReader.DEBUG_STREAM.format("%s/%s remaining: %s\n", bs.remaining(), bs.len(), bs.toString(bs.pos(), bs.len()));
+        }
+
+        long tMatch = System.currentTimeMillis() - tStart;
+        log.info("total time taken: {}s", (tMatch) / 1000.0);
+    }
+
+    public static void main(String[] args) throws Exception {
+        new Main().run(args);
+    }
+
+}
