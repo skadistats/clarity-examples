@@ -5,7 +5,10 @@ import com.google.protobuf.GeneratedMessage;
 import skadistats.clarity.decoder.BitStream;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.Util;
-import skadistats.clarity.model.*;
+import skadistats.clarity.model.DTClass;
+import skadistats.clarity.model.EngineType;
+import skadistats.clarity.model.Entity;
+import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.Runner;
@@ -28,12 +31,11 @@ public class Main {
 
     private final Map<Integer, BaselineEntry> baselineEntries = new HashMap<>();
     private  Entity[] entities;
+    private int[] deletions;
     private FieldReader fieldReader;
     private EngineType engineType;
 
     private int serverTick = -1;
-
-    private final FieldPath[] fieldPaths = new FieldPath[FieldReader.MAX_PROPERTIES];
 
     private class BaselineEntry {
         private ByteString rawBaseline;
@@ -119,7 +121,7 @@ public class Main {
                         stream.readVarUInt();
                     }
                     state = Util.clone(getBaseline(dtClasses, cls.getClassId()));
-                    fieldReader.readFields(stream, cls, fieldPaths, state, dumpTicks.contains(ctx.getTick()));
+                    fieldReader.readFields(stream, cls, state, dumpTicks.contains(ctx.getTick()));
                     entity = new Entity(ctx.getEngineType(), entityIndex, serial, cls, true, state);
                     entities[entityIndex] = entity;
                 } else {
@@ -133,7 +135,7 @@ public class Main {
                     }
                     cls = entity.getDtClass();
                     state = entity.getState();
-                    int nChanged = fieldReader.readFields(stream, cls, fieldPaths, state, dumpTicks.contains(ctx.getTick()));
+                    int nChanged = fieldReader.readFields(stream, cls, state, dumpTicks.contains(ctx.getTick()));
                     if (!entity.isActive()) {
                         entity.setActive(true);
                     }
@@ -151,15 +153,19 @@ public class Main {
             }
         }
 
-//        if (message.getIsDelta()) {
-//            while (stream.readBitFlag()) {
-//                entityIndex = stream.readUBitInt(engineType.getIndexBits());
-//                if (evDeleted != null) {
-//                    evDeleted.raise(entities[entityIndex]);
-//                }
-//                entities[entityIndex] = null;
-//            }
-//        }
+        if (message.getIsDelta()) {
+            int n = fieldReader.readDeletions(stream, engineType.getIndexBits(), deletions);
+            for (int i = 0; i < n; i++) {
+                entityIndex = deletions[i];
+                entity = entities[entityIndex];
+                if (entity != null) {
+                    System.out.format("entity at index %s was ACTUALLY found when ordered to delete, tell the press!\n", entityIndex);
+                } else {
+                    //log.warn("entity at index {} was not found when ordered to delete.", entityIndex);
+                }
+                entities[entityIndex] = null;
+            }
+        }
     }
 
     private Object[] getBaseline(DTClasses dtClasses, int clsId) {
@@ -173,7 +179,7 @@ public class Main {
             BitStream stream = new BitStream(be.rawBaseline);
             be.baseline = cls.getEmptyStateArray();
             System.out.println("trying to read baseline for " + clsId);
-            fieldReader.readFields(stream, cls, fieldPaths, be.baseline, true);
+            fieldReader.readFields(stream, cls, be.baseline, true);
         }
         return be.baseline;
     }
@@ -183,6 +189,7 @@ public class Main {
         engineType = r.getEngineType();
         fieldReader = engineType.getNewFieldReader();
         entities = new Entity[1 << engineType.getIndexBits()];
+        deletions = new int[1 << engineType.getIndexBits()];
         r.runWith(this);
     }
 
