@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dtinspector;
 
+import skadistats.clarity.decoder.s1.S1DTClass;
 import skadistats.clarity.examples.dtinspector.TreeConstructor.TreePayload;
-import skadistats.clarity.model.s1.S1DTClass;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;

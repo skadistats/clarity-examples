@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dtinspector;
 
+import skadistats.clarity.decoder.s1.S1DTClass;
 import skadistats.clarity.model.DTClass;
-import skadistats.clarity.model.s1.S1DTClass;
 import skadistats.clarity.processor.sendtables.DTClasses;
 
 import javax.swing.tree.DefaultMutableTreeNode;
