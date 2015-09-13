@@ -36,7 +36,7 @@ public class Main {
 
         Context ctx = r.getContext();
 
-        File dir = new File("baselines" + File.separator + ctx.getBuildNumber());
+        File dir = new File(String.format("baselines%s%s", File.separator, ctx.getBuildNumber() == -1 ? "latest" : ctx.getBuildNumber()));
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -50,6 +50,7 @@ public class Main {
         for (int i = 0; i < baselines.getEntryCount(); i++) {
             DTClass dtClass = dtClasses.forClassId(Integer.valueOf(baselines.getNameByIndex(i)));
             String fileName = String.format("%s%s%s.txt", dir.getPath(), File.separator, dtClass.getDtName());
+            log.info("writing {}", fileName);
             fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = new BitStream(baselines.getValueByIndex(i));
             fieldReader.readFields(bs, dtClass, dtClass.getEmptyStateArray(), true);
