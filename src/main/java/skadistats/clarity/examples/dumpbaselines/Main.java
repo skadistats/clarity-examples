@@ -53,10 +53,15 @@ public class Main {
             log.info("writing {}", fileName);
             fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = new BitStream(baselines.getValueByIndex(i));
-            fieldReader.readFields(bs, dtClass, dtClass.getEmptyStateArray(), true);
-            fieldReader.DEBUG_STREAM.format("%s/%s remaining: %s\n", bs.remaining(), bs.len(), bs.toString(bs.pos(), bs.len()));
-            if (bs.remaining() < 0 || bs.remaining() > 7) {
-                fieldReader.DEBUG_STREAM.format("might be off?");
+            try {
+                fieldReader.readFields(bs, dtClass, dtClass.getEmptyStateArray(), true);
+                if (bs.remaining() < 0 || bs.remaining() > 7) {
+                    log.info("-- OFF: {} remaining", bs.remaining());
+                }
+            } catch (Exception e) {
+                log.info("-- FAIL: {}", e.getMessage());
+                e.printStackTrace(fieldReader.DEBUG_STREAM);
+            } finally {
             }
         }
 
