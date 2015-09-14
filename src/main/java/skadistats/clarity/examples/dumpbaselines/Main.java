@@ -55,6 +55,9 @@ public class Main {
             BitStream bs = new BitStream(baselines.getValueByIndex(i));
             fieldReader.readFields(bs, dtClass, dtClass.getEmptyStateArray(), true);
             fieldReader.DEBUG_STREAM.format("%s/%s remaining: %s\n", bs.remaining(), bs.len(), bs.toString(bs.pos(), bs.len()));
+            if (bs.remaining() < 0 || bs.remaining() > 7) {
+                fieldReader.DEBUG_STREAM.format("might be off?");
+            }
         }
 
         long tMatch = System.currentTimeMillis() - tStart;
