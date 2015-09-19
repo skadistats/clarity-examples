@@ -37,6 +37,14 @@ public class Main {
 
     private int serverTick = -1;
 
+
+    private static Set<Integer> indicesToLog = new HashSet<>();
+    private static Set<Integer> dumpTicks = new HashSet<>();
+    static {
+        //indicesToLog.add(748);
+        //dumpTicks.add(2482);
+    }
+
     private class BaselineEntry {
         private ByteString rawBaseline;
         private Object[] baseline;
@@ -81,13 +89,6 @@ public class Main {
         Object[] state;
         Entity entity;
 
-
-        Set<Integer> indicesToLog = new HashSet<>();
-        indicesToLog.add(748);
-
-        Set<Integer> dumpTicks = new HashSet<>();
-        dumpTicks.add(3480);
-
         System.out.format("(%s) %s at server tick %s, delta %s, baseline %d, update_baseline %s\n",
             ctx.getTick(),
             message.getClass().getSimpleName(),
@@ -120,19 +121,20 @@ public class Main {
                         // TODO: there is an extra VarInt encoded here for S2, figure out what it is
                         stream.readVarUInt();
                     }
-                    state = Util.clone(getBaseline(dtClasses, cls.getClassId()));
+                    state = Util.clone(getBaseline(ctx, dtClasses, cls.getClassId()));
                     fieldReader.readFields(stream, cls, state, dumpTicks.contains(ctx.getTick()));
                     entity = new Entity(ctx.getEngineType(), entityIndex, serial, cls, true, state);
                     entities[entityIndex] = entity;
                 } else {
                     if (indicesToLog.contains(entityIndex))
                         System.out.format("update for #%d\n", entityIndex);
-                    entity = entities[entityIndex];
-                    if (entity == null) {
+                    if (entityIndex > entities.length || entities[entityIndex] == null) {
                         System.out.format("----------> oops, entity to update not found for idx %d. %d updates remaining. Man the liveboats!\n", entityIndex, updateCount);
+                        System.exit(1);
                         return;
                         //throw new RuntimeException("oops, entity to update not found (" + entityIndex + ")");
                     }
+                    entity = entities[entityIndex];
                     cls = entity.getDtClass();
                     state = entity.getState();
                     int nChanged = fieldReader.readFields(stream, cls, state, dumpTicks.contains(ctx.getTick()));
@@ -168,7 +170,7 @@ public class Main {
         }
     }
 
-    private Object[] getBaseline(DTClasses dtClasses, int clsId) {
+    private Object[] getBaseline(Context ctx, DTClasses dtClasses, int clsId) {
         BaselineEntry be = baselineEntries.get(clsId);
         if (be == null || be.rawBaseline == null) {
             System.out.println("NO BASELINE FOR " + clsId);
@@ -178,8 +180,9 @@ public class Main {
             DTClass cls = dtClasses.forClassId(clsId);
             BitStream stream = BitStream.createBitStream(be.rawBaseline);
             be.baseline = cls.getEmptyStateArray();
-            System.out.println("trying to read baseline for " + clsId);
-            fieldReader.readFields(stream, cls, be.baseline, true);
+            System.out.print("trying to read baseline for " + clsId);
+            fieldReader.readFields(stream, cls, be.baseline, dumpTicks.contains(ctx.getTick()));
+            System.out.println("... done");
         }
         return be.baseline;
     }
