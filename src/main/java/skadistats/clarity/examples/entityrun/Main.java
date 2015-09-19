@@ -20,6 +20,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         try {
+            //System.out.println("press key to start"); System.in.read();
             new Main().run(args);
         } catch (Exception e) {
             Thread.sleep(200);

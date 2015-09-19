@@ -2,9 +2,9 @@ package skadistats.clarity.examples.livetest;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessage;
-import skadistats.clarity.decoder.BitStream;
 import skadistats.clarity.decoder.FieldReader;
 import skadistats.clarity.decoder.Util;
+import skadistats.clarity.decoder.bitstream.BitStream;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.EngineType;
 import skadistats.clarity.model.Entity;
@@ -70,7 +70,7 @@ public class Main {
 
     @OnMessage(NetMessages.CSVCMsg_PacketEntities.class)
     public void onPacketEntities(Context ctx, NetMessages.CSVCMsg_PacketEntities message) {
-        BitStream stream = new BitStream(message.getEntityData());
+        BitStream stream = BitStream.createBitStream(message.getEntityData());
         DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
         int updateCount = message.getUpdatedEntries();
         int entityIndex = -1;
@@ -176,7 +176,7 @@ public class Main {
         }
         if (be.baseline == null) {
             DTClass cls = dtClasses.forClassId(clsId);
-            BitStream stream = new BitStream(be.rawBaseline);
+            BitStream stream = BitStream.createBitStream(be.rawBaseline);
             be.baseline = cls.getEmptyStateArray();
             System.out.println("trying to read baseline for " + clsId);
             fieldReader.readFields(stream, cls, be.baseline, true);
