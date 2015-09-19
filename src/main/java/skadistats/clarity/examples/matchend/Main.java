@@ -39,17 +39,30 @@ public class Main {
         Entity dr = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataRadiant");
         Entity dd = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataDire");
 
-
-        String[][] columns = new String[][]{
-            {"Name", "ps", "m_vecPlayerData.%i.m_iszPlayerName"},
-            {"Level", "ps", "m_vecPlayerTeamData.%i.m_iLevel"},
-            {"K", "ps",  "m_vecPlayerTeamData.%i.m_iKills"},
-            {"D", "ps", "m_vecPlayerTeamData.%i.m_iDeaths"},
-            {"A", "ps", "m_vecPlayerTeamData.%i.m_iAssists"},
-            {"Gold", "d", "m_vecDataTeam.%i.m_iTotalEarnedGold"},
-            {"LH", "d", "m_vecDataTeam.%i.m_iLastHitCount"},
-            {"DN", "d", "m_vecDataTeam.%i.m_iDenyCount"},
-        };
+        String[][] columns;
+        if (ps.getDtClass().getFieldPathForName("m_vecPlayerData") != null) {
+            columns = new String[][]{
+                {"Name", "ps", "m_vecPlayerData.%i.m_iszPlayerName"},
+                {"Level", "ps", "m_vecPlayerTeamData.%i.m_iLevel"},
+                {"K", "ps",  "m_vecPlayerTeamData.%i.m_iKills"},
+                {"D", "ps", "m_vecPlayerTeamData.%i.m_iDeaths"},
+                {"A", "ps", "m_vecPlayerTeamData.%i.m_iAssists"},
+                {"Gold", "d", "m_vecDataTeam.%i.m_iTotalEarnedGold"},
+                {"LH", "d", "m_vecDataTeam.%i.m_iLastHitCount"},
+                {"DN", "d", "m_vecDataTeam.%i.m_iDenyCount"},
+            };
+        } else {
+            columns = new String[][]{
+                {"Name", "ps", "m_iszPlayerNames.%i"},
+                {"Level", "ps", "m_iLevel.%i"},
+                {"K", "ps",  "m_iKills.%i"},
+                {"D", "ps", "m_iDeaths.%i"},
+                {"A", "ps", "m_iAssists.%i"},
+                {"Gold", "ps", "m_iTotalEarnedGold.%i"},
+                {"LH", "ps", "m_iLastHitCount.%i"},
+                {"DN", "ps", "m_iDenyCount.%i"},
+            };
+        }
 
         TextTable.Builder b = new TextTable.Builder();
         for (int c = 0; c < columns.length; c++) {
