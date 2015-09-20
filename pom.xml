@@ -109,15 +109,15 @@
             </properties>
         </profile>
         <profile>
-            <id>entityrun</id>
+            <id>dumpbaselines</id>
             <properties>
-                <exampleName>entityrun</exampleName>
+                <exampleName>dumpbaselines</exampleName>
             </properties>
         </profile>
         <profile>
-            <id>findclasses</id>
+            <id>entityrun</id>
             <properties>
-                <exampleName>findclasses</exampleName>
+                <exampleName>entityrun</exampleName>
             </properties>
         </profile>
         <profile>
@@ -130,6 +130,12 @@
             <id>info</id>
             <properties>
                 <exampleName>info</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>livetest</id>
+            <properties>
+                <exampleName>livetest</exampleName>
             </properties>
         </profile>
         <profile>
