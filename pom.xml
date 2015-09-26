@@ -169,6 +169,12 @@
             </properties>
         </profile>
         <profile>
+            <id>stringtabledump</id>
+            <properties>
+                <exampleName>stringtabledump</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>tempentities</id>
             <properties>
                 <exampleName>tempentities</exampleName>
