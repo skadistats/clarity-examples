@@ -24,6 +24,7 @@ public class Main {
             long tStart = System.nanoTime();
             while (i-- > 0) {
                 int nextTick = r.nextInt(lastTick);
+                log.warn("seeking to {}", nextTick);
                 runner.seek(nextTick);
             }
             long tTick = System.nanoTime() - tStart;
