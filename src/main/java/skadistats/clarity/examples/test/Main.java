@@ -1,69 +1,41 @@
 package skadistats.clarity.examples.test;
 
+import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.model.Entity;
-import skadistats.clarity.model.FieldPath;
-import skadistats.clarity.processor.entities.OnEntityCreated;
-import skadistats.clarity.processor.entities.OnEntityUpdated;
 import skadistats.clarity.processor.entities.UsesEntities;
+import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.wire.s1.proto.S1NetMessages;
+import skadistats.clarity.wire.s2.proto.S2NetMessages;
 
 @UsesEntities
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-    private FieldPath mana;
-    private FieldPath maxMana;
-
-    private boolean isHero(Entity e) {
-        return e.getDtClass().getDtName().startsWith("CDOTA_Unit_Hero");
-    }
-
-    private void ensureFieldPaths(Entity e) {
-        if (mana == null) {
-            mana = e.getDtClass().getFieldPathForName("m_flMana");
-            maxMana = e.getDtClass().getFieldPathForName("m_flMaxMana");
-        }
-    }
-
-    @OnEntityCreated
-    public void onCreated(Context ctx, Entity e) {
-        if (!isHero(e)) {
+    @OnMessage(GeneratedMessage.class)
+    public void onMessage(Context ctx, GeneratedMessage message) {
+        if (message instanceof S1NetMessages.CSVCMsg_VoiceData || message instanceof S2NetMessages.CSVCMsg_VoiceData) {
             return;
         }
-        ensureFieldPaths(e);
-        System.out.format("%s (%s/%s)\n", e.getDtClass().getDtName(), e.getPropertyForFieldPath(mana), e.getPropertyForFieldPath(maxMana));
+        log.info("{}: {}", ctx.getTick(), message.getClass().getSimpleName());
     }
 
-    @OnEntityUpdated
-    public void onUpdated(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount) {
-        if (!isHero(e)) {
-            return;
-        }
-        ensureFieldPaths(e);
-        boolean update = false;
-        for (int i = 0; i < updateCount; i++) {
-            if (updatedPaths[i].equals(mana) || updatedPaths[i].equals(maxMana)) {
-                update = true;
-                break;
-            }
-        }
-        if (update) {
-            System.out.format("%s (%s/%s)\n", e.getDtClass().getDtName(), e.getPropertyForFieldPath(mana), e.getPropertyForFieldPath(maxMana));
-        }
-    }
-
-
-    public void run(String[] args) throws Exception {
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+    public void runSeek(String[] args) throws Exception {
+        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
+        runner.seek(0);
+        runner.seek(3000);
+        System.out.println("at 3000");
+        runner.seek(0);
+        System.out.println("at 0");
+        runner.halt();
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().run(args);
+        new Main().runSeek(args);
     }
 
 }
