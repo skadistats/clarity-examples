@@ -99,6 +99,13 @@ Clarity uses the logback-library for logging. You can enable logging for certain
 handlers, while putting the level to *trace* will output the raw content of the protobuf messages a
 handler is assigned to. 
 
+## Watching the data in real time
+
+[Clarity Analyzer](https://github.com/spheenik/clarity-analyzer) is nifty little JavaFX Application 
+that lets you see all the entity data in the replay in real time.
+ 
+![Clarity Analyzer](https://raw.githubusercontent.com/spheenik/clarity-analyzer/master/screenshot.png)
+
 ## Showing the combat log
 
 It *almost* replicates what is shown on the combat log from the game.
