@@ -5,7 +5,7 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.processor.gameevents.CombatLog;
+import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -28,20 +28,20 @@ public class Main {
         .appendMillis3Digit()
         .toFormatter();
 
-    private String getAttackerNameCompiled(CombatLog.Entry cle) {
+    private String getAttackerNameCompiled(CombatLogEntry cle) {
         return cle.getAttackerName() + (cle.isAttackerIllusion() ? " (illusion)" : "");
     }
 
-    private String getTargetNameCompiled(CombatLog.Entry cle) {
+    private String getTargetNameCompiled(CombatLogEntry cle) {
         return cle.getTargetName() + (cle.isTargetIllusion() ? " (illusion)" : "");
     }
 
 
     @OnCombatLogEntry
-    public void onCombatLogEntry(Context ctx, CombatLog.Entry cle) {
+    public void onCombatLogEntry(Context ctx, CombatLogEntry cle) {
         String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int) (1000.0f * cle.getTimestamp())).toPeriod()) + "]";
         switch (cle.getType()) {
-            case 0:
+            case DOTA_COMBATLOG_DAMAGE:
                 log.info("{} {} hits {}{} for {} damage{}",
                     time,
                     getAttackerNameCompiled(cle),
@@ -51,7 +51,7 @@ public class Main {
                     cle.getHealth() != 0 ? String.format(" (%s->%s)", cle.getHealth() + cle.getValue(), cle.getHealth()) : ""
                 );
                 break;
-            case 1:
+            case DOTA_COMBATLOG_HEAL:
                 log.info("{} {}'s {} heals {} for {} health ({}->{})",
                     time,
                     getAttackerNameCompiled(cle),
@@ -62,7 +62,7 @@ public class Main {
                     cle.getHealth()
                 );
                 break;
-            case 2:
+            case DOTA_COMBATLOG_MODIFIER_ADD:
                 log.info("{} {} receives {} buff/debuff from {}",
                     time,
                     getTargetNameCompiled(cle),
@@ -70,21 +70,21 @@ public class Main {
                     getAttackerNameCompiled(cle)
                 );
                 break;
-            case 3:
+            case DOTA_COMBATLOG_MODIFIER_REMOVE:
                 log.info("{} {} loses {} buff/debuff",
                     time,
                     getTargetNameCompiled(cle),
                     cle.getInflictorName()
                 );
                 break;
-            case 4:
+            case DOTA_COMBATLOG_DEATH:
                 log.info("{} {} is killed by {}",
                     time,
                     getTargetNameCompiled(cle),
                     getAttackerNameCompiled(cle)
                 );
                 break;
-            case 5:
+            case DOTA_COMBATLOG_ABILITY:
                 log.info("{} {} {} ability {} (lvl {}){}{}",
                     time,
                     getAttackerNameCompiled(cle),
@@ -95,14 +95,14 @@ public class Main {
                     cle.getTargetName() != null ? " on " + getAttackerNameCompiled(cle) : ""
                 );
                 break;
-            case 6:
+            case DOTA_COMBATLOG_ITEM:
                 log.info("{} {} uses {}",
                     time,
                     getAttackerNameCompiled(cle),
                     cle.getInflictorName()
                 );
                 break;
-            case 8:
+            case DOTA_COMBATLOG_GOLD:
                 log.info("{} {} {} {} gold",
                     time,
                     getTargetNameCompiled(cle),
@@ -110,27 +110,27 @@ public class Main {
                     Math.abs(cle.getValue())
                 );
                 break;
-            case 9:
+            case DOTA_COMBATLOG_GAME_STATE:
                 log.info("{} game state is now {}",
                     time,
                     cle.getValue()
                 );
                 break;
-            case 10:
+            case DOTA_COMBATLOG_XP:
                 log.info("{} {} gains {} XP",
                     time,
                     getTargetNameCompiled(cle),
                     cle.getValue()
                 );
                 break;
-            case 11:
+            case DOTA_COMBATLOG_PURCHASE:
                 log.info("{} {} buys item {}",
                     time,
                     getTargetNameCompiled(cle),
-                    cle.getValue()
+                    cle.getValueName()
                 );
                 break;
-            case 12:
+            case DOTA_COMBATLOG_BUYBACK:
                 log.info("{} player in slot {} has bought back",
                     time,
                     cle.getValue()
@@ -138,8 +138,8 @@ public class Main {
                 break;
 
             default:
-                DotaUserMessages.DOTA_COMBATLOG_TYPES type = DotaUserMessages.DOTA_COMBATLOG_TYPES.valueOf(cle.getType());
-                log.info("\n{} ({}): {}\n", type.name(), type.ordinal(), cle.getGameEvent());
+                DotaUserMessages.DOTA_COMBATLOG_TYPES type = cle.getType();
+                log.info("\n{} ({}): {}\n", type.name(), type.ordinal(), cle);
                 break;
 
         }
