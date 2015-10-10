@@ -39,7 +39,7 @@ The main method does the following:
    thread for doing the work, and which allows seeking back and forth in the replay. 
 3. Create an instance of your processor. Please note that you are not limited to only using one processor, and clarity itself
    contains a lot of processors that might take part in the run if what you requested requires it.
-4. This starts the processing run. Your annotated method onMessage() will be called back anytime clarity finds an 
+4. This starts the processing run. Your annotated method onMessage() will be called back whenever clarity finds an 
    allchat-message in the replay.
 
 ### Building the examples
