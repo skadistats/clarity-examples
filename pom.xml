@@ -169,6 +169,12 @@
             </properties>
         </profile>
         <profile>
+            <id>spawngroups</id>
+            <properties>
+                <exampleName>spawngroups</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>stringtabledump</id>
             <properties>
                 <exampleName>stringtabledump</exampleName>
