@@ -50,10 +50,8 @@ set a correct classpath.
 
 ### Logging
 
-Clarity uses the logback-library for logging. You can enable logging for certain packets by changing 
-`src/main/resources/logback.xml`. Changing the log-level to *debug* will output parsed data for almost all
-handlers, while putting the level to *trace* will output the raw content of the protobuf messages a
-handler is assigned to. 
+Clarity uses the logback-library for logging. You can enable logging for certain packages by changing 
+`src/main/resources/logback.xml`.  
 
 ## Examples
 
@@ -93,6 +91,23 @@ After building it from the project root with
 you can run it with
 
 	java -jar target/matchend.one-jar.jar replay.dem
+
+### Tracking spawns / deaths
+
+This example shows how to write a processor that provides events related to the lifestate of an entity.
+The processor provides 3 new events (`@OnEntitySpawned`, `@OnEntityDying` and `@OnEntityDied`) and an associated
+main class that uses them.
+
+You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
+and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
+
+After building it from the project root with
+
+	mvn -P lifestate package
+	
+you can run it with
+
+	java -jar target/lifestate.one-jar.jar replay.dem
 
 ### Retrieving basic game info
 
@@ -180,6 +195,8 @@ public class GameEvents {
 2. The exact structure of GameEvents in this replay is encoded in a CSVCMsg_GameEventList message. 
 3. Create a single GameEvent, by using the descriptors created in 2.
 4. fire the @OnGameEvent event, passing the created GameEvent as parameter.
+
+Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
 
 ### Context
 

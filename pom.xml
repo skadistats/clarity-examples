@@ -139,6 +139,12 @@
             </properties>
         </profile>
         <profile>
+            <id>lifestate</id>
+            <properties>
+                <exampleName>lifestate</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>livetest</id>
             <properties>
                 <exampleName>livetest</exampleName>
