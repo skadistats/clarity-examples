@@ -13,7 +13,7 @@ public class Main {
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     @OnEntitySpawned
-    public void onCreated(Context ctx, Entity e) {
+    public void onSpawned(Context ctx, Entity e) {
         System.out.printf("%06d: %s at index %d has spawned\n", ctx.getTick(), e.getDtClass().getDtName(), e.getIndex());
     }
 
