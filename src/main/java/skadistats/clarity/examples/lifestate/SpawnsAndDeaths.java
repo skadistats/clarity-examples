@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @UsesEntities
-@Provides({ OnEntitySpawned.class, OnEntityDied.class })
+@Provides({ OnEntitySpawned.class, OnEntityDying.class, OnEntityDied.class })
 public class SpawnsAndDeaths {
 
     private final Map<Integer, FieldPath> lifeStatePaths = new HashMap<>();
@@ -60,7 +60,7 @@ public class SpawnsAndDeaths {
     }
 
     @OnEntityUpdated
-    public void onUpdate(Context ctx, Entity e, FieldPath[] fieldPaths, int num) {
+    public void onUpdated(Context ctx, Entity e, FieldPath[] fieldPaths, int num) {
         FieldPath p = getFieldPathForEntity(e);
         if (p != null) {
             for (int i = 0; i < num; i++) {
