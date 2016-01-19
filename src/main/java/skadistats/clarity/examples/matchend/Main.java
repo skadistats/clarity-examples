@@ -82,10 +82,12 @@ public class Main {
                     e = r < 5 ? dr : dd;
                     idx = r % 5;
                 }
-                FieldPath fp = e.getDtClass().getFieldPathForName(columns[c][2].replace("%i", Util.arrayIdxToString(idx)));
-                Object val = e.getPropertyForFieldPath(fp);
-                String str = new String(val.toString().getBytes("ISO-8859-1"));
-                t.setData(r, c, str);
+                if (e != null) {
+                    FieldPath fp = e.getDtClass().getFieldPathForName(columns[c][2].replace("%i", Util.arrayIdxToString(idx)));
+                    Object val = e.getPropertyForFieldPath(fp);
+                    String str = new String(val.toString().getBytes("ISO-8859-1"));
+                    t.setData(r, c, str);
+                }
             }
         }
 
