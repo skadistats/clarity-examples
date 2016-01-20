@@ -8,130 +8,160 @@ import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.TextTable;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 
 @UsesEntities
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-    public void run(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        ControllableRunner r = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
-        r.seek(r.getLastTick());
-        r.halt();
-        if (r.getEngineType() == EngineType.SOURCE1) {
-            summary(r.getContext());
-        } else {
-            summary2(r.getContext());
-        }
+        new Main(args[0]).showScoreboard();
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }
 
-    private void summary2(Context ctx) throws UnsupportedEncodingException {
-        Entity ps = ctx.getProcessor(Entities.class).getByDtName("CDOTA_PlayerResource");
-        Entity dr = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataRadiant");
-        Entity dd = ctx.getProcessor(Entities.class).getByDtName("CDOTA_DataDire");
 
-        String[][] columns;
-        if (ps.getDtClass().getFieldPathForName("m_vecPlayerData") != null) {
-            columns = new String[][]{
-                {"Name", "ps", "m_vecPlayerData.%i.m_iszPlayerName"},
-                {"Level", "ps", "m_vecPlayerTeamData.%i.m_iLevel"},
-                {"K", "ps",  "m_vecPlayerTeamData.%i.m_iKills"},
-                {"D", "ps", "m_vecPlayerTeamData.%i.m_iDeaths"},
-                {"A", "ps", "m_vecPlayerTeamData.%i.m_iAssists"},
-                {"Gold", "d", "m_vecDataTeam.%i.m_iTotalEarnedGold"},
-                {"LH", "d", "m_vecDataTeam.%i.m_iLastHitCount"},
-                {"DN", "d", "m_vecDataTeam.%i.m_iDenyCount"},
-            };
+
+    private final ControllableRunner runner;
+
+    public Main(String fileName) throws IOException {
+        runner = new ControllableRunner(new MappedFileSource(fileName)).runWith(this);
+        runner.seek(runner.getLastTick());
+        runner.halt();
+    }
+
+    private void showScoreboard() {
+        boolean isSource1 = runner.getEngineType() == EngineType.SOURCE1;
+        boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getDtClass().getFieldPathForName("m_vecPlayerData") == null;
+        if (isSource1 || isEarlyBetaFormat) {
+            showTableWithColumns(
+                    new DefaultResolver<Integer>("PlayerResource", "m_iPlayerTeams.%i"),
+                    new ColumnDef("Name", new DefaultResolver<String>("PlayerResource", "m_iszPlayerNames.%i")),
+                    new ColumnDef("Level", new DefaultResolver<Integer>("PlayerResource", "m_iLevel.%i")),
+                    new ColumnDef("K", new DefaultResolver<Integer>("PlayerResource", "m_iKills.%i")),
+                    new ColumnDef("D", new DefaultResolver<Integer>("PlayerResource", "m_iDeaths.%i")),
+                    new ColumnDef("A", new DefaultResolver<Integer>("PlayerResource", "m_iAssists.%i")),
+                    new ColumnDef("Gold", new DefaultResolver<Integer>("PlayerResource", (isSource1 ? "EndScoreAndSpectatorStats." : "") + "m_iTotalEarnedGold.%i")),
+                    new ColumnDef("LH", new DefaultResolver<Integer>("PlayerResource", "m_iLastHitCount.%i")),
+                    new ColumnDef("DN", new DefaultResolver<Integer>("PlayerResource", "m_iDenyCount.%i"))
+            );
         } else {
-            columns = new String[][]{
-                {"Name", "ps", "m_iszPlayerNames.%i"},
-                {"Level", "ps", "m_iLevel.%i"},
-                {"K", "ps",  "m_iKills.%i"},
-                {"D", "ps", "m_iDeaths.%i"},
-                {"A", "ps", "m_iAssists.%i"},
-                {"Gold", "ps", "m_iTotalEarnedGold.%i"},
-                {"LH", "ps", "m_iLastHitCount.%i"},
-                {"DN", "ps", "m_iDenyCount.%i"},
-            };
+            showTableWithColumns(
+                    new DefaultResolver<Integer>("PlayerResource", "m_vecPlayerData.%i.m_iPlayerTeam"),
+                    new ColumnDef("Name", new DefaultResolver<String>("PlayerResource", "m_vecPlayerData.%i.m_iszPlayerName")),
+                    new ColumnDef("Level", new DefaultResolver<Integer>("PlayerResource", "m_vecPlayerTeamData.%i.m_iLevel")),
+                    new ColumnDef("K", new DefaultResolver<Integer>("PlayerResource", "m_vecPlayerTeamData.%i.m_iKills")),
+                    new ColumnDef("D", new DefaultResolver<Integer>("PlayerResource", "m_vecPlayerTeamData.%i.m_iDeaths")),
+                    new ColumnDef("A", new DefaultResolver<Integer>("PlayerResource", "m_vecPlayerTeamData.%i.m_iAssists")),
+                    new ColumnDef("Gold", new DefaultResolver<Integer>("Data%n", "m_vecDataTeam.%p.m_iTotalEarnedGold")),
+                    new ColumnDef("LH", new DefaultResolver<Integer>("Data%n", "m_vecDataTeam.%p.m_iLastHitCount")),
+                    new ColumnDef("DN", new DefaultResolver<Integer>("Data%n", "m_vecDataTeam.%p.m_iDenyCount"))
+            );
         }
+    }
 
+    private void showTableWithColumns(ValueResolver<Integer> teamResolver, ColumnDef... columnDefs) {
         TextTable.Builder b = new TextTable.Builder();
-        for (int c = 0; c < columns.length; c++) {
-            b.addColumn(columns[c][0], c == 0 ? TextTable.Alignment.LEFT : TextTable.Alignment.RIGHT);
+        for (int c = 0; c < columnDefs.length; c++) {
+            b.addColumn(columnDefs[c].name, c == 0 ? TextTable.Alignment.LEFT : TextTable.Alignment.RIGHT);
         }
-        TextTable t = b.build();
+        TextTable table = b.build();
 
-        for (int c = 0; c < columns.length; c++) {
-            for (int r = 0; r < 10; r++) {
-                String entityStr = columns[c][1];
-                Entity e;
-                int idx;
-                if ("ps".equals(entityStr)) {
-                    e = ps;
-                    idx = r;
+        int team = 0;
+        int pos = 0;
+        int r = 0;
+
+        for (int idx = 0; idx < 256; idx++) {
+            try {
+                int newTeam = teamResolver.resolveValue(idx, team, pos);
+                if (newTeam != team) {
+                    team = newTeam;
+                    pos = 0;
                 } else {
-                    e = r < 5 ? dr : dd;
-                    idx = r % 5;
+                    pos++;
                 }
-                if (e != null) {
-                    FieldPath fp = e.getDtClass().getFieldPathForName(columns[c][2].replace("%i", Util.arrayIdxToString(idx)));
-                    Object val = e.getPropertyForFieldPath(fp);
-                    String str = new String(val.toString().getBytes("ISO-8859-1"));
-                    t.setData(r, c, str);
-                }
+            } catch (Exception e) {
+                // when the team resolver throws an exception, this was the last index there was
+                break;
             }
+            if (team != 2 && team != 3) {
+                continue;
+            }
+            for (int c = 0; c < columnDefs.length; c++) {
+                table.setData(r, c, columnDefs[c].resolver.resolveValue(idx, team, pos));
+            }
+            r++;
         }
 
-        System.out.println(t);
-
+        System.out.println(table);
     }
 
-    private void summary(Context ctx) throws UnsupportedEncodingException {
-
-        Entity ps = ctx.getProcessor(Entities.class).getByDtName("DT_DOTA_PlayerResource");
-
-        String[][] columns = new String[][]{
-            {"Name", "m_iszPlayerNames"},
-            {"Level", "m_iLevel"},
-            {"K", "m_iKills"},
-            {"D", "m_iDeaths"},
-            {"A", "m_iAssists"},
-            {"Gold", "EndScoreAndSpectatorStats.m_iTotalEarnedGold"},
-            {"LH", "m_iLastHitCount"},
-            {"DN", "m_iDenyCount"},
-        };
-
-        TextTable.Builder b = new TextTable.Builder();
-        for (int c = 0; c < columns.length; c++) {
-            b.addColumn(columns[c][0], c == 0 ? TextTable.Alignment.LEFT : TextTable.Alignment.RIGHT);
+    private String getEngineDependentEntityName(String entityName) {
+        switch (runner.getEngineType()) {
+            case SOURCE1:
+                return "DT_DOTA_" + entityName;
+            case SOURCE2:
+                return "CDOTA_" + entityName;
+            default:
+                throw new RuntimeException("invalid engine type");
         }
-        TextTable t = b.build();
-
-        for (int c = 0; c < columns.length; c++) {
-            FieldPath base = ps.getDtClass().getFieldPathForName(columns[c][1] + ".0000");
-            for (int r = 0; r < 10; r++) {
-                FieldPath fp = new FieldPath(base);
-                fp.path[0] += r;
-                Object val = ps.getPropertyForFieldPath(fp);
-                String str = new String(val.toString().getBytes("ISO-8859-1"));
-                t.setData(r, c, str);
-            }
-        }
-
-        System.out.println(t);
     }
 
-    public static void main(String[] args) throws Exception {
-        new Main().run(args);
+    private String getTeamName(int team) {
+        switch(team) {
+            case 2:
+                return "Radiant";
+            case 3:
+                return "Dire";
+            default:
+                return "";
+        }
+    }
+
+    private Entity getEntity(String entityName) {
+        return runner.getContext().getProcessor(Entities.class).getByDtName(getEngineDependentEntityName(entityName));
+    }
+
+    private class ColumnDef {
+        private final String name;
+        private final ValueResolver<?> resolver;
+
+        public ColumnDef(String name, ValueResolver<?> resolver) {
+            this.name = name;
+            this.resolver = resolver;
+        }
+    }
+
+    private interface ValueResolver<V> {
+        V resolveValue(int index, int team, int pos);
+    }
+
+    private class DefaultResolver<V> implements ValueResolver<V> {
+        private final String entityName;
+        private final String pattern;
+
+        public DefaultResolver(String entityName, String pattern) {
+            this.entityName = entityName;
+            this.pattern = pattern;
+        }
+
+        @Override
+        public V resolveValue(int index, int team, int pos) {
+            String fieldPathString = pattern
+                    .replaceAll("%i", Util.arrayIdxToString(index))
+                    .replaceAll("%t", Util.arrayIdxToString(team))
+                    .replaceAll("%p", Util.arrayIdxToString(pos));
+            String compiledName = entityName.replaceAll("%n", getTeamName(team));
+            Entity entity = getEntity(compiledName);
+            FieldPath fieldPath = entity.getDtClass().getFieldPathForName(fieldPathString);
+            return entity.getPropertyForFieldPath(fieldPath);
+        }
     }
 
 }
