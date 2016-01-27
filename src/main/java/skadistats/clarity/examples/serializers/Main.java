@@ -53,7 +53,9 @@ public class Main {
     }
 
     private void dump(Context ctx, S2NetMessages.CSVCMsg_FlattenedSerializer fs) throws FileNotFoundException {
-        PrintStream out = new PrintStream(new FileOutputStream("flattables_" + ctx.getBuildNumber() + ".txt"));
+        String fileName = "flattables_" + ctx.getBuildNumber() + ".txt";
+        log.info("writing {}", fileName);
+        PrintStream out = new PrintStream(new FileOutputStream(fileName));
         for (S2NetMessages.ProtoFlattenedSerializer_t s : fs.getSerializersList()) {
             out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             out.format("%s(%s)\n", fs.getSymbols(s.getSerializerNameSym()), s.getSerializerVersion());
