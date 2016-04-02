@@ -3,8 +3,12 @@ package skadistats.clarity.examples.entityrun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.entities.UsesEntities;
+import skadistats.clarity.processor.reader.OnMessage;
+import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.wire.s2.proto.S2DotaGcCommon;
+import skadistats.clarity.wire.s2.proto.S2DotaMatchMetadata;
 
 @UsesEntities
 public class Main {
@@ -21,7 +25,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         try {
             //BitStreamImplementations.implementation = 1;
-            System.out.println("press key to start"); System.in.read();
+            //System.out.println("press key to start"); System.in.read();
             new Main().run(args);
         } catch (Exception e) {
             Thread.sleep(200);
