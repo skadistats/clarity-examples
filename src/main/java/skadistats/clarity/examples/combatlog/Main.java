@@ -28,14 +28,17 @@ public class Main {
         .appendMillis3Digit()
         .toFormatter();
 
+    private String compileName(String attackerName, boolean isIllusion) {
+        return attackerName != null ? attackerName + (isIllusion ? " (illusion)" : "") : "UNKNOWN";
+    }
+
     private String getAttackerNameCompiled(CombatLogEntry cle) {
-        return cle.getAttackerName() + (cle.isAttackerIllusion() ? " (illusion)" : "");
+        return compileName(cle.getAttackerName(), cle.isAttackerIllusion());
     }
 
     private String getTargetNameCompiled(CombatLogEntry cle) {
-        return cle.getTargetName() + (cle.isTargetIllusion() ? " (illusion)" : "");
+        return compileName(cle.getTargetName(), cle.isTargetIllusion());
     }
-
 
     @OnCombatLogEntry
     public void onCombatLogEntry(Context ctx, CombatLogEntry cle) {
