@@ -95,7 +95,7 @@ public class Main {
                     cle.getInflictorName(),
                     cle.getAbilityLevel(),
                     cle.isAbilityToggleOn() ? " on" : cle.isAbilityToggleOff() ? " off" : "",
-                    cle.getTargetName() != null ? " on " + getAttackerNameCompiled(cle) : ""
+                    cle.getTargetName() != null ? " on " + getTargetNameCompiled(cle) : ""
                 );
                 break;
             case DOTA_COMBATLOG_ITEM:
