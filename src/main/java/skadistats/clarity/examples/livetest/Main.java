@@ -188,7 +188,7 @@ public class Main {
     }
 
     public void run(String[] args) throws Exception {
-        Runner r = new SimpleRunner(new MappedFileSource(args[0]));
+        SimpleRunner r = new SimpleRunner(new MappedFileSource(args[0]));
         engineType = r.getEngineType();
         fieldReader = engineType.getNewFieldReader();
         entities = new Entity[1 << engineType.getIndexBits()];
