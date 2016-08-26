@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.runner.Context;
-import skadistats.clarity.processor.runner.Runner;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 
@@ -24,7 +23,7 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        Runner r = null;
+        SimpleRunner r = null;
         try {
             r = new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
         } finally {
