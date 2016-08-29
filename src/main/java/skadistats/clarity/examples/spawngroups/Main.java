@@ -16,7 +16,10 @@ import skadistats.clarity.wire.common.proto.NetworkBaseTypes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @UsesEntities
 public class Main {
@@ -27,12 +30,13 @@ public class Main {
         BitStream bs = BitStream.createBitStream(raw);
         boolean isCompressed = bs.readBitFlag();
         int size = bs.readUBitInt(24);
+
         byte[] data;
         if (isCompressed) {
             data = LZSS.unpack(bs);
         } else {
             data = new byte[size];
-            bs.readBitsIntoByteArray(data, size);
+            bs.readBitsIntoByteArray(data, size * 8);
         }
         bs = BitStream.createBitStream(ZeroCopy.wrap(data));
 
@@ -48,8 +52,8 @@ public class Main {
         for (int i = 0; i < nDirs; i++) {
             dirs.add(bs.readString(Integer.MAX_VALUE));
         }
-        int bitsForType = Util.calcBitsNeededFor(types.size() - 1);
-        int bitsForDir = Util.calcBitsNeededFor(dirs.size() - 1);
+        int bitsForType = Math.max(1, Util.calcBitsNeededFor(types.size() - 1));
+        int bitsForDir = Math.max(1, Util.calcBitsNeededFor(dirs.size() - 1));
         System.out.format("\n\nbitsForType: %d, bitsForDir: %d, nEntries: %d\n", bitsForType, bitsForDir, nEntries);
         System.out.printf("dirs: %s\n", dirs);
         System.out.printf("types: %s\n", types);
@@ -57,16 +61,24 @@ public class Main {
             int x = bs.readUBitInt(bitsForDir);
             String s = bs.readString(Integer.MAX_VALUE);
             int y = bs.readUBitInt(bitsForType);
-            System.out.format("[%03d] dir:%s file:%s extension:%s\n", i, dirs.get(x), s, types.get(y));
+            System.out.format("[%03d] %s%s.%s\n", i, dirs.get(x), s, types.get(y));
         }
         System.out.format("finished %d/%d\n\n", bs.pos(), bs.len());
     }
+
+    private final Set<Integer> loaded = new LinkedHashSet<>();
+    private final Set<Integer> complete = new LinkedHashSet<>();
+    private final Set<Integer> created = new LinkedHashSet<>();
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Load.class)
     public void onLoad(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_Load message) throws IOException {
         System.out.println("LOAD ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
+        loaded.add(message.getSpawngrouphandle());
+        if (!message.getManifestincomplete()) {
+            complete.add(message.getSpawngrouphandle());
+        }
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted.class)
@@ -80,12 +92,16 @@ public class Main {
         System.out.println("MANIFEST UPDATE ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
+        if (!message.getManifestincomplete()) {
+            complete.add(message.getSpawngrouphandle());
+        }
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick.class)
     public void onSetCreationTick(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick message) {
         System.out.println("SET CREATION TICK  ----------------------------------------------------------------------------------------------");
         System.out.println(message);
+        created.add(message.getSpawngrouphandle());
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Unload.class)
@@ -94,12 +110,24 @@ public class Main {
         System.out.println(message);
     }
 
-    public void runSeek(String[] args) throws Exception {
+    public void run(String[] args) throws Exception {
         new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        System.out.println("LOADED " + loaded);
+        System.out.println("COMPLETED " + complete);
+        System.out.println("CREATED " + created);
+
+        HashSet<Integer> lbnc = new HashSet<>(loaded);
+        lbnc.removeAll(created);
+        System.out.println("LOADED BUT NOT CREATED " + lbnc);
+
+        lbnc = new HashSet<>(loaded);
+        lbnc.removeAll(complete);
+        System.out.println("LOADED BUT NOT COMPLETED " + lbnc);
+
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().runSeek(args);
+        new Main().run(args);
     }
 
 }
