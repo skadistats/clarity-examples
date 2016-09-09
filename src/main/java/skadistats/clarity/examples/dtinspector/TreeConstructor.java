@@ -39,8 +39,11 @@ public class TreeConstructor {
     public TreeConstructor(DTClasses classes) {
         Iterator<DTClass> dtClasses = classes.iterator();
         while(dtClasses.hasNext()) {
-            S1DTClass c = (S1DTClass) dtClasses.next();
-            DTClass s = c.getSuperClass();
+            DTClass c = dtClasses.next();
+            DTClass s = null;
+            if (c instanceof S1DTClass) {
+                s = ((S1DTClass)c).getSuperClass();
+            }
             Set<DTClass> forSuper = tree.get(s);
             if (forSuper == null) {
                 forSuper = new TreeSet<>(COMPARATOR);

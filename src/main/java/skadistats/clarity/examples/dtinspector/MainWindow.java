@@ -1,7 +1,9 @@
 package skadistats.clarity.examples.dtinspector;
 
 import skadistats.clarity.decoder.s1.S1DTClass;
+import skadistats.clarity.decoder.s2.S2DTClass;
 import skadistats.clarity.examples.dtinspector.TreeConstructor.TreePayload;
+import skadistats.clarity.model.DTClass;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -41,8 +43,12 @@ public class MainWindow {
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
                 TreePayload p = (TreePayload) node.getUserObject();
-                final S1DTClass dtClass = (S1DTClass) p.getDtClass();
-                table.setModel(new TableModel(dtClass));
+                DTClass cls = p.getDtClass();
+                if (cls instanceof S1DTClass) {
+                    table.setModel(new TableModelS1((S1DTClass) cls));
+                } else {
+                    table.setModel(new TableModelS2((S2DTClass) cls));
+                }
             }
         });
         scrollPaneLeft.setViewportView(classTree);
