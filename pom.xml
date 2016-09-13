@@ -169,6 +169,12 @@
             </properties>
         </profile>
         <profile>
+            <id>resources</id>
+            <properties>
+                <exampleName>resources</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>seek</id>
             <properties>
                 <exampleName>seek</exampleName>
