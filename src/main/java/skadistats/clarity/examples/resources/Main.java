@@ -24,7 +24,7 @@ public class Main {
         if (resourceHandle == null || resourceHandle == 0L) {
             return;
         }
-        Resources.Manifest.Entry entry = ctx.getProcessor(Resources.class).getEntryForResourceHandle(resourceHandle);
+        Resources.Entry entry = ctx.getProcessor(Resources.class).getEntryForResourceHandle(resourceHandle);
         System.out.format("model for entity at %d (%d): %s\n", e.getIndex(), resourceHandle, entry);
     }
 
