@@ -71,7 +71,7 @@ public class Main {
     private final Set<Integer> created = new LinkedHashSet<>();
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Load.class)
-    public void onLoad(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_Load message) throws IOException {
+    public void onLoad(NetworkBaseTypes.CNETMsg_SpawnGroup_Load message) throws IOException {
         System.out.println("LOAD ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
@@ -82,13 +82,13 @@ public class Main {
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted.class)
-    public void onLoadCompleted(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted message) {
+    public void onLoadCompleted(NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted message) {
         System.out.println("LOADCOMPLETED ----------------------------------------------------------------------------------------------");
         System.out.println(message);
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate.class)
-    public void onManifestUpdate(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate message) throws IOException {
+    public void onManifestUpdate(NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate message) throws IOException {
         System.out.println("MANIFEST UPDATE ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
@@ -98,14 +98,14 @@ public class Main {
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick.class)
-    public void onSetCreationTick(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick message) {
+    public void onSetCreationTick(NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick message) {
         System.out.println("SET CREATION TICK  ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         created.add(message.getSpawngrouphandle());
     }
 
     @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Unload.class)
-    public void onUnload(Context ctx, NetworkBaseTypes.CNETMsg_SpawnGroup_Unload message) {
+    public void onUnload(NetworkBaseTypes.CNETMsg_SpawnGroup_Unload message) {
         System.out.println("UNLOAD  ----------------------------------------------------------------------------------------------");
         System.out.println(message);
     }

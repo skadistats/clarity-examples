@@ -2,6 +2,7 @@ package skadistats.clarity.examples.lifestate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.event.Insert;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
@@ -11,13 +12,16 @@ public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
+    @Insert
+    private Context ctx;
+
     @OnEntitySpawned
-    public void onSpawned(Context ctx, Entity e) {
+    public void onSpawned(Entity e) {
         System.out.printf("%06d: %s at index %d has spawned\n", ctx.getTick(), e.getDtClass().getDtName(), e.getIndex());
     }
 
     @OnEntityDied
-    public void onDied(Context ctx, Entity e) {
+    public void onDied(Entity e) {
         System.out.printf("%06d: %s at index %d has died\n", ctx.getTick(), e.getDtClass().getDtName(), e.getIndex());
     }
 

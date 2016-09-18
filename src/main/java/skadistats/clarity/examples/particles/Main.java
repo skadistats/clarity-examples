@@ -2,91 +2,103 @@ package skadistats.clarity.examples.particles;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.event.Insert;
 import skadistats.clarity.model.Entity;
+import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s1.ParticleAttachmentType;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.processor.stringtables.OnStringTableCreated;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.common.proto.DotaUserMessages;
 
 @UsesEntities
-@UsesStringTable("ParticleEffectNames")
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
+    @Insert
+    private Entities entities;
+    @Insert
+    private StringTables stringTables;
+    @Insert
+    private Context context;
+
+    private int getTick() {
+        return context.getTick();
+    }
+
     @OnMessage(DotaUserMessages.CDOTAUserMsg_ParticleManager.class)
-    public void onMessage(Context ctx, DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    public void onMessage(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         switch(message.getType()) {
             case DOTA_PARTICLE_MANAGER_EVENT_CREATE:
-                logCreate(message, ctx);
+                logCreate(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE:
-                logUpdate(message, ctx);
+                logUpdate(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FORWARD:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ORIENTATION:
-                logUpdateOrientation(message, ctx);
+                logUpdateOrientation(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FALLBACK:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ENT:
-                logUpdateEnt(message, ctx);
+                logUpdateEnt(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_OFFSET:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_DESTROY:
-                logDestroy(message, ctx);
+                logDestroy(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_RELEASE:
-                logRelease(message, ctx);
+                logRelease(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_LATENCY:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_SHOULD_DRAW:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
             case DOTA_PARTICLE_MANAGER_EVENT_FROZEN:
-                logUnhanded(message, ctx);
+                logUnhanded(message);
                 break;
         }
 
     }
 
-    private void logCreate(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logCreate(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         int entityHandle = message.getCreateParticle().getEntityHandle();
 //        int entityIndex = Handle.indexForHandle(entityHandle);
 //        int entitySerial = Handle.serialForHandle(entityHandle);
-        Entity parent = ctx.getProcessor(Entities.class).getByHandle(entityHandle);
-        String name = ctx.getProcessor(StringTables.class).forName("ParticleEffectNames").getNameByIndex((int)message.getCreateParticle().getParticleNameIndex());
+        Entity parent = entities.getByHandle(entityHandle);
         log.info("{} {} [index={}, entity={}({}), effect={}, attach={}]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_CREATE",
             message.getIndex(),
             entityHandle,
             parent == null ? "NOT_FOUND" : parent.getDtClass().getDtName(),
-            name == null ? "NOT_FOUND" : name,
+            message.getCreateParticle().getParticleNameIndex(),
             message.getCreateParticle().getAttachType()
         );
         //log.info(message.toString());
     }
 
-    private void logUpdate(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdate(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, controlPoint={}, position=[{}, {}, {}]]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_UPDATE",
             message.getIndex(),
             message.getUpdateParticle().getControlPoint(),
@@ -97,9 +109,9 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateOrientation(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdateOrientation(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, controlPoint={}, forward=[{}, {}, {}], right=[{}, {}, {}], up=[{}, {}, {}]]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_UPDATE_ORIENT",
             message.getIndex(),
             message.getUpdateParticleOrient().getControlPoint(),
@@ -116,11 +128,11 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateEnt(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUpdateEnt(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         int entityHandle = message.getUpdateParticleEnt().getEntityHandle();
-        Entity parent = ctx.getProcessor(Entities.class).getByHandle(entityHandle);
+        Entity parent = entities.getByHandle(entityHandle);
         log.info("{} {} [index={}, entity={}({}), controlPoint={}, attachmentType={}, attachment={}, includeWearables={}]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_UPDATE_ENT",
             message.getIndex(),
             entityHandle,
@@ -133,9 +145,9 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logDestroy(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logDestroy(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, immediately={}]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_DESTROY",
             message.getIndex(),
             message.getDestroyParticle().getDestroyImmediately()
@@ -143,16 +155,16 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logRelease(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logRelease(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         log.info("{} {} [index={}]",
-            ctx.getTick(),
+            getTick(),
             "PARTICLE_RELEASE",
             message.getIndex()
         );
         //log.info(message.toString());
     }
 
-    private void logUnhanded(DotaUserMessages.CDOTAUserMsg_ParticleManager message, Context ctx) {
+    private void logUnhanded(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
         log.info(message.toString());
     }
 

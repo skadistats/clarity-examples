@@ -22,7 +22,7 @@ public class Main {
     private Set<String> names = new HashSet<>();
 
     @OnStringTableCreated
-    public void onStringTableCreated(Context ctx, int numTables, StringTable table) {
+    public void onStringTableCreated(int numTables, StringTable table) {
         names.add(table.getName());
         System.out.println(table.getName());
     }

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.common.proto.DotaUserMessages;
@@ -41,7 +40,7 @@ public class Main {
     }
 
     @OnCombatLogEntry
-    public void onCombatLogEntry(Context ctx, CombatLogEntry cle) {
+    public void onCombatLogEntry(CombatLogEntry cle) {
         String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int) (1000.0f * cle.getTimestamp())).toPeriod()) + "]";
         switch (cle.getType()) {
             case DOTA_COMBATLOG_DAMAGE:

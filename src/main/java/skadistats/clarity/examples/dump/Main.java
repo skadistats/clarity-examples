@@ -4,7 +4,6 @@ import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.reader.OnMessage;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.s1.proto.S1NetMessages;
@@ -15,7 +14,7 @@ public class Main {
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     @OnMessage(GeneratedMessage.class)
-    public void onMessage(Context ctx, GeneratedMessage message) {
+    public void onMessage(GeneratedMessage message) {
         if (message instanceof S1NetMessages.CSVCMsg_VoiceData || message instanceof S2NetMessages.CSVCMsg_VoiceData) {
             return;
         }

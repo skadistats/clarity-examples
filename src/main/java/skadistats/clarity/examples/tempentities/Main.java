@@ -3,7 +3,6 @@ package skadistats.clarity.examples.tempentities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.tempentities.OnTempEntity;
 import skadistats.clarity.source.MappedFileSource;
@@ -12,7 +11,7 @@ import skadistats.clarity.source.MappedFileSource;
 public class Main {
 
     @OnTempEntity
-    public void onTempEntity(Context ctx, Entity e) {
+    public void onTempEntity(Entity e) {
         System.out.println(e);
     }
 

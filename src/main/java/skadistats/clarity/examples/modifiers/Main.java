@@ -12,7 +12,7 @@ import skadistats.clarity.wire.common.proto.DotaModifiers;
 public class Main {
 
     @OnModifierTableEntry()
-    public void doIt(Context ctx, DotaModifiers.CDOTAModifierBuffTableEntry e) {
+    public void onModifierEntry(DotaModifiers.CDOTAModifierBuffTableEntry e) {
         System.out.println(e);
     }
 

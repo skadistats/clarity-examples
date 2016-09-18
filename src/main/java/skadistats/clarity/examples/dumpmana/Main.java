@@ -7,7 +7,6 @@ import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.processor.entities.OnEntityCreated;
 import skadistats.clarity.processor.entities.OnEntityUpdated;
 import skadistats.clarity.processor.entities.UsesEntities;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 
@@ -31,7 +30,7 @@ public class Main {
     }
 
     @OnEntityCreated
-    public void onCreated(Context ctx, Entity e) {
+    public void onCreated(Entity e) {
         if (!isHero(e)) {
             return;
         }
@@ -40,7 +39,7 @@ public class Main {
     }
 
     @OnEntityUpdated
-    public void onUpdated(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount) {
+    public void onUpdated(Entity e, FieldPath[] updatedPaths, int updateCount) {
         if (!isHero(e)) {
             return;
         }
