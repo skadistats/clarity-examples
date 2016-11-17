@@ -20,7 +20,7 @@ public class AllChatProcessor {
         // 1) create an input source from the replay
         Source source = new MappedFileSource("replay.dem");
         // 2) create a simple runner that will read the replay once
-        Runner runner = new SimpleRunner(source);
+        SimpleRunner runner = new SimpleRunner(source);
         // 3) create an instance of your processor
         AllChatProcessor processor = new AllChatProcessor();
         // 4) and hand it over to the runner
