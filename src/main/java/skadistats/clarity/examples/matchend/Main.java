@@ -30,7 +30,7 @@ public class Main {
 
     private final ControllableRunner runner;
 
-    public Main(String fileName) throws IOException {
+    public Main(String fileName) throws IOException, InterruptedException {
         runner = new ControllableRunner(new MappedFileSource(fileName)).runWith(this);
         runner.seek(runner.getLastTick());
         runner.halt();
