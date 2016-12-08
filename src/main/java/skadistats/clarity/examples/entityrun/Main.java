@@ -3,12 +3,8 @@ package skadistats.clarity.examples.entityrun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.entities.UsesEntities;
-import skadistats.clarity.processor.reader.OnMessage;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.s2.proto.S2DotaGcCommon;
-import skadistats.clarity.wire.s2.proto.S2DotaMatchMetadata;
 
 @UsesEntities
 public class Main {
