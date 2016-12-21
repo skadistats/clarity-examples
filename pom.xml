@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.skadistats</groupId>
     <artifactId>clarity-examples</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1</version>
     <packaging>jar</packaging>
     <name>clarity-examples</name>
     <description>Provides example code on how to use clarity</description>
