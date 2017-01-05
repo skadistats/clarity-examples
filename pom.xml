@@ -95,6 +95,12 @@
 
     <profiles>
         <profile>
+            <id>allchat</id>
+            <properties>
+                <exampleName>allchat</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>combatlog</id>
             <activation><activeByDefault>true</activeByDefault></activation>
             <properties>
@@ -150,15 +156,15 @@
             </properties>
         </profile>
         <profile>
-            <id>livetest</id>
-            <properties>
-                <exampleName>livetest</exampleName>
-            </properties>
-        </profile>
-        <profile>
             <id>matchend</id>
             <properties>
                 <exampleName>matchend</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>metadata</id>
+            <properties>
+                <exampleName>metadata</exampleName>
             </properties>
         </profile>
         <profile>
@@ -171,6 +177,12 @@
             <id>particles</id>
             <properties>
                 <exampleName>particles</exampleName>
+            </properties>
+        </profile>
+        <profile>
+            <id>propertychange</id>
+            <properties>
+                <exampleName>propertychange</exampleName>
             </properties>
         </profile>
         <profile>
