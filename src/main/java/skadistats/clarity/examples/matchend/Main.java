@@ -3,7 +3,7 @@ package skadistats.clarity.examples.matchend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.decoder.Util;
-import skadistats.clarity.model.EngineType;
+import skadistats.clarity.model.EngineId;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.processor.entities.Entities;
@@ -37,7 +37,7 @@ public class Main {
     }
 
     private void showScoreboard() {
-        boolean isSource1 = runner.getEngineType() == EngineType.SOURCE1;
+        boolean isSource1 = runner.getEngineType().getId() == EngineId.SOURCE1;
         boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getDtClass().getFieldPathForName("m_vecPlayerData") == null;
         if (isSource1 || isEarlyBetaFormat) {
             showTableWithColumns(
@@ -103,7 +103,7 @@ public class Main {
     }
 
     private String getEngineDependentEntityName(String entityName) {
-        switch (runner.getEngineType()) {
+        switch (runner.getEngineType().getId()) {
             case SOURCE1:
                 return "DT_DOTA_" + entityName;
             case SOURCE2:
