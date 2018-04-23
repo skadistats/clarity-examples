@@ -156,6 +156,12 @@
             </properties>
         </profile>
         <profile>
+            <id>livesource</id>
+            <properties>
+                <exampleName>livesource</exampleName>
+            </properties>
+        </profile>
+        <profile>
             <id>matchend</id>
             <properties>
                 <exampleName>matchend</exampleName>
