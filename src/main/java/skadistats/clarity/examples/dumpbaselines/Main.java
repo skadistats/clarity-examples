@@ -8,6 +8,7 @@ import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
+import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.sendtables.DTClasses;
 import skadistats.clarity.processor.sendtables.UsesDTClasses;
 import skadistats.clarity.processor.stringtables.StringTables;
@@ -27,12 +28,9 @@ public class Main {
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
 
-        int tick = Integer.valueOf(args[0]);
-        String demoName = args[1];
+        String demoName = args[0];
 
-        ControllableRunner r = new ControllableRunner(new MappedFileSource(demoName)).runWith(this);
-        r.seek(tick);
-        r.halt();
+        SimpleRunner r = new SimpleRunner(new MappedFileSource(demoName)).runWith(this);
 
         Context ctx = r.getContext();
 
