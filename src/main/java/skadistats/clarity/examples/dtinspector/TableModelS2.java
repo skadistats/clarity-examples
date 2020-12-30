@@ -45,7 +45,7 @@ public class TableModelS2 extends AbstractTableModel {
         Field field = dtClass.getSerializer().getField(rowIndex);
         switch (columnIndex) {
         case 0:
-            return field.getFieldProperties().getName(0);
+            return field.getFieldProperties().getName();
         case 1:
             return field.getFieldProperties().getType();
         case 2:
