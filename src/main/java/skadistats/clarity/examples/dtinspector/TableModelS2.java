@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dtinspector;
 
+import skadistats.clarity.decoder.s2.Field;
 import skadistats.clarity.decoder.s2.S2DTClass;
-import skadistats.clarity.decoder.s2.field.Field;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -16,12 +16,12 @@ public class TableModelS2 extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return dtClass.getSerializer().getFields().length;
+        return dtClass.getSerializer().getFieldCount();
     }
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 4;
     }
 
     @Override
@@ -34,8 +34,6 @@ public class TableModelS2 extends AbstractTableModel {
         case 2:
             return "Flags";
         case 3:
-            return "Serializer";
-        case 4:
             return "Encoder";
         default:
             return "";
@@ -44,18 +42,16 @@ public class TableModelS2 extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Field field = dtClass.getSerializer().getFields()[rowIndex];
+        Field field = dtClass.getSerializer().getField(rowIndex);
         switch (columnIndex) {
         case 0:
-            return field.getProperties().getName();
+            return field.getFieldProperties().getName(0);
         case 1:
-            return field.getProperties().getType();
+            return field.getFieldProperties().getType();
         case 2:
-            return field.getProperties().getEncodeFlags();
+            return field.getUnpackerProperties().getEncodeFlags();
         case 3:
-            return field.getProperties().getSerializerType();
-        case 4:
-            return field.getProperties().getEncoderType();
+            return field.getUnpackerProperties().getEncoderType();
         default:
             return "";
         }
