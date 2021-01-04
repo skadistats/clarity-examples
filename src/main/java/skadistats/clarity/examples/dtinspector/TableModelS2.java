@@ -53,9 +53,9 @@ public class TableModelS2 extends AbstractTableModel {
         case 2:
             return field.getType();
         case 3:
-            return field.getUnpackerProperties().getEncodeFlags();
+            return field.getDecoderProperties().getEncodeFlags();
         case 4:
-            return field.getUnpackerProperties().getEncoderType();
+            return field.getDecoderProperties().getEncoderType();
         default:
             return "";
         }
