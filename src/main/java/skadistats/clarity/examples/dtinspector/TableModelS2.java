@@ -28,12 +28,14 @@ public class TableModelS2 extends AbstractTableModel {
     public String getColumnName(int column) {
         switch (column) {
         case 0:
-            return "Name";
+            return "Idx";
         case 1:
-            return "Type";
+            return "Name";
         case 2:
-            return "Flags";
+            return "Type";
         case 3:
+            return "Flags";
+        case 4:
             return "Encoder";
         default:
             return "";
@@ -45,12 +47,14 @@ public class TableModelS2 extends AbstractTableModel {
         Field field = dtClass.getSerializer().getField(rowIndex);
         switch (columnIndex) {
         case 0:
-            return field.getFieldProperties().getName();
+            return rowIndex;
         case 1:
-            return field.getFieldProperties().getType();
+            return dtClass.getSerializer().getFieldName(rowIndex);
         case 2:
-            return field.getUnpackerProperties().getEncodeFlags();
+            return field.getType();
         case 3:
+            return field.getUnpackerProperties().getEncodeFlags();
+        case 4:
             return field.getUnpackerProperties().getEncoderType();
         default:
             return "";
