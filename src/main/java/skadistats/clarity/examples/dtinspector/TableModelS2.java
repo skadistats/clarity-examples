@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dtinspector;
 
-import skadistats.clarity.decoder.s2.Field;
-import skadistats.clarity.decoder.s2.S2DTClass;
+import skadistats.clarity.io.s2.Field;
+import skadistats.clarity.io.s2.S2DTClass;
 
 import javax.swing.table.AbstractTableModel;
 

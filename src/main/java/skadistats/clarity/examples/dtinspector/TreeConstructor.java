@@ -1,12 +1,17 @@
 package skadistats.clarity.examples.dtinspector;
 
-import skadistats.clarity.decoder.s1.S1DTClass;
+import skadistats.clarity.io.s1.S1DTClass;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.processor.sendtables.DTClasses;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TreeConstructor {
 
@@ -20,15 +25,15 @@ public class TreeConstructor {
         public DTClass getDtClass() {
             return dtClass;
         }
-        
+
         public String toString() {
             return dtClass == null ? "" : dtClass.getDtName();
         }
-        
+
     }
-    
+
     private final Map<DTClass, Set<DTClass>> tree = new HashMap<DTClass, Set<DTClass>>();
-    
+
     private static final Comparator<DTClass> COMPARATOR = new Comparator<DTClass>() {
         @Override
         public int compare(DTClass o1, DTClass o2) {
@@ -52,7 +57,7 @@ public class TreeConstructor {
             forSuper.add(c);
         }
     }
-    
+
     private DefaultMutableTreeNode constructInternal(DTClass superClass) {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(new TreePayload(superClass));
         Set<DTClass> children = tree.get(superClass);
@@ -63,7 +68,7 @@ public class TreeConstructor {
         }
         return node;
     }
-    
+
     public TreeNode construct() {
         return constructInternal(null);
     }

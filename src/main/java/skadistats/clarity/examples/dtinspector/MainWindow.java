@@ -1,8 +1,8 @@
 package skadistats.clarity.examples.dtinspector;
 
-import skadistats.clarity.decoder.s1.S1DTClass;
-import skadistats.clarity.decoder.s2.S2DTClass;
 import skadistats.clarity.examples.dtinspector.TreeConstructor.TreePayload;
+import skadistats.clarity.io.s1.S1DTClass;
+import skadistats.clarity.io.s2.S2DTClass;
 import skadistats.clarity.model.DTClass;
 
 import javax.swing.*;
@@ -55,7 +55,7 @@ public class MainWindow {
 
         scrollPaneRight = new JScrollPane();
         splitPane.setRightComponent(scrollPaneRight);
-        
+
         table = new JTable();
         table.setColumnSelectionAllowed(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);

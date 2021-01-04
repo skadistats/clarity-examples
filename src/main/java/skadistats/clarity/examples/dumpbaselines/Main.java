@@ -2,8 +2,8 @@ package skadistats.clarity.examples.dumpbaselines;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.decoder.FieldReader;
-import skadistats.clarity.decoder.bitstream.BitStream;
+import skadistats.clarity.io.FieldReader;
+import skadistats.clarity.io.bitstream.BitStream;
 import skadistats.clarity.model.DTClass;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.runner.Context;

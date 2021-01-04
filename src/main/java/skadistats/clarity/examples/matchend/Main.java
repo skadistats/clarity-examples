@@ -2,7 +2,7 @@ package skadistats.clarity.examples.matchend;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.decoder.Util;
+import skadistats.clarity.io.Util;
 import skadistats.clarity.model.EngineId;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;
