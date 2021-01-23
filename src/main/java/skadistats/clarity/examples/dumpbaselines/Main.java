@@ -51,7 +51,7 @@ public class Main {
             fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = BitStream.createBitStream(baselines.getValueByIndex(i));
             try {
-                fieldReader.readFields(bs, dtClass, dtClass.getEmptyState(), null, true);
+                fieldReader.readFields(bs, dtClass, true);
                 if (bs.remaining() < 0 || bs.remaining() > 7) {
                     log.info("-- OFF: {} remaining", bs.remaining());
                 }
