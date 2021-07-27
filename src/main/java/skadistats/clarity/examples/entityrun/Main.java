@@ -13,14 +13,16 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        MappedFileSource s = new MappedFileSource(args[0]);
+        new SimpleRunner(s).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
+        s.close();
     }
 
     public static void main(String[] args) throws Exception {
         try {
-            //BitStreamImplementations.implementation = 1;
+            //ClarityPlatform.setBitStreamConstructor(data -> new BitStream32(new UnsafeBuffer.B32(data)));
             //System.out.println("press key to start"); System.in.read();
             new Main().run(args);
         } catch (Exception e) {
