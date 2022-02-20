@@ -136,15 +136,15 @@ public class Main {
         private HeroLookup(Entity heroEntity) {
             this.heroEntity = heroEntity;
             DTClass heroClass = heroEntity.getDtClass();
-            this.fpCellX = fpForCell(heroClass, "cellX");
-            this.fpCellY = fpForCell(heroClass, "cellY");
-            this.fpCellZ = fpForCell(heroClass, "cellZ");
-            this.fpVecX = fpForCell(heroClass, "vecX");
-            this.fpVecY = fpForCell(heroClass, "vecY");
-            this.fpVecZ = fpForCell(heroClass, "vecZ");
+            this.fpCellX = getBodyComponentFieldPath(heroClass, "cellX");
+            this.fpCellY = getBodyComponentFieldPath(heroClass, "cellY");
+            this.fpCellZ = getBodyComponentFieldPath(heroClass, "cellZ");
+            this.fpVecX = getBodyComponentFieldPath(heroClass, "vecX");
+            this.fpVecY = getBodyComponentFieldPath(heroClass, "vecY");
+            this.fpVecZ = getBodyComponentFieldPath(heroClass, "vecZ");
         }
 
-        private FieldPath fpForCell(DTClass heroClass, String which) {
+        private FieldPath getBodyComponentFieldPath(DTClass heroClass, String which) {
             return heroClass.getFieldPathForName(format("CBodyComponent.m_%s", which));
         }
 
