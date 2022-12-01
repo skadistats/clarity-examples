@@ -64,7 +64,7 @@
     </dependencies>
 
     <build>
-        <finalName>${exampleName}</finalName>
+        <finalName>clarityexamples</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -73,7 +73,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>skadistats.clarity.examples.${exampleName}.Main</mainClass>
+                            <mainClass>skadistats.clarity.examples.clarityexamples.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
