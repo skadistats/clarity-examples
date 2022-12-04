@@ -14,7 +14,7 @@ public class AllChatProcessor {
     }
     public static void main(String[] args) throws Exception {
         // 1) create an input source from the replay
-        Source source = new MappedFileSource("replay.dem");
+        Source source = new MappedFileSource(args[0]);
         // 2) create a simple runner that will read the replay once
         SimpleRunner runner = new SimpleRunner(source);
         // 3) create an instance of your processor
