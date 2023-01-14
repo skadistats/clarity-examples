@@ -46,7 +46,7 @@ The main method does the following:
 
 All provided examples can be build with Maven. The build process yields an "uber-jar", that is a jar 
 containing all the dependencies, which can be called from the command line easily without having to 
-set a correct classpath. 
+set a correct classpath.
 
 ### Logging
 
@@ -54,6 +54,17 @@ Clarity uses the logback-library for logging. You can enable logging for certain
 `src/main/resources/logback.xml`.  
 
 ## Examples
+
+### AllChat
+
+You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/allchat/Main.java).
+After building it from the project root with
+
+	mvn -P allchat package
+
+you can run it with
+
+	java -jar target/allchat.one-jar.jar replay.dem
 
 ### Watching the data in real time
 
