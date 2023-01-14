@@ -1,8 +1,5 @@
 package skadistats.clarity.examples.combatlog;
 
-import org.joda.time.Duration;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.CombatLogEntry;
@@ -11,21 +8,15 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.common.proto.DotaUserMessages;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
-    private final PeriodFormatter GAMETIME_FORMATTER = new PeriodFormatterBuilder()
-        .minimumPrintedDigits(2)
-        .printZeroAlways()
-        .appendHours()
-        .appendLiteral(":")
-        .appendMinutes()
-        .appendLiteral(":")
-        .appendSeconds()
-        .appendLiteral(".")
-        .appendMillis3Digit()
-        .toFormatter();
+    private final DateTimeFormatter GAMETIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
     private String compileName(String attackerName, boolean isIllusion) {
         return attackerName != null ? attackerName + (isIllusion ? " (illusion)" : "") : "UNKNOWN";
@@ -41,7 +32,9 @@ public class Main {
 
     @OnCombatLogEntry
     public void onCombatLogEntry(CombatLogEntry cle) {
-        String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int) (1000.0f * cle.getTimestamp())).toPeriod()) + "]";
+        Duration gameTimeMillis = Duration.ofMillis((int) (1000.0f * cle.getTimestamp()));
+        LocalTime gameTime = LocalTime.MIDNIGHT.plus(gameTimeMillis);
+        String time = "[" + GAMETIME_FORMATTER.format(gameTime) + "]";
         switch (cle.getType()) {
             case DOTA_COMBATLOG_DAMAGE:
                 log.info("{} {} hits {}{} for {} damage{}",
