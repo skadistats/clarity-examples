@@ -37,7 +37,7 @@ public class Main {
     }
 
     private void showScoreboard() {
-        boolean isSource1 = runner.getEngineType().getId() == EngineId.SOURCE1;
+        boolean isSource1 = runner.getEngineType().getId() == EngineId.DOTA_S1;
         boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getDtClass().getFieldPathForName("m_vecPlayerData") == null;
         if (isSource1 || isEarlyBetaFormat) {
             showTableWithColumns(
@@ -104,9 +104,9 @@ public class Main {
 
     private String getEngineDependentEntityName(String entityName) {
         switch (runner.getEngineType().getId()) {
-            case SOURCE1:
+            case DOTA_S1:
                 return "DT_DOTA_" + entityName;
-            case SOURCE2:
+            case DOTA_S2:
                 return "CDOTA_" + entityName;
             default:
                 throw new RuntimeException("invalid engine type");
