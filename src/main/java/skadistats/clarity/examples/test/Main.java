@@ -8,8 +8,8 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.s1.proto.S1NetMessages;
-import skadistats.clarity.wire.s2.proto.S2NetMessages;
+import skadistats.clarity.wire.dota.s1.proto.S1NetMessages;
+import skadistats.clarity.wire.dota.s2.proto.S2NetMessages;
 
 @UsesEntities
 public class Main {

@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.metadata;
 
 import skadistats.clarity.Clarity;
-import skadistats.clarity.wire.s2.proto.S2DotaMatchMetadata;
+import skadistats.clarity.wire.dota.s2.proto.S2DotaMatchMetadata;
 
 import java.io.IOException;
 

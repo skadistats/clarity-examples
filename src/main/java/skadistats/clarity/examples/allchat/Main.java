@@ -5,7 +5,7 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
-import skadistats.clarity.wire.s2.proto.S2UserMessages;
+import skadistats.clarity.wire.dota.s2.proto.S2UserMessages;
 
 public class Main {
     @OnMessage(S2UserMessages.CUserMessageSayText2.class)

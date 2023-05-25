@@ -11,7 +11,7 @@ import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.Packet;
 import skadistats.clarity.wire.common.proto.Demo;
-import skadistats.clarity.wire.s2.proto.S2NetMessages;
+import skadistats.clarity.wire.dota.s2.proto.S2NetMessages;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
