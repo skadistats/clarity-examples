@@ -11,7 +11,7 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.LZSS;
-import skadistats.clarity.wire.common.proto.NetworkBaseTypes;
+import skadistats.clarity.wire.shared.common.proto.NetworkBaseTypes;
 
 import java.io.IOException;
 import java.util.ArrayList;
