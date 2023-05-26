@@ -6,7 +6,7 @@ import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.common.proto.DotaUserMessages;
+import skadistats.clarity.wire.dota.common.proto.DotaUserMessages;
 
 import java.time.Duration;
 import java.time.LocalTime;

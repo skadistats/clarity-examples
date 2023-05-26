@@ -4,18 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.event.Insert;
 import skadistats.clarity.model.Entity;
-import skadistats.clarity.model.StringTable;
 import skadistats.clarity.model.s1.ParticleAttachmentType;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
-import skadistats.clarity.processor.stringtables.OnStringTableCreated;
 import skadistats.clarity.processor.stringtables.StringTables;
-import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.common.proto.DotaUserMessages;
+import skadistats.clarity.wire.dota.common.proto.DotaUserMessages;
 
 @UsesEntities
 public class Main {
