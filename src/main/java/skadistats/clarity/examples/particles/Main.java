@@ -12,7 +12,7 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.dota.common.proto.DotaUserMessages;
+import skadistats.clarity.wire.shared.demo.proto.DemoUserMessages;
 
 @UsesEntities
 public class Main {
@@ -30,53 +30,53 @@ public class Main {
         return context.getTick();
     }
 
-    @OnMessage(DotaUserMessages.CDOTAUserMsg_ParticleManager.class)
-    public void onMessage(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    @OnMessage(DemoUserMessages.CUserMsg_ParticleManager.class)
+    public void onMessage(DemoUserMessages.CUserMsg_ParticleManager message) {
         switch(message.getType()) {
-            case DOTA_PARTICLE_MANAGER_EVENT_CREATE:
+            case GAME_PARTICLE_MANAGER_EVENT_CREATE:
                 logCreate(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE:
                 logUpdate(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FORWARD:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE_FORWARD:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ORIENTATION:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE_ORIENTATION:
                 logUpdateOrientation(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_FALLBACK:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE_FALLBACK:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_ENT:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE_ENT:
                 logUpdateEnt(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_UPDATE_OFFSET:
+            case GAME_PARTICLE_MANAGER_EVENT_UPDATE_OFFSET:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_DESTROY:
+            case GAME_PARTICLE_MANAGER_EVENT_DESTROY:
                 logDestroy(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING:
+            case GAME_PARTICLE_MANAGER_EVENT_DESTROY_INVOLVING:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_RELEASE:
+            case GAME_PARTICLE_MANAGER_EVENT_RELEASE:
                 logRelease(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_LATENCY:
+            case GAME_PARTICLE_MANAGER_EVENT_LATENCY:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_SHOULD_DRAW:
+            case GAME_PARTICLE_MANAGER_EVENT_SHOULD_DRAW:
                 logUnhanded(message);
                 break;
-            case DOTA_PARTICLE_MANAGER_EVENT_FROZEN:
+            case GAME_PARTICLE_MANAGER_EVENT_FROZEN:
                 logUnhanded(message);
                 break;
         }
 
     }
 
-    private void logCreate(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logCreate(DemoUserMessages.CUserMsg_ParticleManager message) {
         int entityHandle = message.getCreateParticle().getEntityHandle();
 //        int entityIndex = Handle.indexForHandle(entityHandle);
 //        int entitySerial = Handle.serialForHandle(entityHandle);
@@ -93,7 +93,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdate(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logUpdate(DemoUserMessages.CUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, controlPoint={}, position=[{}, {}, {}]]",
             getTick(),
             "PARTICLE_UPDATE",
@@ -106,7 +106,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateOrientation(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logUpdateOrientation(DemoUserMessages.CUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, controlPoint={}, forward=[{}, {}, {}], right=[{}, {}, {}], up=[{}, {}, {}]]",
             getTick(),
             "PARTICLE_UPDATE_ORIENT",
@@ -115,9 +115,9 @@ public class Main {
             message.getUpdateParticleOrient().getForward().getX(),
             message.getUpdateParticleOrient().getForward().getY(),
             message.getUpdateParticleOrient().getForward().getZ(),
-            message.getUpdateParticleOrient().getRight().getX(),
-            message.getUpdateParticleOrient().getRight().getY(),
-            message.getUpdateParticleOrient().getRight().getZ(),
+            message.getUpdateParticleOrient().getDeprecatedRight().getX(),
+            message.getUpdateParticleOrient().getDeprecatedRight().getY(),
+            message.getUpdateParticleOrient().getDeprecatedRight().getZ(),
             message.getUpdateParticleOrient().getUp().getX(),
             message.getUpdateParticleOrient().getUp().getY(),
             message.getUpdateParticleOrient().getUp().getZ()
@@ -125,7 +125,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUpdateEnt(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logUpdateEnt(DemoUserMessages.CUserMsg_ParticleManager message) {
         int entityHandle = message.getUpdateParticleEnt().getEntityHandle();
         Entity parent = entities.getByHandle(entityHandle);
         log.info("{} {} [index={}, entity={}({}), controlPoint={}, attachmentType={}, attachment={}, includeWearables={}]",
@@ -142,7 +142,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logDestroy(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logDestroy(DemoUserMessages.CUserMsg_ParticleManager message) {
         log.info("{} {} [index={}, immediately={}]",
             getTick(),
             "PARTICLE_DESTROY",
@@ -152,7 +152,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logRelease(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logRelease(DemoUserMessages.CUserMsg_ParticleManager message) {
         log.info("{} {} [index={}]",
             getTick(),
             "PARTICLE_RELEASE",
@@ -161,7 +161,7 @@ public class Main {
         //log.info(message.toString());
     }
 
-    private void logUnhanded(DotaUserMessages.CDOTAUserMsg_ParticleManager message) {
+    private void logUnhanded(DemoUserMessages.CUserMsg_ParticleManager message) {
         log.info(message.toString());
     }
 
