@@ -11,7 +11,7 @@ import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.LZSS;
-import skadistats.clarity.wire.shared.common.proto.NetworkBaseTypes;
+import skadistats.clarity.wire.shared.s2.proto.S2NetworkBaseTypes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,8 +69,8 @@ public class Main {
     private final Set<Integer> complete = new LinkedHashSet<>();
     private final Set<Integer> created = new LinkedHashSet<>();
 
-    @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Load.class)
-    public void onLoad(NetworkBaseTypes.CNETMsg_SpawnGroup_Load message) throws IOException {
+    @OnMessage(S2NetworkBaseTypes.CNETMsg_SpawnGroup_Load.class)
+    public void onLoad(S2NetworkBaseTypes.CNETMsg_SpawnGroup_Load message) throws IOException {
         System.out.println("LOAD ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
@@ -80,14 +80,14 @@ public class Main {
         }
     }
 
-    @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted.class)
-    public void onLoadCompleted(NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted message) {
+    @OnMessage(S2NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted.class)
+    public void onLoadCompleted(S2NetworkBaseTypes.CNETMsg_SpawnGroup_LoadCompleted message) {
         System.out.println("LOADCOMPLETED ----------------------------------------------------------------------------------------------");
         System.out.println(message);
     }
 
-    @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate.class)
-    public void onManifestUpdate(NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate message) throws IOException {
+    @OnMessage(S2NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate.class)
+    public void onManifestUpdate(S2NetworkBaseTypes.CNETMsg_SpawnGroup_ManifestUpdate message) throws IOException {
         System.out.println("MANIFEST UPDATE ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         parse(message.getSpawngroupmanifest());
@@ -96,15 +96,15 @@ public class Main {
         }
     }
 
-    @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick.class)
-    public void onSetCreationTick(NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick message) {
+    @OnMessage(S2NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick.class)
+    public void onSetCreationTick(S2NetworkBaseTypes.CNETMsg_SpawnGroup_SetCreationTick message) {
         System.out.println("SET CREATION TICK  ----------------------------------------------------------------------------------------------");
         System.out.println(message);
         created.add(message.getSpawngrouphandle());
     }
 
-    @OnMessage(NetworkBaseTypes.CNETMsg_SpawnGroup_Unload.class)
-    public void onUnload(NetworkBaseTypes.CNETMsg_SpawnGroup_Unload message) {
+    @OnMessage(S2NetworkBaseTypes.CNETMsg_SpawnGroup_Unload.class)
+    public void onUnload(S2NetworkBaseTypes.CNETMsg_SpawnGroup_Unload message) {
         System.out.println("UNLOAD  ----------------------------------------------------------------------------------------------");
         System.out.println(message);
     }

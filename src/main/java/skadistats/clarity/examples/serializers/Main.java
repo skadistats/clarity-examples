@@ -10,7 +10,7 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.Packet;
-import skadistats.clarity.wire.shared.common.proto.Demo;
+import skadistats.clarity.wire.shared.demo.proto.Demo;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 
 import java.io.FileNotFoundException;
