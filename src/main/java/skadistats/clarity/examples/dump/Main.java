@@ -14,13 +14,18 @@ public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
+    private boolean dumpAudio;
+    private boolean dumpMessage;
+
     @OnMessage(GeneratedMessage.class)
     public void onMessage(GeneratedMessage message) {
-        if (isAudio(message)) {
+        if (!dumpAudio && isAudio(message)) {
             return;
         }
         log.info(message.getClass().getName());
-        log.info(message.toString());
+        if (dumpMessage) {
+            log.info(message.toString());
+        }
     }
 
     private boolean isAudio(GeneratedMessage message) {
@@ -30,15 +35,17 @@ public class Main {
                 || message instanceof S2NetMessages.CSVCMsg_VoiceData;
     }
 
-    public void run(String[] args) throws Exception {
+    public void run(String replayFile, boolean dumpAudio, boolean dumpMessage) throws Exception {
+        this.dumpAudio = dumpAudio;
+        this.dumpMessage = dumpMessage;
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        new SimpleRunner(new MappedFileSource(replayFile)).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().run(args);
+        new Main().run(args[0], false, true);
     }
 
 }
