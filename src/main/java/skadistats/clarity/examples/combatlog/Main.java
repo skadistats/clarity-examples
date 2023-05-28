@@ -6,7 +6,7 @@ import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.dota.common.proto.DotaUserMessages;
+import skadistats.clarity.wire.dota.common.proto.DOTAUserMessages;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -133,7 +133,7 @@ public class Main {
                 break;
 
             default:
-                DotaUserMessages.DOTA_COMBATLOG_TYPES type = cle.getType();
+                DOTAUserMessages.DOTA_COMBATLOG_TYPES type = cle.getType();
                 log.info("\n{} ({}): {}\n", type.name(), type.ordinal(), cle);
                 break;
 
