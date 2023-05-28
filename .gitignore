@@ -6,3 +6,5 @@
 /.idea
 /replays
 /dependency-reduced-pom.xml
+/flattables_*
+/baselines
