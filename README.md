@@ -42,11 +42,45 @@ The main method does the following:
 4. This starts the processing run. Your annotated method onMessage() will be called back whenever clarity finds an 
    allchat-message in the replay.
 
-### Building the examples
+### Building / running the examples
 
-All provided examples can be build with Maven. The build process yields an "uber-jar", that is a jar 
+All provided examples can be build with Gradle. The build process yields an "uno-jar", that is a jar 
 containing all the dependencies, which can be called from the command line easily without having to 
-set a correct classpath.
+set a correct classpath. Alternatively, you can use Gradle to run an example directly.
+
+All following commands have to be issued in the root of the project.
+
+
+#### Building
+
+Windows:
+
+    gradlew.bat <exampleName>Package 
+    
+Linux / Mac:
+
+    ./gradlew <exampleName>Package
+
+#### Running the built uno-jar
+
+Windows:
+
+    java -jar build\libs\<exampleName>.jar replay.dem 
+
+Linux / Mac:
+
+    java -jar build/libs/<exampleName>.jar replay.dem
+
+#### Running from Gradle
+
+Windows:
+
+    gradlew.bat <exampleName>Run --args "path\to\replay.dem" 
+
+Linux / Mac:
+
+    ./gradlew <exampleName>Run  --args "path/to/replay.dem"
+
 
 ### Logging
 
@@ -57,14 +91,11 @@ Clarity uses the logback-library for logging. You can enable logging for certain
 
 ### AllChat
 
+
 You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/allchat/Main.java).
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P allchat package
-
-you can run it with
-
-	java -jar target/allchat.one-jar.jar replay.dem
+    <exampleName> = allchat
 
 ### Watching the data in real time
 
@@ -80,13 +111,9 @@ It has problems with finding out if some modifier applied to a unit is a buff or
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
 
 You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P combatlog package
-	
-you can run it with
-
-	java -jar target/combatlog.one-jar.jar replay.dem
+    <exampleName> = combatlog
 
 ### Show stats at the end of the game
 
@@ -95,13 +122,9 @@ It outputs the score table at the end of the match. For getting to the result as
 run the complete replay, but instead uses the ControllableRunner to directly seek to the last tick in the replay.
 
 You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/matchend/Main.java).
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P matchend package
-	
-you can run it with
-
-	java -jar target/matchend.one-jar.jar replay.dem
+    <exampleName> = matchend
 
 ### Tracking spawns / deaths
 
@@ -112,13 +135,9 @@ main class that uses them.
 You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
 and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
 
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P lifestate package
-	
-you can run it with
-
-	java -jar target/lifestate.one-jar.jar replay.dem
+    <exampleName> = lifestate
 
 ### Retrieving basic game info
 
@@ -135,13 +154,9 @@ public class Main {
 ```
 
 You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/info/Main.java).
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P info package
-	
-you can run it with
-
-	java -jar target/info.one-jar.jar replay.dem
+    <exampleName> = info
 
 
 ### Send table inspection (Source 1)
@@ -160,13 +175,9 @@ called send tables.
 This example shows the format of the entity data in a certain replay.
 
 You can find it under [skadistats.clarity.examples.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/dtinspector/Main.java).
-After building it from the project root with
+Follow the instructions above to build and run it with
 
-	mvn -P dtinspector package
-	
-you can run it with
-
-	java -jar target/dtinspector.one-jar.jar replay.dem
+    <exampleName> = dtinspector
 	
 and it will open a window which lets you explore the send tables in an interactive manner.
 
