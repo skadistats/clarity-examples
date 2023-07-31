@@ -33,7 +33,7 @@ public class Main {
 
         Context ctx = r.getContext();
 
-        File dir = new File(String.format("baselines%s%s", File.separator, ctx.getBuildNumber() == -1 ? "latest" : ctx.getBuildNumber()));
+        File dir = new File(String.format("baselines%s%s", File.separator, ctx.getGameVersion() == -1 ? "latest" : ctx.getBuildNumber()));
         if (!dir.exists()) {
             dir.mkdirs();
         }
