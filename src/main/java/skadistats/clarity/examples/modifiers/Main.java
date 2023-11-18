@@ -3,16 +3,15 @@ package skadistats.clarity.examples.modifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.modifiers.OnModifierTableEntry;
-import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.common.proto.DotaModifiers;
+import skadistats.clarity.wire.dota.common.proto.DOTAModifiers;
 
 
 public class Main {
 
     @OnModifierTableEntry()
-    public void onModifierEntry(DotaModifiers.CDOTAModifierBuffTableEntry e) {
+    public void onModifierEntry(DOTAModifiers.CDOTAModifierBuffTableEntry e) {
         System.out.println(e);
     }
 

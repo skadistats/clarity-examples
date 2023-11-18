@@ -10,8 +10,8 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.Packet;
-import skadistats.clarity.wire.common.proto.Demo;
-import skadistats.clarity.wire.s2.proto.S2NetMessages;
+import skadistats.clarity.wire.shared.demo.proto.Demo;
+import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,7 +53,7 @@ public class Main {
     }
 
     private void dump(Context ctx, S2NetMessages.CSVCMsg_FlattenedSerializer fs) throws FileNotFoundException {
-        String fileName = "flattables_" + ctx.getBuildNumber() + ".txt";
+        String fileName = "flattables_" + ctx.getGameVersion() + ".txt";
         log.info("writing {}", fileName);
         PrintStream out = new PrintStream(new FileOutputStream(fileName));
         for (S2NetMessages.ProtoFlattenedSerializer_t s : fs.getSerializersList()) {

@@ -33,7 +33,7 @@ public class Main {
 
         Context ctx = r.getContext();
 
-        File dir = new File(String.format("baselines%s%s", File.separator, ctx.getBuildNumber() == -1 ? "latest" : ctx.getBuildNumber()));
+        File dir = new File(String.format("baselines%s%s", File.separator, ctx.getGameVersion() == -1 ? "latest" : ctx.getBuildNumber()));
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -45,8 +45,18 @@ public class Main {
         StringTable baselines = stringTables.forName("instancebaseline");
 
         for (int i = 0; i < baselines.getEntryCount(); i++) {
-            DTClass dtClass = dtClasses.forClassId(Integer.valueOf(baselines.getNameByIndex(i)));
-            String fileName = String.format("%s%s%s.txt", dir.getPath(), File.separator, dtClass.getDtName());
+            DTClass dtClass;
+            String fileName;
+            String nameByIndex = baselines.getNameByIndex(i);
+            if (nameByIndex.contains(":")) {
+                String[] split = nameByIndex.split(":");
+                dtClass = dtClasses.forClassId(Integer.valueOf(split[0]));
+                fileName = String.format("%s%s%s_%s.txt", dir.getPath(), File.separator, dtClass.getDtName(), split[1]);
+            } else {
+                dtClass = dtClasses.forClassId(Integer.valueOf(nameByIndex));
+                fileName = String.format("%s%s%s.txt", dir.getPath(), File.separator, dtClass.getDtName());
+            }
+
             log.info("writing {}", fileName);
             fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = BitStream.createBitStream(baselines.getValueByIndex(i));
