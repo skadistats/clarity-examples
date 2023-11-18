@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.0.0-SNAPSHOT")
+    api("com.skadistats:clarity:3.0.0")
     api("ch.qos.logback:logback-classic:1.4.7")
 }
 
