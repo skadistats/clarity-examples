@@ -63,6 +63,7 @@ public class Main {
             try {
                 fieldReader.readFields(bs, dtClass, true);
                 if (bs.remaining() < 0 || bs.remaining() > 7) {
+                    fieldReader.DEBUG_STREAM.println("-- OFF: " + bs.remaining() + " remaining");
                     log.info("-- OFF: {} remaining", bs.remaining());
                 }
             } catch (Exception e) {
