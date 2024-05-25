@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.0.4")
+    api("com.skadistats:clarity:3.0.5")
     api("ch.qos.logback:logback-classic:1.4.14")
 }
 
