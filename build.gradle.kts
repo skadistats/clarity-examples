@@ -21,6 +21,7 @@ repositories {
 dependencies {
     api("com.skadistats:clarity:3.1.0")
     api("ch.qos.logback:logback-classic:1.4.14")
+    annotationProcessor("org.atteo.classindex:classindex:3.13")
 }
 
 File("src/main/java/skadistats/clarity/examples").walk().maxDepth(1).forEach {
