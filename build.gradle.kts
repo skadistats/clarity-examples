@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.skadistats"
-version = "3.0-SNAPSHOT"
+version = "3.1-SNAPSHOT"
 
 java {
     toolchain {
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.1.0")
+    api("com.skadistats:clarity:3.1.1")
     api("ch.qos.logback:logback-classic:1.4.14")
     annotationProcessor("org.atteo.classindex:classindex:3.13")
 }
