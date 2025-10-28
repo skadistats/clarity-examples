@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.1.1")
+    api("com.skadistats:clarity:3.1.2")
     api("ch.qos.logback:logback-classic:1.5.20")
     annotationProcessor("org.atteo.classindex:classindex:3.13")
 }
