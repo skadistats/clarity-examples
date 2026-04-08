@@ -42,16 +42,25 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this);
+        }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }
 
     public void runControlled(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
-        while(!runner.isAtEnd()) {
-            runner.tick();
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            ControllableRunner runner = new ControllableRunner(source).runWith(this);
+            try {
+                while (!runner.isAtEnd()) {
+                    runner.tick();
+                }
+            } finally {
+                runner.halt();
+                runner.join();
+            }
         }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);

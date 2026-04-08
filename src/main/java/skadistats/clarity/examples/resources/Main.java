@@ -32,8 +32,10 @@ public class Main {
     }
 
     public void run(String[] args) throws Exception {
-        SimpleRunner runner = new SimpleRunner(new MappedFileSource(args[0]));
-        runner.runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            SimpleRunner runner = new SimpleRunner(source);
+            runner.runWith(this);
+        }
     }
 
     public static void main(String[] args) throws Exception {

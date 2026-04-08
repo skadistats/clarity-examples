@@ -58,7 +58,9 @@ public class Main {
 
 
     public void run(String[] args) throws Exception {
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this);
+        }
     }
 
     public static void main(String[] args) throws Exception {

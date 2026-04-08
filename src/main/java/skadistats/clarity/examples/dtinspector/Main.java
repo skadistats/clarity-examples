@@ -19,7 +19,10 @@ public class Main {
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     public void run(String[] args) throws Exception {
-        final Context ctx = new SimpleRunner(new MappedFileSource(args[0])).runWith(this).getContext();
+        final Context ctx;
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            ctx = new SimpleRunner(source).runWith(this).getContext();
+        }
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         EventQueue.invokeLater(new Runnable() {
             public void run() {

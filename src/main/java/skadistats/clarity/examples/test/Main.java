@@ -26,12 +26,18 @@ public class Main {
     }
 
     public void runSeek(String[] args) throws Exception {
-        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
-        runner.seek(30000);
-        System.out.println("at 30000\n\n");
-        runner.seek(0);
-        System.out.println("at 0\n\n");
-        runner.halt();
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            ControllableRunner runner = new ControllableRunner(source).runWith(this);
+            try {
+                runner.seek(30000);
+                System.out.println("at 30000\n\n");
+                runner.seek(0);
+                System.out.println("at 0\n\n");
+            } finally {
+                runner.halt();
+                runner.join();
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {

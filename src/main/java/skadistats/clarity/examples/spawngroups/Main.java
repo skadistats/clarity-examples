@@ -110,7 +110,9 @@ public class Main {
     }
 
     public void run(String[] args) throws Exception {
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this);
+        }
         System.out.println("LOADED " + loaded);
         System.out.println("COMPLETED " + complete);
         System.out.println("CREATED " + created);

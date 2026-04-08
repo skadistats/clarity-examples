@@ -19,7 +19,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this);
+        }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

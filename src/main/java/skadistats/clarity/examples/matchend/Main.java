@@ -31,9 +31,15 @@ public class Main {
     private final ControllableRunner runner;
 
     public Main(String fileName) throws IOException, InterruptedException {
-        runner = new ControllableRunner(new MappedFileSource(fileName)).runWith(this);
-        runner.seek(runner.getLastTick());
-        runner.halt();
+        try (MappedFileSource source = new MappedFileSource(fileName)) {
+            runner = new ControllableRunner(source).runWith(this);
+            try {
+                runner.seek(runner.getLastTick());
+            } finally {
+                runner.halt();
+                runner.join();
+            }
+        }
     }
 
     private void showScoreboard() {

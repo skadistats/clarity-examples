@@ -13,11 +13,11 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        MappedFileSource s = new MappedFileSource(args[0]);
-        new SimpleRunner(s).runWith(this);
+        try (MappedFileSource s = new MappedFileSource(args[0])) {
+            new SimpleRunner(s).runWith(this);
+        }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
-        s.close();
     }
 
     public static void main(String[] args) throws Exception {

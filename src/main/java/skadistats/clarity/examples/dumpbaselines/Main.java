@@ -29,9 +29,10 @@ public class Main {
 
         String demoName = args[0];
 
-        SimpleRunner r = new SimpleRunner(new MappedFileSource(demoName)).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(demoName)) {
+            SimpleRunner r = new SimpleRunner(source).runWith(this);
 
-        Context ctx = r.getContext();
+            Context ctx = r.getContext();
 
         File dir = new File(String.format("baselines%s%s", File.separator, ctx.getGameVersion() == -1 ? "latest" : ctx.getBuildNumber()));
         if (!dir.exists()) {
@@ -71,6 +72,8 @@ public class Main {
                 e.printStackTrace(fieldReader.DEBUG_STREAM);
             } finally {
             }
+        }
+
         }
 
         long tMatch = System.currentTimeMillis() - tStart;

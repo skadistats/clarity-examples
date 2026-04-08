@@ -29,11 +29,13 @@ public class Main {
 
 
     public void runSeek(String[] args) throws Exception {
-        Runner runner = new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
-        StringTables st = runner.getContext().getProcessor(StringTables.class);
-        for (String name : names) {
-            StringTable t = st.forName(name);
-            System.out.println(t.toString());
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            Runner runner = new SimpleRunner(source).runWith(this);
+            StringTables st = runner.getContext().getProcessor(StringTables.class);
+            for (String name : names) {
+                StringTable t = st.forName(name);
+                System.out.println(t.toString());
+            }
         }
     }
 

@@ -15,11 +15,12 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.1.3")
+    api("com.skadistats:clarity:3.1.4-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.20")
     annotationProcessor("org.atteo.classindex:classindex:3.13")
 }

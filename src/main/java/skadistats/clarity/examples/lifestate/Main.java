@@ -27,15 +27,11 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        SimpleRunner r = null;
-        try {
-            r = new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this);
         } finally {
             long tMatch = System.currentTimeMillis() - tStart;
             log.info("total time taken: {}s", (tMatch) / 1000.0);
-            if (r != null) {
-                r.getSource().close();
-            }
         }
     }
 

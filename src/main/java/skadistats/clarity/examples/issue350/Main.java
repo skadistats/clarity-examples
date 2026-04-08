@@ -18,11 +18,18 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
         int ticks = 0;
-        while (!runner.isAtEnd()) {
-            runner.tick();
-            ticks++;
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            ControllableRunner runner = new ControllableRunner(source).runWith(this);
+            try {
+                while (!runner.isAtEnd()) {
+                    runner.tick();
+                    ticks++;
+                }
+            } finally {
+                runner.halt();
+                runner.join();
+            }
         }
         long elapsed = System.currentTimeMillis() - tStart;
         log.info("processed {} ticks in {}s", ticks, elapsed / 1000.0);

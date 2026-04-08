@@ -20,13 +20,14 @@ public class Main {
         String dstFile = args[1];
         createWriterThread(srcFile, dstFile);
 
-        LiveSource source = new LiveSource(dstFile, 5, TimeUnit.SECONDS);
-        new SimpleRunner(source).runWith(new Object() {
-            @OnMessage
-            public void onMessage(GeneratedMessage msg) {
-                System.out.println(msg.getClass().getSimpleName());
-            }
-        });
+        try (LiveSource source = new LiveSource(dstFile, 5, TimeUnit.SECONDS)) {
+            new SimpleRunner(source).runWith(new Object() {
+                @OnMessage
+                public void onMessage(GeneratedMessage msg) {
+                    System.out.println(msg.getClass().getSimpleName());
+                }
+            });
+        }
     }
 
     private void createWriterThread(final String srcFile, final String dstFile) {

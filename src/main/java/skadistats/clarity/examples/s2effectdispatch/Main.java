@@ -28,7 +28,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(args[0])).runWith(this, new EffectDispatches());
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            new SimpleRunner(source).runWith(this, new EffectDispatches());
+        }
         long tMatch = System.currentTimeMillis() - tStart;
 
         log.info("=== effect dispatch histogram ===");

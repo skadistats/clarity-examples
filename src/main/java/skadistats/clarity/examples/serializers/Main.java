@@ -82,9 +82,15 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        ControllableRunner runner = new ControllableRunner(new MappedFileSource(args[0])).runWith(this);
-        runner.tick();
-        runner.halt();
+        try (MappedFileSource source = new MappedFileSource(args[0])) {
+            ControllableRunner runner = new ControllableRunner(source).runWith(this);
+            try {
+                runner.tick();
+            } finally {
+                runner.halt();
+                runner.join();
+            }
+        }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

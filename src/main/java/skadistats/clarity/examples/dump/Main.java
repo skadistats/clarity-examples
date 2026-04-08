@@ -39,7 +39,9 @@ public class Main {
         this.dumpAudio = dumpAudio;
         this.dumpMessage = dumpMessage;
         long tStart = System.currentTimeMillis();
-        new SimpleRunner(new MappedFileSource(replayFile)).runWith(this);
+        try (MappedFileSource source = new MappedFileSource(replayFile)) {
+            new SimpleRunner(source).runWith(this);
+        }
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

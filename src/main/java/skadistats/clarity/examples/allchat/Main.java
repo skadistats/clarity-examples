@@ -13,14 +13,15 @@ public class Main {
         System.out.format("%s: %s\n", message.getParam1(), message.getParam2());
     }
     public static void main(String[] args) throws Exception {
-        // 1) create an input source from the replay
-        Source source = new MappedFileSource(args[0]);
-        // 2) create a simple runner that will read the replay once
-        SimpleRunner runner = new SimpleRunner(source);
-        // 3) create an instance of your processor
-        Main processor = new Main();
-        // 4) and hand it over to the runner
-        runner.runWith(processor);
+        // 1) create an input source from the replay (try-with-resources closes it)
+        try (Source source = new MappedFileSource(args[0])) {
+            // 2) create a simple runner that will read the replay once
+            SimpleRunner runner = new SimpleRunner(source);
+            // 3) create an instance of your processor
+            Main processor = new Main();
+            // 4) and hand it over to the runner
+            runner.runWith(processor);
+        }
     }
 
 }
