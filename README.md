@@ -139,6 +139,33 @@ Follow the instructions above to build and run it with
 
     <exampleName> = lifestate
 
+### Tracking ability / item cooldowns
+
+This example builds on the same pattern as `lifestate` and shows how to write a processor that
+provides events for ability and item cooldown transitions. It watches the `m_fCooldown` property
+on every entity that has it (i.e. all `CDOTABaseAbility` and `CDOTA_Item` subclasses) and resolves
+the owning hero via `m_hOwnerEntity`, so the events tell you both *what* went on cooldown and *who*
+it belongs to.
+
+The processor provides three new events:
+
+- `@OnAbilityCooldownStart(Entity ability, Entity owner, Float endTime)` — fires when an ability
+  or item is used and its cooldown begins. `endTime` is the absolute game time at which the
+  cooldown will expire.
+- `@OnAbilityCooldownEnd(Entity ability, Entity owner)` — fires when a cooldown reaches its
+  natural expiration. Since this is not a property change, it is implemented by polling the
+  current game time (read from `CDOTAGamerulesProxy`) at the end of each tick and firing for
+  every pending cooldown whose end time has passed.
+- `@OnAbilityCooldownReset(Entity ability, Entity owner)` — fires when the cooldown is cleared
+  before its natural expiration, e.g. after a Refresher Orb.
+
+You can find the processor under [skadistats.clarity.examples.cooldowns.Cooldowns.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/cooldowns/Cooldowns.java),
+and the class that uses it under [skadistats.clarity.examples.cooldowns.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/cooldowns/Main.java).
+
+Follow the instructions above to build and run it with
+
+    <exampleName> = cooldowns
+
 ### Retrieving basic game info
 
 For retrieving the basic game information (players, picks, bans, who won), 
