@@ -1,4 +1,4 @@
-package skadistats.clarity.examples.s1dotatempentities;
+package skadistats.clarity.examples.s1tempentities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,22 +11,33 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Demonstrates the {@code OnTempEntity} event on Source 1 Dota 2 replays.
+ * Demonstrates the {@code OnTempEntity} event on Source 1 replays.
  *
- * <p>In Dota 2 Source 1, temp entities are sent through
+ * <p>In Source 1 (both Dota 2 and CSGO), temp entities are sent through
  * {@code CSVCMsg_TempEntities} as bit-packed property updates against a
- * regular DT class (e.g. {@code DT_DOTA_TempEntity_*}). Clarity's existing
- * {@code TempEntities} processor turns each one into an {@link Entity}
- * object so consumers can access fields the same way they would on a
- * persistent networked entity.</p>
+ * regular DT class. Clarity's {@code TempEntities} processor turns each
+ * one into an {@link Entity} so consumers can read fields the same way
+ * they would on a persistent networked entity.</p>
  *
  * <p>This example listens to the event and builds a histogram of how many
- * temp entities of each DT class were observed across the whole replay.</p>
+ * temp entities of each DT class were observed across the whole replay.
+ * The DT class set differs by game:</p>
  *
- * <p>Note: this only works on Source 1 Dota 2 replays. CSGO Source 1 uses
- * a different (currently unsupported) wire format for temp entities, and
- * Source 2 ships them through entirely different mechanisms — see the
- * {@code s2effectdispatch} and {@code s2dotatempentities} examples.</p>
+ * <ul>
+ *   <li><b>Dota 2 Source 1</b> — {@code DT_TEDOTAProjectile},
+ *       {@code DT_TEDOTAProjectileLoc}, {@code DT_TEDotaBloodImpact},
+ *       {@code DT_TEEffectDispatch}, {@code DT_TEUnitAnimation},
+ *       {@code DT_TEUnitAnimationEnd}.</li>
+ *   <li><b>CSGO Source 1</b> — {@code DT_TEFireBullets} (every shot),
+ *       {@code DT_TEEffectDispatch}, {@code DT_TEDecal} /
+ *       {@code DT_TEWorldDecal} (impact decals),
+ *       {@code DT_TEBreakModel}, {@code DT_TEPhysicsProp},
+ *       {@code DT_TEExplosion}, {@code DT_TEDynamicLight}.</li>
+ * </ul>
+ *
+ * <p>For Source 2 (modern Dota 2, CS2, Deadlock), see the
+ * {@code s2effectdispatch} and {@code s2dotatempentities} examples — S2
+ * ships temp entities through entirely different mechanisms.</p>
  */
 public class Main {
 
@@ -44,7 +55,7 @@ public class Main {
         new SimpleRunner(new MappedFileSource(args[0])).runWith(this);
         long tMatch = System.currentTimeMillis() - tStart;
 
-        log.info("=== s1 dota temp-entity histogram ===");
+        log.info("=== s1 temp-entity histogram ===");
         long total = 0;
         for (var e : byDtClass.entrySet()) {
             log.info("  {} : {}", e.getKey(), e.getValue());
