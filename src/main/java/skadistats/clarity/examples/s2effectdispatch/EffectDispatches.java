@@ -1,6 +1,5 @@
 package skadistats.clarity.examples.s2effectdispatch;
 
-import skadistats.clarity.event.Event;
 import skadistats.clarity.event.EventListener;
 import skadistats.clarity.event.Initializer;
 import skadistats.clarity.event.Provides;
@@ -36,11 +35,11 @@ import skadistats.clarity.wire.shared.s2.proto.S2TempEntities.CMsgTEEffectDispat
 public class EffectDispatches {
 
     private StringTable dispatchTable;
-    private Event<OnEffectDispatch> evDispatch;
+    private OnEffectDispatch.Event evDispatch;
 
     @Initializer(OnEffectDispatch.class)
     public void initOnDispatch(final Context ctx, final EventListener<OnEffectDispatch> el) {
-        evDispatch = ctx.createEvent(OnEffectDispatch.class, String.class, CMsgEffectData.class);
+        evDispatch = (OnEffectDispatch.Event) ctx.createEvent(OnEffectDispatch.class);
     }
 
     @OnStringTableCreated

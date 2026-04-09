@@ -1,6 +1,5 @@
 package skadistats.clarity.examples.cooldowns;
 
-import skadistats.clarity.event.Event;
 import skadistats.clarity.event.EventListener;
 import skadistats.clarity.event.Initializer;
 import skadistats.clarity.event.Insert;
@@ -53,23 +52,23 @@ public class Cooldowns {
     @Insert
     private Entities entities;
 
-    private Event<OnAbilityCooldownStart> evStart;
-    private Event<OnAbilityCooldownReset> evReset;
-    private Event<OnAbilityCooldownEnd> evEnd;
+    private OnAbilityCooldownStart.Event evStart;
+    private OnAbilityCooldownReset.Event evReset;
+    private OnAbilityCooldownEnd.Event evEnd;
 
     @Initializer(OnAbilityCooldownStart.class)
     public void initOnStart(final Context ctx, final EventListener<OnAbilityCooldownStart> el) {
-        evStart = ctx.createEvent(OnAbilityCooldownStart.class, Entity.class, Entity.class, Float.class);
+        evStart = (OnAbilityCooldownStart.Event) ctx.createEvent(OnAbilityCooldownStart.class);
     }
 
     @Initializer(OnAbilityCooldownReset.class)
     public void initOnReset(final Context ctx, final EventListener<OnAbilityCooldownReset> el) {
-        evReset = ctx.createEvent(OnAbilityCooldownReset.class, Entity.class, Entity.class);
+        evReset = (OnAbilityCooldownReset.Event) ctx.createEvent(OnAbilityCooldownReset.class);
     }
 
     @Initializer(OnAbilityCooldownEnd.class)
     public void initOnEnd(final Context ctx, final EventListener<OnAbilityCooldownEnd> el) {
-        evEnd = ctx.createEvent(OnAbilityCooldownEnd.class, Entity.class, Entity.class);
+        evEnd = (OnAbilityCooldownEnd.Event) ctx.createEvent(OnAbilityCooldownEnd.class);
     }
 
     @OnEntityCreated

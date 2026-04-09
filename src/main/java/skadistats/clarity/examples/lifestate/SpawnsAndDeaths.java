@@ -1,6 +1,5 @@
 package skadistats.clarity.examples.lifestate;
 
-import skadistats.clarity.event.Event;
 import skadistats.clarity.event.EventListener;
 import skadistats.clarity.event.Initializer;
 import skadistats.clarity.event.Provides;
@@ -22,26 +21,26 @@ public class SpawnsAndDeaths {
     private final Map<Integer, FieldPath> lifeStatePaths = new HashMap<>();
     private final Map<Integer, Integer> currentLifeState = new HashMap<>();
 
-    private Event<OnEntitySpawned> evSpawned;
-    private Event<OnEntityDying> evDying;
-    private Event<OnEntityDied> evDied;
+    private OnEntitySpawned.Event evSpawned;
+    private OnEntityDying.Event evDying;
+    private OnEntityDied.Event evDied;
 
     @Initializer(OnEntitySpawned.class)
     public void initOnEntitySpawned(final Context ctx, final EventListener<OnEntitySpawned> eventListener) {
         init(ctx);
-        evSpawned = ctx.createEvent(OnEntitySpawned.class, Entity.class);
+        evSpawned = (OnEntitySpawned.Event) ctx.createEvent(OnEntitySpawned.class);
     }
 
     @Initializer(OnEntityDying.class)
     public void initOnEntityDying(final Context ctx, final EventListener<OnEntityDying> eventListener) {
         init(ctx);
-        evDying = ctx.createEvent(OnEntityDying.class, Entity.class);
+        evDying = (OnEntityDying.Event) ctx.createEvent(OnEntityDying.class);
     }
 
     @Initializer(OnEntityDied.class)
     public void initOnEntityDied(final Context ctx, final EventListener<OnEntityDied> eventListener) {
         init(ctx);
-        evDied = ctx.createEvent(OnEntityDied.class, Entity.class);
+        evDied = (OnEntityDied.Event) ctx.createEvent(OnEntityDied.class);
     }
 
     @OnEntityCreated
