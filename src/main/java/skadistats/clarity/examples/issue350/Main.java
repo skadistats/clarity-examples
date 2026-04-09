@@ -2,19 +2,40 @@ package skadistats.clarity.examples.issue350;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.model.Entity;
+import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.processor.entities.OnEntityPropertyChanged;
+import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
+import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.source.MappedFileSource;
 
 /**
  * Reproducer for https://github.com/skadistats/clarity/issues/350
  *
- * Drives a CS2 demo (HLTV #103994 m1 anubis, played on an old map version)
- * through a ControllableRunner. Historically, clarity hung on this kind of
- * replay; this Main verifies it now runs to completion.
+ * The reporter clarified that the hang only manifests when at least one
+ * processor with entity listeners is attached. This Main attaches the same
+ * two listeners they used (CCSGameRulesProxy.m_pGameRules.m_totalRoundsPlayed
+ * and CCSPlayerController.m_iPawnHealth) and drives the demo through a
+ * ControllableRunner.
  */
+@UsesEntities
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class);
+
+    private int rounds = 0;
+    private int healthChanges = 0;
+
+    @OnEntityPropertyChanged(classPattern = "CCSGameRulesProxy", propertyPattern = "m_pGameRules.m_totalRoundsPlayed")
+    public void onRoundsPlayed(Context ctx, Entity e, FieldPath fp) {
+        rounds++;
+    }
+
+    @OnEntityPropertyChanged(classPattern = "CCSPlayerController", propertyPattern = "m_iPawnHealth")
+    public void onHealth(Context ctx, Entity e, FieldPath fp) {
+        healthChanges++;
+    }
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
@@ -32,7 +53,7 @@ public class Main {
             }
         }
         long elapsed = System.currentTimeMillis() - tStart;
-        log.info("processed {} ticks in {}s", ticks, elapsed / 1000.0);
+        log.info("processed {} ticks in {}s, rounds={} healthChanges={}", ticks, elapsed / 1000.0, rounds, healthChanges);
     }
 
     public static void main(String[] args) throws Exception {
