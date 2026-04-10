@@ -30,6 +30,7 @@ File("src/main/java/skadistats/clarity/examples").walk().maxDepth(1).forEach {
     tasks.register<JavaExec>("${it.name}Run") {
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("skadistats.clarity.examples.${it.name}.Main")
+        maxHeapSize = "4g"
     }
     tasks.register<PackageUnoJarTask>("${it.name}Package") {
         dependsOn("jar")
