@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.skadistats"
-version = "3.1-SNAPSHOT"
+version = "4.0-SNAPSHOT"
 
 java {
     toolchain {
@@ -21,9 +21,9 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:3.1.4-SNAPSHOT")
+    api("com.skadistats:clarity:4.0.0")
     api("ch.qos.logback:logback-classic:1.5.20")
-    annotationProcessor("com.skadistats:clarity:3.1.4-SNAPSHOT")
+    annotationProcessor("com.skadistats:clarity:4.0.0")
 }
 
 File("src/main/java/skadistats/clarity/examples").walk().maxDepth(1).forEach {
