@@ -8,7 +8,7 @@ import skadistats.clarity.source.MappedFileSource;
 
 /**
  * Baseline benchmark for raw entity parsing throughput.
- * Exercises the hot path: readFieldOp() → Huffman decode → readUBitVarFieldPath → readUBitInt.
+ * Exercises the hot path: readFieldOpId() → Huffman decode → readUBitVarFieldPath → readUBitInt.
  * No listeners attached — measures pure parsing cost.
  */
 public class Main {
