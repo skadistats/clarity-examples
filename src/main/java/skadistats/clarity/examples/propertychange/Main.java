@@ -21,7 +21,7 @@ public class Main {
                 "%6d %s: %s = %s\n",
                 ctx.getTick(),
                 e.getDtClass().getDtName(),
-                e.getDtClass().getNameForFieldPath(fp),
+                e.getNameForFieldPath(fp),
                 e.getPropertyForFieldPath(fp)
         );
     }

@@ -39,10 +39,9 @@ public class Main {
             dir.mkdirs();
         }
 
-        FieldReader fieldReader = ctx.getEngineType().getNewFieldReader();
-
         StringTables stringTables = ctx.getProcessor(StringTables.class);
         DTClasses dtClasses = ctx.getProcessor(DTClasses.class);
+        FieldReader fieldReader = ctx.getEngineType().getNewFieldReader(dtClasses.getPointerCount());
         StringTable baselines = stringTables.forName("instancebaseline");
 
         for (int i = 0; i < baselines.getEntryCount(); i++) {
@@ -62,7 +61,7 @@ public class Main {
             fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = BitStream.createBitStream(baselines.getValueByIndex(i));
             try {
-                fieldReader.readFields(bs, dtClass, true);
+                fieldReader.readFields(bs, dtClass, dtClass.getEmptyState(), true);
                 if (bs.remaining() < 0 || bs.remaining() > 7) {
                     fieldReader.DEBUG_STREAM.println("-- OFF: " + bs.remaining() + " remaining");
                     log.info("-- OFF: {} remaining", bs.remaining());

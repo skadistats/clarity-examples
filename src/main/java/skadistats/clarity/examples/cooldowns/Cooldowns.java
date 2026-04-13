@@ -100,8 +100,8 @@ public class Cooldowns {
     private FieldPath ensureFieldPathForEntityInitialized(Entity e) {
         Integer cid = e.getDtClass().getClassId();
         if (!cooldownPaths.containsKey(cid)) {
-            cooldownPaths.put(cid, e.getDtClass().getFieldPathForName("m_fCooldown"));
-            ownerPaths.put(cid, e.getDtClass().getFieldPathForName("m_hOwnerEntity"));
+            cooldownPaths.put(cid, e.getFieldPathForName("m_fCooldown"));
+            ownerPaths.put(cid, e.getFieldPathForName("m_hOwnerEntity"));
         }
         return cooldownPaths.get(cid);
     }
@@ -147,7 +147,7 @@ public class Cooldowns {
         Entity rules = entities.getByDtName("CDOTAGamerulesProxy");
         if (rules == null) return;
         if (gameTimePath == null) {
-            gameTimePath = rules.getDtClass().getFieldPathForName("m_pGameRules.m_fGameTime");
+            gameTimePath = rules.getFieldPathForName("m_pGameRules.m_fGameTime");
             if (gameTimePath == null) return;
         }
         Float gameTime = rules.getPropertyForFieldPath(gameTimePath);

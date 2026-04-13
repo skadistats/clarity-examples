@@ -19,7 +19,7 @@ public class Main {
 
     @OnEntityCreated
     public void onCreated(Entity e) {
-        FieldPath fp = e.getDtClass().getFieldPathForName("CBodyComponent.m_hModel");
+        FieldPath fp = e.getFieldPathForName("CBodyComponent.m_hModel");
         if (fp == null) {
             return;
         }

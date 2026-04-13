@@ -24,8 +24,8 @@ public class Main {
 
     private void ensureFieldPaths(Entity e) {
         if (mana == null) {
-            mana = e.getDtClass().getFieldPathForName("m_flMana");
-            maxMana = e.getDtClass().getFieldPathForName("m_flMaxMana");
+            mana = e.getFieldPathForName("m_flMana");
+            maxMana = e.getFieldPathForName("m_flMaxMana");
         }
     }
 

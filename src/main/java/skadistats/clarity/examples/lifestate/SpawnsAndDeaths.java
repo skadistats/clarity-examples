@@ -77,7 +77,7 @@ public class SpawnsAndDeaths {
     private void ensureFieldPathForEntityInitialized(Entity e) {
         Integer cid = e.getDtClass().getClassId();
         if (!lifeStatePaths.containsKey(cid)) {
-            lifeStatePaths.put(cid, e.getDtClass().getFieldPathForName("m_lifeState"));
+            lifeStatePaths.put(cid, e.getFieldPathForName("m_lifeState"));
         }
     }
 

@@ -34,21 +34,28 @@ public class Main {
     private Entities entities;
 
     private DTClass playerResourceClass;
-    private final PlayerResourceLookup[] playerLookup = new PlayerResourceLookup[10];
+    private PlayerResourceLookup[] playerLookup;
     private final HeroLookup[] heroLookup = new HeroLookup[10];
     private final List<Runnable> deferredActions = new ArrayList<>();
 
     @OnDTClassesComplete
     protected void onDtClassesComplete() {
         playerResourceClass = dtClasses.forDtName("CDOTA_PlayerResource");
-        for (int i = 0; i < 10; i++) {
-            playerLookup[i] = new PlayerResourceLookup(playerResourceClass, i);
+    }
+
+    private void ensurePlayerLookups(Entity playerResource) {
+        if (playerLookup == null) {
+            playerLookup = new PlayerResourceLookup[10];
+            for (int i = 0; i < 10; i++) {
+                playerLookup[i] = new PlayerResourceLookup(playerResource, i);
+            }
         }
     }
 
     @OnEntityUpdated
     protected void onEntityUpdated(Entity e, FieldPath[] changedFieldPaths, int nChangedFieldPaths) {
         if (e.getDtClass() == playerResourceClass) {
+            ensurePlayerLookups(e);
             for (int p = 0; p < 10; p++) {
                 PlayerResourceLookup lookup = playerLookup[p];
                 if (lookup.isSelectedHeroChanged(e, changedFieldPaths, nChangedFieldPaths)) {
@@ -103,8 +110,8 @@ public class Main {
 
         private final FieldPath fpSelectedHero;
 
-        private PlayerResourceLookup(DTClass playerResourceClass, int idx) {
-            this.fpSelectedHero = playerResourceClass.getFieldPathForName(
+        private PlayerResourceLookup(Entity playerResource, int idx) {
+            this.fpSelectedHero = playerResource.getFieldPathForName(
                     format("m_vecPlayerTeamData.%s.m_hSelectedHero", Util.arrayIdxToString(idx))
             );
         }
@@ -135,17 +142,16 @@ public class Main {
 
         private HeroLookup(Entity heroEntity) {
             this.heroEntity = heroEntity;
-            DTClass heroClass = heroEntity.getDtClass();
-            this.fpCellX = getBodyComponentFieldPath(heroClass, "cellX");
-            this.fpCellY = getBodyComponentFieldPath(heroClass, "cellY");
-            this.fpCellZ = getBodyComponentFieldPath(heroClass, "cellZ");
-            this.fpVecX = getBodyComponentFieldPath(heroClass, "vecX");
-            this.fpVecY = getBodyComponentFieldPath(heroClass, "vecY");
-            this.fpVecZ = getBodyComponentFieldPath(heroClass, "vecZ");
+            this.fpCellX = getBodyComponentFieldPath(heroEntity, "cellX");
+            this.fpCellY = getBodyComponentFieldPath(heroEntity, "cellY");
+            this.fpCellZ = getBodyComponentFieldPath(heroEntity, "cellZ");
+            this.fpVecX = getBodyComponentFieldPath(heroEntity, "vecX");
+            this.fpVecY = getBodyComponentFieldPath(heroEntity, "vecY");
+            this.fpVecZ = getBodyComponentFieldPath(heroEntity, "vecZ");
         }
 
-        private FieldPath getBodyComponentFieldPath(DTClass heroClass, String which) {
-            return heroClass.getFieldPathForName(format("CBodyComponent.m_%s", which));
+        private FieldPath getBodyComponentFieldPath(Entity entity, String which) {
+            return entity.getFieldPathForName(format("CBodyComponent.m_%s", which));
         }
 
         private boolean isPositionChanged(Entity e, FieldPath[] changedFieldPaths, int nChangedFieldPaths) {

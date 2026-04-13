@@ -44,7 +44,7 @@ public class Main {
 
     private void showScoreboard() {
         boolean isSource1 = runner.getEngineType().getId() == EngineId.DOTA_S1;
-        boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getDtClass().getFieldPathForName("m_vecPlayerData") == null;
+        boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getFieldPathForName("m_vecPlayerData") == null;
         if (isSource1 || isEarlyBetaFormat) {
             showTableWithColumns(
                     new DefaultResolver<Integer>("PlayerResource", "m_iPlayerTeams.%i"),
@@ -165,7 +165,7 @@ public class Main {
                     .replaceAll("%p", Util.arrayIdxToString(pos));
             String compiledName = entityName.replaceAll("%n", getTeamName(team));
             Entity entity = getEntity(compiledName);
-            FieldPath fieldPath = entity.getDtClass().getFieldPathForName(fieldPathString);
+            FieldPath fieldPath = entity.getFieldPathForName(fieldPathString);
             return entity.getPropertyForFieldPath(fieldPath);
         }
     }
