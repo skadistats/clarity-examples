@@ -10,6 +10,7 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
+import skadistats.clarity.model.state.S2EntityStateType;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
@@ -24,6 +25,9 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class EntityStateParseBench {
 
+    @Param({"NESTED_ARRAY", "TREE_MAP", "FLAT"})
+    public String impl;
+
     @Param({""})
     public String replay;
 
@@ -33,8 +37,10 @@ public class EntityStateParseBench {
 
     @Benchmark
     public void parse() throws Exception {
+        var type = S2EntityStateType.valueOf(impl);
         try (var src = new MappedFileSource(replay)) {
             var runner = new SimpleRunner(src);
+            runner.withS2EntityState(type);
             runner.runWith(new EmptyProcessor());
         }
     }
