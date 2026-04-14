@@ -2,6 +2,18 @@
 
 This project contains example code for the [clarity replay parser](https://github.com/skadistats/clarity).
 
+## Project structure
+
+The build is split into five Gradle subprojects:
+
+- **`examples/`** — teaching/showcase code you read to learn the Clarity API.
+- **`repro/`** — minimal reproducers for specific GitHub issues.
+- **`dev/`** — maintainer-only diagnostic tools, dumpers, and send-table inspectors.
+- **`bench/`** — throughput benchmarks built as `Main`-style apps (distinct from the JMH harness that lives in the root project's `src/jmh/`).
+- **`launcher/`** — scaffold for the cross-example launcher (populated by follow-up proposals).
+
+Each subproject has its own `src/main/java/` tree and auto-generates `<name>Run` / `<name>Package` Gradle tasks for every example directory it contains.
+
 ## Introduction
 
 Clarity 2 uses an event based approach to replay analysis. To use it, you have to supply one or more
@@ -48,51 +60,64 @@ All provided examples can be build with Gradle. The build process yields an "uno
 containing all the dependencies, which can be called from the command line easily without having to 
 set a correct classpath. Alternatively, you can use Gradle to run an example directly.
 
-All following commands have to be issued in the root of the project.
-
+All following commands have to be issued in the root of the project. Task names are the leaf example
+directory name — resolved unqualified when unique across subprojects, or as `:<subproject>:<name>Run`
+when you want to be explicit.
 
 #### Building
 
 Windows:
 
-    gradlew.bat <exampleName>Package 
-    
+    gradlew.bat <exampleName>Package
+
 Linux / Mac:
 
     ./gradlew <exampleName>Package
 
+Qualified form (always works):
+
+    ./gradlew :examples:<exampleName>Package
+    ./gradlew :dev:<exampleName>Package
+
 #### Running the built uno-jar
+
+Uno-jars are produced in the owning subproject's `build/libs/` (e.g. `examples/build/libs/allchat.jar`,
+`dev/build/libs/dtinspector.jar`).
 
 Windows:
 
-    java -jar build\libs\<exampleName>.jar replay.dem 
+    java -jar <subproject>\build\libs\<exampleName>.jar replay.dem
 
 Linux / Mac:
 
-    java -jar build/libs/<exampleName>.jar replay.dem
+    java -jar <subproject>/build/libs/<exampleName>.jar replay.dem
 
 #### Running from Gradle
 
 Windows:
 
-    gradlew.bat <exampleName>Run --args "path\to\replay.dem" 
+    gradlew.bat <exampleName>Run --args "path\to\replay.dem"
 
 Linux / Mac:
 
-    ./gradlew <exampleName>Run  --args "path/to/replay.dem"
+    ./gradlew <exampleName>Run --args "path/to/replay.dem"
+
+Qualified form (always works):
+
+    ./gradlew :examples:<exampleName>Run --args "path/to/replay.dem"
 
 
 ### Logging
 
-Clarity uses the logback-library for logging. You can enable logging for certain packages by changing 
-`src/main/resources/logback.xml`.  
+Clarity uses the logback-library for logging. You can enable logging for certain packages by changing
+`<subproject>/src/main/resources/logback.xml` (one copy per content subproject).
 
 ## Examples
 
 ### AllChat
 
 
-You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/allchat/Main.java).
+You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/allchat/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = allchat
@@ -110,7 +135,7 @@ This example *almost* replicates what is shown on the combat log from the game.
 It has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
 
-You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
+You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = combatlog
@@ -121,7 +146,7 @@ This example shows how to use the PlayerResource entity as well as the Controlla
 It outputs the score table at the end of the match. For getting to the result as fast as possible, it does not 
 run the complete replay, but instead uses the ControllableRunner to directly seek to the last tick in the replay.
 
-You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/matchend/Main.java).
+You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/matchend/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = matchend
@@ -132,8 +157,8 @@ This example shows how to write a processor that provides events related to the 
 The processor provides 3 new events (`@OnEntitySpawned`, `@OnEntityDying` and `@OnEntityDied`) and an associated
 main class that uses them.
 
-You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
-and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
+You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
+and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
 
 Follow the instructions above to build and run it with
 
@@ -159,8 +184,8 @@ The processor provides three new events:
 - `@OnAbilityCooldownReset(Entity ability, Entity owner)` — fires when the cooldown is cleared
   before its natural expiration, e.g. after a Refresher Orb.
 
-You can find the processor under [skadistats.clarity.examples.cooldowns.Cooldowns.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/cooldowns/Cooldowns.java),
-and the class that uses it under [skadistats.clarity.examples.cooldowns.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/cooldowns/Main.java).
+You can find the processor under [skadistats.clarity.examples.cooldowns.Cooldowns.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/cooldowns/Cooldowns.java),
+and the class that uses it under [skadistats.clarity.examples.cooldowns.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/cooldowns/Main.java).
 
 Follow the instructions above to build and run it with
 
@@ -180,7 +205,7 @@ public class Main {
 }
 ```
 
-You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/info/Main.java).
+You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/info/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = info
@@ -201,7 +226,7 @@ called send tables.
 
 This example shows the format of the entity data in a certain replay.
 
-You can find it under [skadistats.clarity.examples.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/dtinspector/Main.java).
+You can find it under [skadistats.clarity.examples.dev.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/master/dev/src/main/java/skadistats/clarity/examples/dev/dtinspector/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = dtinspector
@@ -245,7 +270,7 @@ public class GameEvents {
 3. Create a single GameEvent, by using the descriptors created in 2.
 4. fire the @OnGameEvent event, passing the created GameEvent as parameter.
 
-Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/master/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
+Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
 
 ### Context
 

@@ -1,7 +1,7 @@
 /.idea
 /*.iml
-/.gradle
-/build
+.gradle/
+build/
 /replays
 /flattables_*
 /baselines

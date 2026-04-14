@@ -8,18 +8,25 @@ This repository contains example code for the Clarity replay parser (https://git
 
 ## Build System
 
-The project uses **Gradle** (not Maven, despite having older Maven files). Build configuration is in `build.gradle.kts`.
+The project uses **Gradle** (not Maven, despite having older Maven files) and is split into five subprojects (`examples`, `repro`, `dev`, `bench`, `launcher`). Convention plugins live in `build-logic/` (composite included build), not `buildSrc/`.
 
 ### Common Commands
 
-Build a specific example:
+Build a specific example (unqualified — works when the leaf name is unique across subprojects):
 ```bash
 ./gradlew <exampleName>Package
+```
+
+Qualified form (always works; prefer this in scripts):
+```bash
+./gradlew :<subproject>:<exampleName>Package
+# e.g. ./gradlew :examples:allchatPackage, ./gradlew :dev:dtinspectorPackage
 ```
 
 Run an example directly without packaging:
 ```bash
 ./gradlew <exampleName>Run --args "path/to/replay.dem"
+./gradlew :<subproject>:<exampleName>Run --args "path/to/replay.dem"
 ```
 
 Build all:
@@ -27,14 +34,15 @@ Build all:
 ./gradlew build
 ```
 
-The built uno-jars (self-contained JARs with all dependencies) are located in `build/libs/<exampleName>.jar` and can be run with:
+The built uno-jars live in the owning subproject's `build/libs/`:
 ```bash
-java -jar build/libs/<exampleName>.jar replay.dem
+java -jar <subproject>/build/libs/<exampleName>.jar replay.dem
+# e.g. java -jar examples/build/libs/allchat.jar replay.dem
 ```
 
 ### Running Single Tests
 
-Gradle tasks are auto-generated per example directory in `src/main/java/skadistats/clarity/examples/`. Each example has:
+Gradle tasks are auto-generated per example directory by the `examples-convention` plugin in `build-logic/`. Each example directory under `<subproject>/src/main/java/.../<name>/` containing a `Main.java` gets:
 - `<exampleName>Run` - Run the example
 - `<exampleName>Package` - Build the uno-jar
 
@@ -111,14 +119,19 @@ For basic match info (players, picks, bans, winner), use `Clarity.infoForFile(pa
 
 ## Example Categories
 
-The `src/main/java/skadistats/clarity/examples/` directory contains many examples:
-- **allchat** - Parse chat messages (simple @OnMessage example)
-- **combatlog** - Combat log replication
-- **matchend** - Scoreboard at game end (uses ControllableRunner.seekToTick)
-- **lifestate** - Custom event provider for spawn/death tracking
-- **info** - Quick metadata extraction without iteration
-- **dtinspector** - Interactive send table browser (GUI)
-- **position**, **modifiers**, **particles**, **tempentities** - Various entity features
-- **seek**, **tick** - Runner control examples
+Examples live under five Gradle subprojects:
 
-Each example is self-contained with a Main.java entry point.
+- **`examples/`** — teaching code (Java package: `skadistats.clarity.examples.<name>`):
+  - **allchat** - Parse chat messages (simple @OnMessage example)
+  - **combatlog** - Combat log replication
+  - **matchend** - Scoreboard at game end (uses ControllableRunner.seekToTick)
+  - **lifestate** - Custom event provider for spawn/death tracking
+  - **info** - Quick metadata extraction without iteration
+  - **position**, **modifiers**, **particles**, **s1tempentities**, **s2dotatempentities** - Various entity features
+  - **seek**, **tick** - Runner control examples
+- **`repro/`** — issue reproducers (package: `skadistats.clarity.examples.repro.<name>`): `issue289`, `issue350`.
+- **`dev/`** — maintainer diagnostic tools (package: `skadistats.clarity.examples.dev.<name>`): `dtinspector` (interactive send table GUI), `dump`, `dumpbaselines`, `entityrun`, `serializers`, etc.
+- **`bench/`** — throughput benchmarks run as apps (package: `skadistats.clarity.examples.bench.<name>`): `entitybaseline`, `eventdispatchbench`, `propertychangebench`. Distinct from the JMH harness at `src/jmh/java/skadistats/clarity/bench/` which is invoked via `./gradlew bench`.
+- **`launcher/`** — scaffold only (populated by follow-up proposals).
+
+Each example is self-contained with a `Main.java` entry point.
