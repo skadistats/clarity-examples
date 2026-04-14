@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Baseline benchmark for raw entity parsing throughput.
  * Exercises the hot path: readFieldOpId() → Huffman decode → readUBitVarFieldPath → readUBitInt.
  * No listeners attached — measures pure parsing cost.
  */
+@Example(name = "entitybaseline", description = "Benchmark raw entity parsing throughput", category = Category.BENCH)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);

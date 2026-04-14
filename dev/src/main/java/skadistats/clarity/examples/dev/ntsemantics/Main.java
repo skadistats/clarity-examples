@@ -21,8 +21,11 @@ import skadistats.clarity.wire.shared.common.proto.CommonNetMessages.CSVCMsg_Pac
 import java.util.HashSet;
 import java.util.Set;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "ntsemantics", description = "Analyze non-transmitted entity packet semantics", category = Category.DEV)
 public class Main {
 
     private int[] ntIndices;

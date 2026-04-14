@@ -8,7 +8,10 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.OnPlayerInfo;
 import skadistats.clarity.processor.stringtables.PlayerInfo;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "csgo2test", description = "Test various replay parsing modes (internal)", category = Category.DEV)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

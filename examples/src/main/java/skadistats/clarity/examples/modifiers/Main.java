@@ -7,8 +7,11 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.dota.common.proto.DOTAModifiers;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 
+@Example(name = "modifiers", description = "Print modifier/buff table entries from replay", category = Category.DOCS)
 public class Main {
 
     @OnModifierTableEntry()

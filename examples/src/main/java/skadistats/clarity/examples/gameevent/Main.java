@@ -7,7 +7,10 @@ import skadistats.clarity.processor.gameevents.OnGameEvent;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "gameevent", description = "Print all game events from a replay", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

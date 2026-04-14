@@ -10,7 +10,10 @@ import skadistats.clarity.source.LiveSource;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.concurrent.TimeUnit;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "livesource", description = "Demonstrate real-time replay streaming from a file", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

@@ -22,8 +22,11 @@ import java.util.List;
 
 import static java.lang.String.format;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "position", description = "Track and log hero position updates throughout match", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

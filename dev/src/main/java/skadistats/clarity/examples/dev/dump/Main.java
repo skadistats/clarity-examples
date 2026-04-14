@@ -10,7 +10,10 @@ import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.csgo.s1.proto.CSGOS1NetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "dump", description = "Dump all replay messages with optional content", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

@@ -9,6 +9,8 @@ import skadistats.clarity.wire.shared.s2.proto.S2TempEntities.CMsgEffectData;
 import java.util.Map;
 import java.util.TreeMap;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Demonstrates the {@link EffectDispatches} provider on a Source 2 replay.
@@ -16,6 +18,7 @@ import skadistats.clarity.examples.shared.ReplayChooser;
  * Counts effect dispatches by resolved handler name and prints a histogram
  * at the end of the run.
  */
+@Example(name = "s2effectdispatch", description = "Count effect dispatch handlers in Source 2", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getName());

@@ -19,9 +19,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
 @UsesDTClasses
+@Example(name = "packetentitiesmatch", description = "Test hypotheses on PacketEntities encoding", category = Category.DEV)
 public class Main {
 
     private long[] lastVarints;

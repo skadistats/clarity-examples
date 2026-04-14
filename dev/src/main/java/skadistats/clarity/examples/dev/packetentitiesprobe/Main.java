@@ -11,7 +11,10 @@ import skadistats.clarity.wire.shared.common.proto.CommonNetMessages.CSVCMsg_Pac
 
 import java.io.FileOutputStream;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "packetentitiesprobe", description = "Probe PacketEntities structure (internal)", category = Category.DEV)
 public class Main {
 
     private int totalPackets;

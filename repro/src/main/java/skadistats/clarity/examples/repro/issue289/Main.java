@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Reproducer for https://github.com/skadistats/clarity/issues/289
@@ -31,6 +33,7 @@ import java.util.stream.Stream;
  * Tip: launch via `bash -c 'ulimit -n 256 && ./gradlew issue289Run --args ...'`
  * to make the FD leak surface within seconds.
  */
+@Example(name = "issue289", description = "Reproduce FD leak in ControllableRunner", category = Category.REPRO)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);

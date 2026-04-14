@@ -10,9 +10,12 @@ import skadistats.clarity.processor.resources.UsesResources;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesResources
 @UsesEntities
+@Example(name = "resources", description = "Resolve and display model resources for entities", category = Category.DOCS)
 public class Main {
 
     @Insert

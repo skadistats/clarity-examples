@@ -8,8 +8,11 @@ import skadistats.clarity.source.MappedFileSource;
 
 import java.util.Random;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "seek", description = "Benchmark random seeking performance on a replay", category = Category.DOCS)
 public class Main {
 
     private final int N_SEEKS = 1000;

@@ -8,7 +8,10 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "lifestate", description = "Track entity spawn and death events in replay", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

@@ -6,8 +6,11 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "entityrun", description = "Baseline test of entity parsing path", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

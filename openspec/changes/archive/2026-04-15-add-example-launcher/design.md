@@ -50,9 +50,9 @@ This change introduces that entry point and the registry behind it.
 **Rationale:** Compile-time arrows still flow inward (content subprojects import `shared.ReplayChooser`). Runtime-only arrows the other way let `shared`'s `ExampleLauncher` reflectively find classes in the content subprojects without creating compile cycles.
 
 ### D5. Launcher never calls ReplayChooser directly
-**Choice:** When the user clicks Run in the launcher, the launcher reflectively invokes `selectedClass.main(new String[0])` on a background thread. The example's own `ReplayChooser.open(args)` call — inside its main — runs the cascade (args → env → history → GUI) with the empty args it was handed, and `StackWalker` identifies the example as the history owner.
+**Choice:** When the user clicks Run in the launcher, the launcher reflectively invokes `selectedClass.main(new String[0])` on a background thread. The example's own `ReplayChooser.choose(args)` call — inside its main — runs the cascade (args → env → history → GUI) with the empty args it was handed.
 
-**Rationale:** The launcher stays stateless about replays. Replay resolution semantics (including which history key gets read/written) are defined in exactly one place — the example's own call site — regardless of how the example was started. `./gradlew allchatRun`, an IDE run config pointing at `allchat.Main`, and the launcher picking `allchat` all produce identical behavior and share the same history entry.
+**Rationale:** The launcher stays stateless about replays. Replay resolution semantics are defined in exactly one place — the example's own call site — regardless of how the example was started. `./gradlew allchatRun`, an IDE run config pointing at `allchat.Main`, and the launcher picking `allchat` all reach the same `ReplayChooser.choose(args)` with the same empty args, so behavior is identical by construction. History is already global by spec (`examples-replay-chooser` §"ReplayChooser API shape"), so both paths read and write the same `lastReplay` entry without needing any owner/call-site mechanism.
 
 **Implication:** The launcher does not need, and does not get, a compile-time dependency on `ReplayChooser`. Its only compile-time dependency is the `@Example` annotation + classindex.
 
@@ -61,7 +61,19 @@ This change introduces that entry point and the registry behind it.
 
 **Alternative:** derive category from the package segment. Rejected — harder to evolve if we ever want sub-categories, and the annotation field is one line of code.
 
-### D7. UI shape (first cut)
+### D7. Consolidate `logback.xml` under `shared/`
+**Choice:** Delete `logback.xml` from `examples/`, `repro/`, `dev/`, `bench/` and keep a single copy in `shared/src/main/resources/`. Every content subproject already compile-depends on `:shared`, so `shared`'s runtime jar (carrying `logback.xml`) is on the classpath for both `./gradlew <name>Run` and `./gradlew launcher`.
+
+**Rationale:** The four files are byte-identical today, so this is a hygiene change, not a behavioral one. The launcher's unified classpath would otherwise contain four identical configs and logback would pick one arbitrarily (with a "multiple bindings"-style warning). Collapsing to one source of truth eliminates that noise and removes a future drift trap where someone tweaks `dev`'s config and silently gets a different config under the launcher.
+
+**Alternatives considered:**
+- *Leave all four, add a fifth under `shared`*: five near-identical files, same drift risk, nothing gained.
+- *Leave all four as-is*: harmless today, fragile the moment anyone diverges one of them.
+- *Launcher-specific override via `-Dlogback.configurationFile`*: good lever if we ever need launcher-only logging, but orthogonal — not a reason to keep four duplicate resource files around.
+
+**Trade-off:** Loses the (hypothetical, unused) ability for a subproject to carry its own logback config. If per-subproject log tuning is ever wanted, the right knob is a per-logger level in the shared config (MDC or `<logger name="…">` entries), not four parallel files.
+
+### D8. UI shape (first cut)
 **Choice:** A single-window Swing UI:
 - Left pane: tree/list of examples grouped by category, selected entry shows its description.
 - Bottom toolbar: `Run` button (disabled until selection) + maybe a "clear history" action.

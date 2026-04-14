@@ -7,7 +7,10 @@ import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
 import skadistats.clarity.wire.shared.demo.proto.Demo;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "fullpacketcount", description = "Count and log CDemoFullPacket occurrences", category = Category.DEV)
 public class Main {
 
     private int count;

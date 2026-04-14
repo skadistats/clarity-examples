@@ -18,9 +18,12 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
+@Example(name = "dumpbaselines", description = "Export entity baselines to text files", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

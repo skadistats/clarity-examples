@@ -14,8 +14,11 @@ import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.shared.demo.proto.DemoUserMessages;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "particles", description = "Parse and log particle manager events", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

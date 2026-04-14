@@ -14,8 +14,11 @@ import skadistats.clarity.source.MappedFileSource;
 import java.util.HashSet;
 import java.util.Set;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesStringTable("*")
+@Example(name = "stringtabledump", description = "Extract and print all string tables", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

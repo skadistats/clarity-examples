@@ -26,6 +26,41 @@ dependencies {
     jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.20")
 }
 
+tasks.register("verifyExampleNames") {
+    description = "Fail the build if two @Example annotations share a name."
+    group = "verification"
+    val subprojects = listOf("examples", "repro", "dev", "bench")
+    val pattern = Regex("""@Example\s*\(\s*name\s*=\s*"([^"]+)"""")
+    doLast {
+        val seen = mutableMapOf<String, MutableList<String>>()
+        subprojects.forEach { sp ->
+            val root = rootDir.resolve("$sp/src/main/java")
+            if (!root.isDirectory) return@forEach
+            root.walkTopDown()
+                .filter { it.isFile && it.name == "Main.java" }
+                .forEach { f ->
+                    pattern.find(f.readText())?.groupValues?.get(1)?.let { name ->
+                        seen.getOrPut(name) { mutableListOf() }.add(f.relativeTo(rootDir).invariantSeparatorsPath)
+                    }
+                }
+        }
+        val dupes = seen.filterValues { it.size > 1 }
+        if (dupes.isNotEmpty()) {
+            val msg = dupes.entries.joinToString("\n") { (n, files) ->
+                "  '$n' used in:\n    - ${files.joinToString("\n    - ")}"
+            }
+            throw GradleException("Duplicate @Example.name values found:\n$msg")
+        }
+        logger.lifecycle("Verified ${seen.size} unique @Example names across ${subprojects.size} subprojects.")
+    }
+}
+
+subprojects {
+    tasks.matching { it.name == "check" }.configureEach {
+        dependsOn(rootProject.tasks.named("verifyExampleNames"))
+    }
+}
+
 tasks.register("bench") {
     description = "Run the entity state benchmark harness. Pass args with -PbenchArgs=\"...\"."
     group = "benchmark"

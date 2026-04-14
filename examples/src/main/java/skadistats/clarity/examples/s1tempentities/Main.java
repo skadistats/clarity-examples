@@ -10,6 +10,8 @@ import skadistats.clarity.source.MappedFileSource;
 import java.util.Map;
 import java.util.TreeMap;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Demonstrates the {@code OnTempEntity} event on Source 1 replays.
@@ -40,6 +42,7 @@ import skadistats.clarity.examples.shared.ReplayChooser;
  * {@code s2effectdispatch} and {@code s2dotatempentities} examples — S2
  * ships temp entities through entirely different mechanisms.</p>
  */
+@Example(name = "s1tempentities", description = "Count temp entities in Source 1 replays", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getName());

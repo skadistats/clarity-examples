@@ -12,7 +12,10 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "combatlog", description = "Extract and format combat log from replay events", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

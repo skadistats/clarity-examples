@@ -16,6 +16,8 @@ import skadistats.clarity.wire.dota.common.proto.DOTAUserMessages.CDOTAUserMsg_T
 import java.util.Map;
 import java.util.TreeMap;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Demonstrates how to consume Dota-2 specific Source 2 temp-entity messages.
@@ -42,6 +44,7 @@ import skadistats.clarity.examples.shared.ReplayChooser;
  * not fire on CSGO/CS2/Deadlock replays since these messages do not exist
  * there.</p>
  */
+@Example(name = "s2dotatempentities", description = "Count Dota-specific Source 2 temp entities", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getName());

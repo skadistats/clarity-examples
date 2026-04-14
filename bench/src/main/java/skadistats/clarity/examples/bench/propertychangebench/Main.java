@@ -8,12 +8,15 @@ import skadistats.clarity.processor.entities.OnEntityPropertyChanged;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Benchmark for the cost of {@link OnEntityPropertyChanged} listeners.
  * Compares baseline (no listeners) against several realistic listener
  * configurations on the same replay file.
  */
+@Example(name = "propertychangebench", description = "Benchmark OnEntityPropertyChanged listeners", category = Category.BENCH)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);

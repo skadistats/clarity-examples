@@ -14,8 +14,11 @@ import skadistats.clarity.util.TextTable;
 import skadistats.clarity.examples.shared.ReplayChooser;
 
 import java.io.IOException;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
+@Example(name = "matchend", description = "Display final match scoreboard with player stats", category = Category.DOCS)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

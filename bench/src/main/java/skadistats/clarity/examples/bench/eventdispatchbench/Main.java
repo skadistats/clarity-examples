@@ -10,6 +10,8 @@ import skadistats.clarity.processor.entities.OnEntityUpdated;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Benchmark for the raw event dispatch path: {@link OnEntityUpdated} fires
@@ -20,6 +22,7 @@ import skadistats.clarity.source.MappedFileSource;
  * (TreeMap/HashSet flattening, varargs allocation, predicate hoisting,
  * MethodHandle dispatch).
  */
+@Example(name = "eventdispatchbench", description = "Benchmark OnEntityUpdated event dispatch", category = Category.BENCH)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);

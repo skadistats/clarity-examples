@@ -10,6 +10,8 @@ import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 /**
  * Reproducer for https://github.com/skadistats/clarity/issues/350
@@ -21,6 +23,7 @@ import skadistats.clarity.examples.shared.ReplayChooser;
  * ControllableRunner.
  */
 @UsesEntities
+@Example(name = "issue350", description = "Reproduce hang with entity listeners in CS2", category = Category.REPRO)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class);

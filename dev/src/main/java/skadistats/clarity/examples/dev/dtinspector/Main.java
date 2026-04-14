@@ -12,9 +12,12 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
 
 @UsesDTClasses
+@Example(name = "dtinspector", description = "GUI browser for data table classes in replay", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());

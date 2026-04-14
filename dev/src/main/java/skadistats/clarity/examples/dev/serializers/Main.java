@@ -20,7 +20,10 @@ import java.io.PrintStream;
 import java.util.Set;
 import java.util.TreeSet;
 import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 
+@Example(name = "serializers", description = "Dump flattened serializers from SendTables", category = Category.DEV)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
