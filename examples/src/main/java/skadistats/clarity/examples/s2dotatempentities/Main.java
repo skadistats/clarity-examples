@@ -15,6 +15,7 @@ import skadistats.clarity.wire.dota.common.proto.DOTAUserMessages.CDOTAUserMsg_T
 
 import java.util.Map;
 import java.util.TreeMap;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 /**
  * Demonstrates how to consume Dota-2 specific Source 2 temp-entity messages.
@@ -94,7 +95,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this);
         }
         long tMatch = System.currentTimeMillis() - tStart;

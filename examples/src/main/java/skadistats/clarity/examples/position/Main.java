@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 public class Main {
@@ -89,7 +90,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource s = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource s = new MappedFileSource(replay)) {
             SimpleRunner runner = new SimpleRunner(s);
             runner.runWith(this);
         }

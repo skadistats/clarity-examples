@@ -9,6 +9,7 @@ import skadistats.clarity.source.MappedFileSource;
 
 import java.util.Map;
 import java.util.TreeMap;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 /**
  * Demonstrates the {@code OnTempEntity} event on Source 1 replays.
@@ -52,7 +53,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this);
         }
         long tMatch = System.currentTimeMillis() - tStart;

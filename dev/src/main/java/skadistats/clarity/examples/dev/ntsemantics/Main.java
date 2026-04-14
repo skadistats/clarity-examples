@@ -20,6 +20,7 @@ import skadistats.clarity.wire.shared.common.proto.CommonNetMessages.CSVCMsg_Pac
 
 import java.util.HashSet;
 import java.util.Set;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 public class Main {
@@ -141,7 +142,9 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Main p = new Main();
-        try (Source source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (Source source = new MappedFileSource(replay)) {
             SimpleRunner runner = new SimpleRunner(source);
             runner.runWith(p);
         }

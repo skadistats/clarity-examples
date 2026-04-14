@@ -11,6 +11,7 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.util.TextTable;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 import java.io.IOException;
 
@@ -20,8 +21,10 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     public static void main(String[] args) throws Exception {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
         long tStart = System.currentTimeMillis();
-        new Main(args[0]).showScoreboard();
+        new Main(replay).showScoreboard();
         long tMatch = System.currentTimeMillis() - tStart;
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 @UsesDTClasses
@@ -213,7 +214,9 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Main p = new Main();
-        try (Source source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (Source source = new MappedFileSource(replay)) {
             SimpleRunner runner = new SimpleRunner(source);
             runner.runWith(p);
         }

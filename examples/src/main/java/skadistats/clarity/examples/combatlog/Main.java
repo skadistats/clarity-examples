@@ -11,6 +11,7 @@ import skadistats.clarity.wire.dota.common.proto.DOTACombatLog;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 public class Main {
 
@@ -388,7 +389,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this);
         }
         long tMatch = System.currentTimeMillis() - tStart;

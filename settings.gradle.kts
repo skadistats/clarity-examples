@@ -7,4 +7,4 @@ rootProject.name = "clarity-examples"
 if (file("../clarity").exists())
     includeBuild("../clarity")
 
-include(":examples", ":repro", ":dev", ":bench", ":launcher")
+include(":examples", ":repro", ":dev", ":bench", ":shared")

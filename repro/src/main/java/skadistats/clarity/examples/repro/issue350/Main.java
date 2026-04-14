@@ -9,6 +9,7 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 /**
  * Reproducer for https://github.com/skadistats/clarity/issues/350
@@ -40,7 +41,9 @@ public class Main {
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
         int ticks = 0;
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             ControllableRunner runner = new ControllableRunner(source).runWith(this);
             try {
                 while (!runner.isAtEnd()) {

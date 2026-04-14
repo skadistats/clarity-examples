@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 public class Main {
@@ -110,7 +111,9 @@ public class Main {
     }
 
     public void run(String[] args) throws Exception {
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this);
         }
         System.out.println("LOADED " + loaded);

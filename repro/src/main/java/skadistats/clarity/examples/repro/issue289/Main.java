@@ -2,6 +2,7 @@ package skadistats.clarity.examples.repro.issue289;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
 
@@ -35,7 +36,8 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public void run(String[] args) throws Exception {
-        String path = args[0];
+        String path = ReplayChooser.choose(args);
+        if (path == null) return;
         boolean closeSource = args.length > 1 && "close".equals(args[1]);
         log.info("reproducer: file={} closeSource={}", path, closeSource);
 

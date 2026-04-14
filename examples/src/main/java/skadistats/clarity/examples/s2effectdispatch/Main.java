@@ -8,6 +8,7 @@ import skadistats.clarity.wire.shared.s2.proto.S2TempEntities.CMsgEffectData;
 
 import java.util.Map;
 import java.util.TreeMap;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 /**
  * Demonstrates the {@link EffectDispatches} provider on a Source 2 replay.
@@ -28,7 +29,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this, new EffectDispatches());
         }
         long tMatch = System.currentTimeMillis() - tStart;

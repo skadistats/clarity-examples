@@ -10,7 +10,7 @@ The build is split into five Gradle subprojects:
 - **`repro/`** — minimal reproducers for specific GitHub issues.
 - **`dev/`** — maintainer-only diagnostic tools, dumpers, and send-table inspectors.
 - **`bench/`** — throughput benchmarks built as `Main`-style apps (distinct from the JMH harness that lives in the root project's `src/jmh/`).
-- **`launcher/`** — scaffold for the cross-example launcher (populated by follow-up proposals).
+- **`shared/`** — reusable components consumed by the example subprojects (for example, `ReplayChooser`). Not a directory-per-example tree.
 
 Each subproject has its own `src/main/java/` tree and auto-generates `<name>Run` / `<name>Package` Gradle tasks for every example directory it contains.
 

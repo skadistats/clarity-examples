@@ -11,6 +11,7 @@ import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.csgo.s1.proto.CSGOS1NetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 public class Main {
@@ -26,7 +27,9 @@ public class Main {
     }
 
     public void runSeek(String[] args) throws Exception {
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             ControllableRunner runner = new ControllableRunner(source).runWith(this);
             try {
                 runner.seek(30000);

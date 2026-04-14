@@ -6,6 +6,7 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
 import skadistats.clarity.wire.shared.s2.proto.S2UserMessages;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 public class Main {
     @OnMessage(S2UserMessages.CUserMessageSayText2.class)
@@ -14,7 +15,9 @@ public class Main {
     }
     public static void main(String[] args) throws Exception {
         // 1) create an input source from the replay (try-with-resources closes it)
-        try (Source source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (Source source = new MappedFileSource(replay)) {
             // 2) create a simple runner that will read the replay once
             SimpleRunner runner = new SimpleRunner(source);
             // 3) create an instance of your processor

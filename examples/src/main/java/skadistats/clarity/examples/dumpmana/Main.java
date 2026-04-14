@@ -9,6 +9,7 @@ import skadistats.clarity.processor.entities.OnEntityUpdated;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesEntities
 public class Main {
@@ -58,7 +59,9 @@ public class Main {
 
 
     public void run(String[] args) throws Exception {
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             new SimpleRunner(source).runWith(this);
         }
     }

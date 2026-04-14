@@ -13,6 +13,7 @@ import skadistats.clarity.processor.sendtables.UsesDTClasses;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +28,8 @@ public class Main {
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
 
-        String demoName = args[0];
+        String demoName = ReplayChooser.choose(args);
+        if (demoName == null) return;
 
         try (MappedFileSource source = new MappedFileSource(demoName)) {
             SimpleRunner r = new SimpleRunner(source).runWith(this);

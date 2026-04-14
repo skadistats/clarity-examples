@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Set;
 import java.util.TreeSet;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 public class Main {
 
@@ -82,7 +83,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             ControllableRunner runner = new ControllableRunner(source).runWith(this);
             try {
                 runner.tick();

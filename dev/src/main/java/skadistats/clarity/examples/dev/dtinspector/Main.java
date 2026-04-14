@@ -11,6 +11,7 @@ import skadistats.clarity.source.MappedFileSource;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 
 @UsesDTClasses
@@ -20,7 +21,9 @@ public class Main {
 
     public void run(String[] args) throws Exception {
         final Context ctx;
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             ctx = new SimpleRunner(source).runWith(this).getContext();
         }
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

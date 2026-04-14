@@ -13,6 +13,7 @@ import skadistats.clarity.source.MappedFileSource;
 
 import java.util.HashSet;
 import java.util.Set;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 @UsesStringTable("*")
 public class Main {
@@ -29,7 +30,9 @@ public class Main {
 
 
     public void runSeek(String[] args) throws Exception {
-        try (MappedFileSource source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (MappedFileSource source = new MappedFileSource(replay)) {
             Runner runner = new SimpleRunner(source).runWith(this);
             StringTables st = runner.getContext().getProcessor(StringTables.class);
             for (String name : names) {

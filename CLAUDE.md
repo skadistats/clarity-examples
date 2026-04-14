@@ -8,7 +8,7 @@ This repository contains example code for the Clarity replay parser (https://git
 
 ## Build System
 
-The project uses **Gradle** (not Maven, despite having older Maven files) and is split into five subprojects (`examples`, `repro`, `dev`, `bench`, `launcher`). Convention plugins live in `build-logic/` (composite included build), not `buildSrc/`.
+The project uses **Gradle** (not Maven, despite having older Maven files) and is split into five subprojects (`examples`, `repro`, `dev`, `bench`, `shared`). Convention plugins live in `build-logic/` (composite included build), not `buildSrc/`.
 
 ### Common Commands
 
@@ -132,6 +132,6 @@ Examples live under five Gradle subprojects:
 - **`repro/`** — issue reproducers (package: `skadistats.clarity.examples.repro.<name>`): `issue289`, `issue350`.
 - **`dev/`** — maintainer diagnostic tools (package: `skadistats.clarity.examples.dev.<name>`): `dtinspector` (interactive send table GUI), `dump`, `dumpbaselines`, `entityrun`, `serializers`, etc.
 - **`bench/`** — throughput benchmarks run as apps (package: `skadistats.clarity.examples.bench.<name>`): `entitybaseline`, `eventdispatchbench`, `propertychangebench`. Distinct from the JMH harness at `src/jmh/java/skadistats/clarity/bench/` which is invoked via `./gradlew bench`.
-- **`launcher/`** — scaffold only (populated by follow-up proposals).
+- **`shared/`** — reusable components consumed by the example subprojects (e.g. `ReplayChooser`). Not a per-example directory tree.
 
 Each example is self-contained with a `Main.java` entry point.

@@ -3,6 +3,7 @@ package skadistats.clarity.examples.dev.dump;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
@@ -47,7 +48,9 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        new Main().run(args[0], false, true);
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        new Main().run(replay, false, true);
     }
 
 }

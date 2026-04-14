@@ -6,6 +6,7 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
 import skadistats.clarity.wire.shared.demo.proto.Demo;
+import skadistats.clarity.examples.shared.ReplayChooser;
 
 public class Main {
 
@@ -26,7 +27,9 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Main p = new Main();
-        try (Source source = new MappedFileSource(args[0])) {
+        String replay = ReplayChooser.choose(args);
+        if (replay == null) return;
+        try (Source source = new MappedFileSource(replay)) {
             SimpleRunner runner = new SimpleRunner(source);
             runner.runWith(p);
         }
