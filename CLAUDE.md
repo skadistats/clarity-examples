@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository contains example code for the Clarity replay parser (https://github.com/skadistats/clarity), which parses Dota 2 and CS:GO replays. The project uses Gradle with Kotlin DSL and Java 17.
+This repository contains example code for the Clarity replay parser (https://github.com/skadistats/clarity), which parses Dota 2 and CS:GO replays. The project uses Gradle with Kotlin DSL and Java 21.
 
 ## Build System
 
