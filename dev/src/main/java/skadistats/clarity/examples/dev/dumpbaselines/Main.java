@@ -2,6 +2,9 @@ package skadistats.clarity.examples.dev.dumpbaselines;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
+import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.io.FieldReader;
 import skadistats.clarity.io.bitstream.BitStream;
 import skadistats.clarity.model.DTClass;
@@ -13,13 +16,10 @@ import skadistats.clarity.processor.sendtables.UsesDTClasses;
 import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.examples.shared.ReplayChooser;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import skadistats.clarity.examples.shared.Category;
-import skadistats.clarity.examples.shared.Example;
 
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
@@ -63,17 +63,17 @@ public class Main {
             }
 
             log.info("writing {}", fileName);
-            fieldReader.DEBUG_STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
+            FieldReader.Debug.STREAM = new PrintStream(new FileOutputStream(fileName), true, "UTF-8");
             BitStream bs = BitStream.createBitStream(baselines.getValueByIndex(i));
             try {
                 fieldReader.readFields(bs, dtClass, dtClass.getEmptyState(), true);
                 if (bs.remaining() < 0 || bs.remaining() > 7) {
-                    fieldReader.DEBUG_STREAM.println("-- OFF: " + bs.remaining() + " remaining");
+                    FieldReader.Debug.STREAM.println("-- OFF: " + bs.remaining() + " remaining");
                     log.info("-- OFF: {} remaining", bs.remaining());
                 }
             } catch (Exception e) {
                 log.info("-- FAIL: {}", e.getMessage());
-                e.printStackTrace(fieldReader.DEBUG_STREAM);
+                e.printStackTrace(FieldReader.Debug.STREAM);
             } finally {
             }
         }
