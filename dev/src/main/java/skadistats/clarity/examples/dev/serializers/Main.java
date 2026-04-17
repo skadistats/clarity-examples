@@ -4,7 +4,10 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.ZeroCopy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skadistats.clarity.io.s2.FieldType;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
+import skadistats.clarity.examples.shared.ReplayChooser;
+import skadistats.clarity.model.s2.FieldType;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
@@ -19,9 +22,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Set;
 import java.util.TreeSet;
-import skadistats.clarity.examples.shared.ReplayChooser;
-import skadistats.clarity.examples.shared.Category;
-import skadistats.clarity.examples.shared.Example;
 
 @Example(name = "serializers", description = "Dump flattened serializers from SendTables", category = Category.DEV)
 public class Main {
