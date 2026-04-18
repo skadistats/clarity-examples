@@ -37,3 +37,26 @@ a Gradle **composite build** via `includeBuild("../clarity")` in
 `settings.gradle.kts` (conditional on the sibling checkout existing),
 so parser sources are picked up directly — no publish step needed. API
 changes there should be smoke-tested against examples here.
+
+## Cross-version benchmarking
+Compare a released Clarity vs local `next` using the JMH harness in
+`bench/` (`EntityStateParseBench` etc., invoked with `./gradlew bench`).
+
+Use **two separate checkouts** of clarity-examples — the composite
+include only triggers when `../clarity` exists, so each checkout's
+behavior depends on what sits next to it:
+
+- **Baseline (released)**: a sibling worktree of clarity-examples,
+  with the `clarity` dependency pin set to the released coordinate
+  (e.g. `4.0.0`) and **no `../clarity` sibling** present. Resolves
+  Clarity from Maven Central. `./gradlew bench`.
+- **Candidate (local)**: main checkout on `next`, with `../clarity`
+  present. Composite build picks up local sources. `./gradlew bench`.
+
+Same JDK 21, same hardware, same replays, same JMH config (default:
+SingleShotTime, 3 warmup + 10 measurement). Capture wall-clock score
+± err, alloc/op, GCs, GC time. JDK 21 runs older bytecode fine, so a
+4.x baseline is fair against a 5.x candidate.
+
+Before any major bump (e.g. 5.0), record a baseline of current master
+on the standard replay set so post-bump regressions are attributable.

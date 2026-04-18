@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.skadistats"
-version = "4.0-SNAPSHOT"
+version = "5.0-SNAPSHOT"
 
 java {
     toolchain {
@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:4.0.1-SNAPSHOT")
+    api("com.skadistats:clarity:5.0.0-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.32")
-    annotationProcessor("com.skadistats:clarity:4.0.1-SNAPSHOT")
+    annotationProcessor("com.skadistats:clarity:5.0.0-SNAPSHOT")
 
     jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.32")
 }
