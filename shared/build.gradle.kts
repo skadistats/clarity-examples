@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation("com.formdev:flatlaf:3.5.4")
+    implementation("com.formdev:flatlaf:3.6")
     runtimeOnly(project(":examples"))
     runtimeOnly(project(":repro"))
     runtimeOnly(project(":dev"))

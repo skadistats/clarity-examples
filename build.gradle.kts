@@ -1,6 +1,6 @@
 plugins {
     id("java-library")
-    id("me.champeau.jmh") version "0.7.2"
+    id("me.champeau.jmh") version "0.7.3"
 }
 
 group = "com.skadistats"
@@ -20,10 +20,10 @@ repositories {
 
 dependencies {
     api("com.skadistats:clarity:4.0.1-SNAPSHOT")
-    api("ch.qos.logback:logback-classic:1.5.20")
+    api("ch.qos.logback:logback-classic:1.5.32")
     annotationProcessor("com.skadistats:clarity:4.0.1-SNAPSHOT")
 
-    jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.20")
+    jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.32")
 }
 
 tasks.register("verifyExampleNames") {
