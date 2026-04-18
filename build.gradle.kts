@@ -1,6 +1,5 @@
 plugins {
     id("java-library")
-    id("me.champeau.jmh") version "0.7.3"
 }
 
 group = "com.skadistats"
@@ -22,14 +21,12 @@ dependencies {
     api("com.skadistats:clarity:5.0.0-SNAPSHOT")
     api("ch.qos.logback:logback-classic:1.5.32")
     annotationProcessor("com.skadistats:clarity:5.0.0-SNAPSHOT")
-
-    jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.32")
 }
 
 tasks.register("verifyExampleNames") {
     description = "Fail the build if two @Example annotations share a name."
     group = "verification"
-    val subprojects = listOf("examples", "repro", "dev", "bench")
+    val subprojects = listOf("examples", "repro", "dev")
     val pattern = Regex("""@Example\s*\(\s*name\s*=\s*"([^"]+)"""")
     doLast {
         val seen = mutableMapOf<String, MutableList<String>>()
@@ -58,31 +55,5 @@ tasks.register("verifyExampleNames") {
 subprojects {
     tasks.matching { it.name == "check" }.configureEach {
         dependsOn(rootProject.tasks.named("verifyExampleNames"))
-    }
-}
-
-tasks.register("bench") {
-    description = "Run the entity state benchmark harness. Pass args with -PbenchArgs=\"...\"."
-    group = "benchmark"
-    dependsOn("jmhCompileGeneratedClasses")
-    doLast {
-        val cp = (files(
-            "build/jmh-generated-classes",
-            "build/jmh-generated-resources",
-        ) + sourceSets["jmh"].runtimeClasspath).asPath
-        val javaHome = System.getProperty("java.home")
-        val userArgs = (project.findProperty("benchArgs") as? String)
-            ?.split(" ")?.filter { it.isNotBlank() } ?: emptyList()
-        val cmd = listOf(
-            "$javaHome/bin/java",
-            "-Xmx4g",
-            "-cp", cp,
-            "skadistats.clarity.bench.Main",
-        ) + userArgs
-        val pb = ProcessBuilder(cmd)
-        pb.directory(rootDir)
-        pb.inheritIO()
-        val exit = pb.start().waitFor()
-        if (exit != 0) throw GradleException("bench exited with $exit")
     }
 }

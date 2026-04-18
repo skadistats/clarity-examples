@@ -8,21 +8,21 @@ Defines how the clarity-examples Gradle project is organized: which subprojects 
 
 ### Requirement: Subproject layout
 
-The clarity-examples Gradle build SHALL be organized as five subprojects at the repository root: `examples`, `repro`, `dev`, `bench`, and `shared`. Each subproject SHALL have its own `src/main/java/` source tree and its own `build.gradle.kts`.
+The clarity-examples Gradle build SHALL be organized as four subprojects at the repository root: `examples`, `repro`, `dev`, and `shared`. Each subproject SHALL have its own `src/main/java/` source tree and its own `build.gradle.kts`. The `bench/` subproject and the `src/jmh/` JMH harness SHALL NOT be present.
 
 #### Scenario: Root settings file lists every subproject
 
 - **WHEN** a developer reads `settings.gradle.kts`
-- **THEN** it includes exactly these subprojects: `examples`, `repro`, `dev`, `bench`, `shared`
+- **THEN** it includes exactly these subprojects: `examples`, `repro`, `dev`, `shared`
 
 #### Scenario: Each subproject is independently buildable
 
-- **WHEN** a developer runs `./gradlew :<subproject>:build` for any of the five subprojects
+- **WHEN** a developer runs `./gradlew :<subproject>:build` for any of the four subprojects
 - **THEN** Gradle compiles that subproject's sources without error and without requiring any other subproject to be compiled first (except for transitive dependencies declared in `build.gradle.kts`)
 
 ### Requirement: Category assignment
 
-Every example directory SHALL live in exactly one of the four content subprojects (`examples`, `repro`, `dev`, `bench`). The `shared` subproject SHALL host reusable components consumed by the content subprojects; it SHALL NOT itself contain per-example directories.
+Every example directory SHALL live in exactly one of the three content subprojects (`examples`, `repro`, `dev`). The `shared` subproject SHALL host reusable components consumed by the content subprojects; it SHALL NOT itself contain per-example directories. Throughput benchmarks belong in the separate `clarity-bench` repository, not in `clarity-examples`.
 
 #### Scenario: Docs examples land in examples/
 
@@ -39,11 +39,6 @@ Every example directory SHALL live in exactly one of the four content subproject
 - **WHEN** a contributor looks up a maintainer diagnostic tool such as `csgo2test`, `dtinspector`, `dump`, `dumpbaselines`, `entityrun`, `fullpacketcount`, `ntsemantics`, `packetentitiesmatch`, `packetentitiesprobe`, `serializers`, `stringtabledump`, or `test`
 - **THEN** it is located under `dev/src/main/java/skadistats/clarity/examples/dev/<name>/`
 
-#### Scenario: Benchmarks land in bench/
-
-- **WHEN** a contributor looks up a throughput benchmark such as `entitybaseline`, `eventdispatchbench`, or `propertychangebench`
-- **THEN** it is located under `bench/src/main/java/skadistats/clarity/examples/bench/<name>/`
-
 #### Scenario: Shared subproject hosts reusable components
 
 - **WHEN** a contributor opens `shared/src/main/java/skadistats/clarity/examples/shared/`
@@ -51,7 +46,7 @@ Every example directory SHALL live in exactly one of the four content subproject
 
 ### Requirement: Java package reflects subproject
 
-Java package names for examples SHALL include the subproject name as a segment for `repro`, `dev`, and `bench`. Examples in `examples` SHALL keep their base packages. Code in `shared` SHALL live under `skadistats.clarity.examples.shared`.
+Java package names for examples SHALL include the subproject name as a segment for `repro` and `dev`. Examples in `examples` SHALL keep their base packages. Code in `shared` SHALL live under `skadistats.clarity.examples.shared`.
 
 #### Scenario: Docs examples keep bare packages
 
@@ -60,8 +55,8 @@ Java package names for examples SHALL include the subproject name as a segment f
 
 #### Scenario: Categorized examples carry their category in the package
 
-- **WHEN** a reader opens `repro/.../issue350/Main.java`, `dev/.../dtinspector/Main.java`, or `bench/.../entitybaseline/Main.java`
-- **THEN** the file's `package` declaration is respectively `skadistats.clarity.examples.repro.issue350`, `skadistats.clarity.examples.dev.dtinspector`, or `skadistats.clarity.examples.bench.entitybaseline`
+- **WHEN** a reader opens `repro/.../issue350/Main.java` or `dev/.../dtinspector/Main.java`
+- **THEN** the file's `package` declaration is respectively `skadistats.clarity.examples.repro.issue350` or `skadistats.clarity.examples.dev.dtinspector`
 
 #### Scenario: Shared components carry the shared package
 
@@ -70,7 +65,7 @@ Java package names for examples SHALL include the subproject name as a segment f
 
 ### Requirement: Content subprojects depend on shared
 
-Each content subproject (`examples`, `repro`, `dev`, `bench`) SHALL declare a compile-time dependency on `:shared` so that examples can consume `ReplayChooser` and future shared components.
+Each content subproject (`examples`, `repro`, `dev`) SHALL declare a compile-time dependency on `:shared` so that examples can consume `ReplayChooser` and future shared components.
 
 #### Scenario: Example imports shared component
 
@@ -79,16 +74,16 @@ Each content subproject (`examples`, `repro`, `dev`, `bench`) SHALL declare a co
 
 #### Scenario: Examples with specialized arg handling retain their existing behavior
 
-- **WHEN** a developer opens an example whose arg model doesn't match the single-replay-path shape — specifically `dev/csgo2test` (hardcoded multi-replay rig), `examples/livesource` (takes two positional args: src and dst), and the three benches in `bench/` (custom multi-path batch mode with defaults)
+- **WHEN** a developer opens an example whose arg model doesn't match the single-replay-path shape — specifically `dev/csgo2test` (hardcoded multi-replay rig) and `examples/livesource` (takes two positional args: src and dst)
 - **THEN** those examples are not migrated to `ReplayChooser` and retain their existing arg handling; this is explicitly permitted
 
 ### Requirement: Per-example Gradle tasks
 
-Each example directory SHALL produce a `<name>Run` task (runs `Main` with optional `--args`) and a `<name>Package` task (emits a uno-jar under `build/libs/`). These tasks SHALL be generated by a shared convention plugin in `buildSrc/`, not duplicated across subproject `build.gradle.kts` files.
+Each example directory SHALL produce a `<name>Run` task (runs `Main` with optional `--args`) and a `<name>Package` task (emits a uno-jar under `build/libs/`). These tasks SHALL be generated by a shared convention plugin in `build-logic/`, not duplicated across subproject `build.gradle.kts` files.
 
 #### Scenario: Convention plugin applies to every content subproject
 
-- **WHEN** a developer inspects any of `examples/build.gradle.kts`, `repro/build.gradle.kts`, `dev/build.gradle.kts`, or `bench/build.gradle.kts`
+- **WHEN** a developer inspects any of `examples/build.gradle.kts`, `repro/build.gradle.kts`, or `dev/build.gradle.kts`
 - **THEN** the file applies the shared convention plugin and does not redefine the example-task-generation logic inline
 
 #### Scenario: Unqualified task invocation works for unique names
@@ -122,12 +117,12 @@ Every subproject's convention-plugin-generated tasks SHALL resolve the `replays/
 
 ### Requirement: Documentation reflects new layout
 
-`README.md` and `CLAUDE.md` SHALL be updated as part of this change to describe the five-subproject layout, the category semantics, and the task invocation rules.
+`README.md` and `CLAUDE.md` SHALL be updated as part of this change to describe the four-subproject layout, the category semantics, and the task invocation rules.
 
 #### Scenario: README describes the subprojects
 
 - **WHEN** a new contributor opens `README.md`
-- **THEN** it lists the five subprojects with a one-line description of each category's purpose
+- **THEN** it lists the four subprojects with a one-line description of each category's purpose
 
 #### Scenario: CLAUDE.md documents task invocation
 
@@ -145,16 +140,16 @@ The `.java` source of every moved example SHALL be unchanged except for its `pac
 
 ### Requirement: Shared depends on content subprojects at runtime
 
-The `shared/` subproject SHALL declare `runtimeOnly` dependencies on each of the four content subprojects (`examples`, `repro`, `dev`, `bench`) so that `ExampleLauncher` can reflectively enumerate and invoke registered examples. `shared/` SHALL NOT declare compile-time dependencies on these subprojects.
+The `shared/` subproject SHALL declare `runtimeOnly` dependencies on each of the three content subprojects (`examples`, `repro`, `dev`) so that `ExampleLauncher` can reflectively enumerate and invoke registered examples. `shared/` SHALL NOT declare compile-time dependencies on these subprojects.
 
 #### Scenario: Runtime arrow exists
 
 - **WHEN** a developer reads `shared/build.gradle.kts`
-- **THEN** its `dependencies {}` block includes `runtimeOnly(project(":examples"))`, `runtimeOnly(project(":repro"))`, `runtimeOnly(project(":dev"))`, and `runtimeOnly(project(":bench"))`
+- **THEN** its `dependencies {}` block includes `runtimeOnly(project(":examples"))`, `runtimeOnly(project(":repro"))`, and `runtimeOnly(project(":dev"))`
 
 #### Scenario: No compile arrow
 
-- **WHEN** a developer tries to `import` a class from `:examples` / `:repro` / `:dev` / `:bench` inside any file under `shared/src/main/java/`
+- **WHEN** a developer tries to `import` a class from `:examples` / `:repro` / `:dev` inside any file under `shared/src/main/java/`
 - **THEN** the build fails, because `shared`'s compile classpath does not include those subprojects
 
 ### Requirement: Launcher Gradle task
@@ -173,7 +168,7 @@ The build SHALL expose a single Gradle task that runs `ExampleLauncher` with `sh
 
 ### Requirement: Single logback configuration
 
-The repository SHALL contain exactly one `logback.xml` for the example subprojects, located at `shared/src/main/resources/logback.xml`. The content subprojects (`examples`, `repro`, `dev`, `bench`) SHALL NOT carry their own `logback.xml` under `src/main/resources/`.
+The repository SHALL contain exactly one `logback.xml` for the example subprojects, located at `shared/src/main/resources/logback.xml`. The content subprojects (`examples`, `repro`, `dev`) SHALL NOT carry their own `logback.xml` under `src/main/resources/`.
 
 #### Scenario: Only shared carries logback.xml
 
@@ -182,5 +177,5 @@ The repository SHALL contain exactly one `logback.xml` for the example subprojec
 
 #### Scenario: Direct run and launcher use the same config
 
-- **WHEN** a developer runs `./gradlew :examples:allchatRun`, `./gradlew :dev:dtinspectorRun`, or `./gradlew launcher`
+- **WHEN** a developer runs `./gradlew :examples:allchatRun`, `./gradlew :dev:dtinspectorRun`, or `./gradlew :shared:launcher`
 - **THEN** logback initializes against the single `shared/src/main/resources/logback.xml` — no "multiple SLF4J bindings" or "multiple configurations" warnings are emitted

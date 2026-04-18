@@ -7,7 +7,6 @@ dependencies {
     runtimeOnly(project(":examples"))
     runtimeOnly(project(":repro"))
     runtimeOnly(project(":dev"))
-    runtimeOnly(project(":bench"))
 }
 
 tasks.register<JavaExec>("launcher") {
