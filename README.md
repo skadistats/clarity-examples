@@ -287,7 +287,11 @@ public class Context {
     public EngineType getEngineType() {}
     // 4. query the build number the replay was recorded with (Source 2 only)
     public int getBuildNumber() {}
-    // 5. raise an event yourself
+    // 5. query the game version the replay was recorded with (Source 2 only)
+    public int getGameVersion() {}
+    // 6. query the tick interval in milliseconds
+    public float getMillisPerTick() {}
+    // 7. raise an event yourself
     public <A extends Annotation> Event<A> createEvent(Class<A> eventType, Class... parameterTypes) {}
 }
 ```
@@ -297,5 +301,7 @@ public class Context {
 2. returns the current tick
 3. returns the type of engine (Source 1 or 2) the replay was recorded with.
 4. if the replay was recorded with Source 2, this will give you the build number of the server that recorded the replay
-5. this function can be used to create events yourself. 
+5. if the replay was recorded with Source 2, this will give you the game version
+6. returns the tick interval in milliseconds (useful for converting ticks to wall-clock time)
+7. this function can be used to create events yourself.
 
