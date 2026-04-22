@@ -34,6 +34,12 @@ a Gradle **composite build** via `includeBuild("../clarity")` in
 so parser sources are picked up directly — no publish step needed. API
 changes there should be smoke-tested against examples here.
 
+## OpenSpec
+OpenSpec changes and specs belong in the repo they describe. Changes
+that touch the parser go in `clarity/openspec/`; changes that touch
+examples go here. Don't let the working directory decide — move them
+after creation if needed.
+
 ## Benchmarking
 Throughput benchmarks live in the separate `clarity-bench` project at
 `/home/spheenik/projects/clarity/clarity-bench`. See its README for
