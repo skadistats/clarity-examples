@@ -58,17 +58,17 @@ public class Cooldowns {
 
     @Initializer(OnAbilityCooldownStart.class)
     public void initOnStart(final Context ctx, final EventListener<OnAbilityCooldownStart> el) {
-        evStart = (OnAbilityCooldownStart.Event) ctx.createEvent(OnAbilityCooldownStart.class);
+        evStart = ctx.createEvent(OnAbilityCooldownStart.class);
     }
 
     @Initializer(OnAbilityCooldownReset.class)
     public void initOnReset(final Context ctx, final EventListener<OnAbilityCooldownReset> el) {
-        evReset = (OnAbilityCooldownReset.Event) ctx.createEvent(OnAbilityCooldownReset.class);
+        evReset = ctx.createEvent(OnAbilityCooldownReset.class);
     }
 
     @Initializer(OnAbilityCooldownEnd.class)
     public void initOnEnd(final Context ctx, final EventListener<OnAbilityCooldownEnd> el) {
-        evEnd = (OnAbilityCooldownEnd.Event) ctx.createEvent(OnAbilityCooldownEnd.class);
+        evEnd = ctx.createEvent(OnAbilityCooldownEnd.class);
     }
 
     @OnEntityCreated

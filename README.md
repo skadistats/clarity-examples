@@ -259,7 +259,8 @@ public class GameEvents {
         // 3. use the GameEventDescriptors from 2, to create a single GameEvent
         GameEvent e = new GameEvent(descriptor);
         // 4. raise @OnGameEvent
-        ctx.createEvent(OnGameEvent.class, GameEvent.class).raise(e);
+        OnGameEvent.Event ev = ctx.createEvent(OnGameEvent.class);
+        ev.raise(e);
     }
 ```
 
@@ -292,7 +293,7 @@ public class Context {
     // 6. query the tick interval in milliseconds
     public float getMillisPerTick() {}
     // 7. raise an event yourself
-    public <A extends Annotation> Event<A> createEvent(Class<A> eventType, Class... parameterTypes) {}
+    public <A extends Annotation, E extends Event<A>> E createEvent(Class<A> eventType) {}
 }
 ```
 

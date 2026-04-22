@@ -39,7 +39,7 @@ public class EffectDispatches {
 
     @Initializer(OnEffectDispatch.class)
     public void initOnDispatch(final Context ctx, final EventListener<OnEffectDispatch> el) {
-        evDispatch = (OnEffectDispatch.Event) ctx.createEvent(OnEffectDispatch.class);
+        evDispatch = ctx.createEvent(OnEffectDispatch.class);
     }
 
     @OnStringTableCreated

@@ -28,19 +28,19 @@ public class SpawnsAndDeaths {
     @Initializer(OnEntitySpawned.class)
     public void initOnEntitySpawned(final Context ctx, final EventListener<OnEntitySpawned> eventListener) {
         init(ctx);
-        evSpawned = (OnEntitySpawned.Event) ctx.createEvent(OnEntitySpawned.class);
+        evSpawned = ctx.createEvent(OnEntitySpawned.class);
     }
 
     @Initializer(OnEntityDying.class)
     public void initOnEntityDying(final Context ctx, final EventListener<OnEntityDying> eventListener) {
         init(ctx);
-        evDying = (OnEntityDying.Event) ctx.createEvent(OnEntityDying.class);
+        evDying = ctx.createEvent(OnEntityDying.class);
     }
 
     @Initializer(OnEntityDied.class)
     public void initOnEntityDied(final Context ctx, final EventListener<OnEntityDied> eventListener) {
         init(ctx);
-        evDied = (OnEntityDied.Event) ctx.createEvent(OnEntityDied.class);
+        evDied = ctx.createEvent(OnEntityDied.class);
     }
 
     @OnEntityCreated
