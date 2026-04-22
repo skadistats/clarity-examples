@@ -29,14 +29,15 @@ public class AllChatProcessor {
         System.out.format("%s: %s\n", message.getParam1(), message.getParam2());
     }
     public static void main(String[] args) throws Exception {
-        // 1) create an input source from the replay
-        Source source = new MappedFileSource("replay.dem");
-        // 2) create a simple runner that will read the replay once
-        SimpleRunner runner = new SimpleRunner(source);
-        // 3) create an instance of your processor
-        AllChatProcessor processor = new AllChatProcessor();
-        // 4) and hand it over to the runner
-        runner.runWith(processor);
+        // 1) create an input source from the replay (try-with-resources closes it)
+        try (Source source = new MappedFileSource("replay.dem")) {
+            // 2) create a simple runner that will read the replay once
+            SimpleRunner runner = new SimpleRunner(source);
+            // 3) create an instance of your processor
+            AllChatProcessor processor = new AllChatProcessor();
+            // 4) and hand it over to the runner
+            runner.runWith(processor);
+        }
     }
 }
 ```
@@ -44,8 +45,9 @@ public class AllChatProcessor {
 The main method does the following:
 
 1. Creates a source from the replay file. In this case, a MappedFileSource is used, which needs a locally available file
-   to work. This is the fastest implementation, but there is also an InputStreamSource, which lets you create a source 
-   from any InputStream you can come up with.
+   to work. This is the fastest implementation, but there is also an InputStreamSource, which lets you create a source
+   from any InputStream you can come up with. `Source` is `AutoCloseable`, so we wrap it in try-with-resources to make
+   sure the underlying file handle / mapping is released when the run finishes.
 2. Create a runner with your source. The runner is what drives the replay analysis. The SimpleRunner we use in this case
    will simply run over the whole replay once. There is also a more sophisticated ControllableRunner, which uses a separate
    thread for doing the work, and which allows seeking back and forth in the replay. 
