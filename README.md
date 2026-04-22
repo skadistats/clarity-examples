@@ -44,16 +44,16 @@ public class AllChatProcessor {
 
 The main method does the following:
 
-1. Creates a source from the replay file. In this case, a MappedFileSource is used, which needs a locally available file
-   to work. This is the fastest implementation, but there is also an InputStreamSource, which lets you create a source
-   from any InputStream you can come up with. `Source` is `AutoCloseable`, so we wrap it in try-with-resources to make
+1. Creates a source from the replay file. In this case, a `MappedFileSource` is used, which needs a locally available file
+   to work. This is the fastest implementation, but there is also an `InputStreamSource`, which lets you create a source
+   from any `InputStream` you can come up with. `Source` is `AutoCloseable`, so we wrap it in try-with-resources to make
    sure the underlying file handle / mapping is released when the run finishes.
-2. Create a runner with your source. The runner is what drives the replay analysis. The SimpleRunner we use in this case
-   will simply run over the whole replay once. There is also a more sophisticated ControllableRunner, which uses a separate
-   thread for doing the work, and which allows seeking back and forth in the replay. 
+2. Create a runner with your source. The runner is what drives the replay analysis. The `SimpleRunner` we use in this case
+   will simply run over the whole replay once. There is also a more sophisticated `ControllableRunner`, which uses a separate
+   thread for doing the work, and which allows seeking back and forth in the replay.
 3. Create an instance of your processor. Please note that you are not limited to only using one processor, and clarity itself
    contains a lot of processors that might take part in the run if what you requested requires it.
-4. This starts the processing run. Your annotated method onMessage() will be called back whenever clarity finds an 
+4. This starts the processing run. Your annotated method `onMessage()` will be called back whenever clarity finds an
    allchat-message in the replay.
 
 ### Building / running the examples
@@ -144,9 +144,9 @@ Follow the instructions above to build and run it with
 
 ### Show stats at the end of the game
 
-This example shows how to use the PlayerResource entity as well as the ControllableRunner.
-It outputs the score table at the end of the match. For getting to the result as fast as possible, it does not 
-run the complete replay, but instead uses the ControllableRunner to directly seek to the last tick in the replay.
+This example shows how to use the `PlayerResource` entity as well as the `ControllableRunner`.
+It outputs the score table at the end of the match. For getting to the result as fast as possible, it does not
+run the complete replay, but instead uses the `ControllableRunner` to directly seek to the last tick in the replay.
 
 You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/matchend/Main.java).
 Follow the instructions above to build and run it with
@@ -240,14 +240,14 @@ and it will open a window which lets you explore the send tables in an interacti
 
 ### Events / Providers
 
-Clarity is driven by a small annotation driven event system. Clarity provides basic events, like @OnMessage, 
+Clarity is driven by a small annotation driven event system. Clarity provides basic events, like `@OnMessage`,
 which is used to get a callback whenever a message of a certain type is found in the replay.
 
 If you want, you can subscribe to those events directly, for example to create a dump of the replay.
 
 But those events can also be used to listen for certain data in the replay and refine the raw data into more
-sophisticated events. One example from Clarity is the GameEvents processor, which listens for raw messages of type
-CSVCMsg_GameEventList and CSVCMsg_GameEvent and transforms their content into an easier to use form:
+sophisticated events. One example from Clarity is the `GameEvents` processor, which listens for raw messages of type
+`CSVCMsg_GameEventList` and `CSVCMsg_GameEvent` and transforms their content into an easier to use form:
 
 ```java
 @Provides(OnGameEvent.class) // 1. register as a provider for @OnGameEvent
@@ -266,18 +266,18 @@ public class GameEvents {
     }
 ```
 
-1. the @Provides-annotation tells clarity that this processor is able to supply @OnGameEvent events.
+1. the `@Provides`-annotation tells clarity that this processor is able to supply `@OnGameEvent` events.
    So whenever some processor gets added to the run that listens for this event, Clarity will make sure an instance
-   of GameEvents is also part of the run to supply those events.
-2. The exact structure of GameEvents in this replay is encoded in a CSVCMsg_GameEventList message. 
-3. Create a single GameEvent, by using the descriptors created in 2.
-4. fire the @OnGameEvent event, passing the created GameEvent as parameter.
+   of `GameEvents` is also part of the run to supply those events.
+2. The exact structure of game events in this replay is encoded in a `CSVCMsg_GameEventList` message.
+3. Create a single `GameEvent`, by using the descriptors created in 2.
+4. fire the `@OnGameEvent` event, passing the created `GameEvent` as parameter.
 
 Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
 
 ### Context
 
-The first parameter on any event listener called by Clarity is a Context object.
+The first parameter on any event listener called by Clarity is a `Context` object.
 You can use it to do useful stuff:
 
 ```java
@@ -299,7 +299,7 @@ public class Context {
 }
 ```
 
-1. Often times you need a reference to another processor. You could get a reference to the mentioned GameEvents processor
+1. Often times you need a reference to another processor. You could get a reference to the mentioned `GameEvents` processor
    by calling `ctx.getProcessor(GameEvents.class)`.
 2. returns the current tick
 3. returns the type of engine (Source 1 or 2) the replay was recorded with.
