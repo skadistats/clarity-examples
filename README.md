@@ -119,7 +119,7 @@ Clarity uses the logback-library for logging. You can enable logging for certain
 ### AllChat
 
 
-You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/allchat/Main.java).
+You can find an executable example of the example above under [skadistats.clarity.examples.allchat.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/allchat/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = allchat
@@ -137,7 +137,7 @@ This example *almost* replicates what is shown on the combat log from the game.
 It has problems with finding out if some modifier applied to a unit is a buff or a debuff, 
 and it doesn't know how to convert the technical hero names to plain english... but otherwise it has it all :)
 
-You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
+You can find it under [skadistats.clarity.examples.combatlog.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/combatlog/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = combatlog
@@ -148,7 +148,7 @@ This example shows how to use the `PlayerResource` entity as well as the `Contro
 It outputs the score table at the end of the match. For getting to the result as fast as possible, it does not
 run the complete replay, but instead uses the `ControllableRunner` to directly seek to the last tick in the replay.
 
-You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/matchend/Main.java).
+You can find it under [skadistats.clarity.examples.matchend.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/matchend/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = matchend
@@ -159,8 +159,8 @@ This example shows how to write a processor that provides events related to the 
 The processor provides 3 new events (`@OnEntitySpawned`, `@OnEntityDying` and `@OnEntityDied`) and an associated
 main class that uses them.
 
-You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
-and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
+You can find the processor under [skadistats.clarity.examples.lifestate.SpawnsAndDeaths.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java),
+and the class that uses it under [skadistats.clarity.examples.lifestate.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/lifestate/Main.java). 
 
 Follow the instructions above to build and run it with
 
@@ -186,8 +186,8 @@ The processor provides three new events:
 - `@OnAbilityCooldownReset(Entity ability, Entity owner)` — fires when the cooldown is cleared
   before its natural expiration, e.g. after a Refresher Orb.
 
-You can find the processor under [skadistats.clarity.examples.cooldowns.Cooldowns.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/cooldowns/Cooldowns.java),
-and the class that uses it under [skadistats.clarity.examples.cooldowns.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/cooldowns/Main.java).
+You can find the processor under [skadistats.clarity.examples.cooldowns.Cooldowns.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/cooldowns/Cooldowns.java),
+and the class that uses it under [skadistats.clarity.examples.cooldowns.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/cooldowns/Main.java).
 
 Follow the instructions above to build and run it with
 
@@ -207,7 +207,7 @@ public class Main {
 }
 ```
 
-You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/info/Main.java).
+You can find this example under [skadistats.clarity.examples.info.Main.java](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/info/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = info
@@ -228,7 +228,7 @@ called send tables.
 
 This example shows the format of the entity data in a certain replay.
 
-You can find it under [skadistats.clarity.examples.dev.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/master/dev/src/main/java/skadistats/clarity/examples/dev/dtinspector/Main.java).
+You can find it under [skadistats.clarity.examples.dev.dtinspector.Main.java](https://github.com/skadistats/clarity-examples/blob/next/dev/src/main/java/skadistats/clarity/examples/dev/dtinspector/Main.java).
 Follow the instructions above to build and run it with
 
     <exampleName> = dtinspector
@@ -273,7 +273,7 @@ public class GameEvents {
 3. Create a single `GameEvent`, by using the descriptors created in 2.
 4. fire the `@OnGameEvent` event, passing the created `GameEvent` as parameter.
 
-Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/master/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
+Another example for creating your own event provider is [a provider for spawn / death events](https://github.com/skadistats/clarity-examples/blob/next/examples/src/main/java/skadistats/clarity/examples/lifestate/SpawnsAndDeaths.java).
 
 ### Context
 
