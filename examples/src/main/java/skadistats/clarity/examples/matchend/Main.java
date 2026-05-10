@@ -137,7 +137,10 @@ public class Main {
     }
 
     private Entity getEntity(String entityName) {
-        return runner.getContext().getProcessor(Entities.class).getByDtName(getEngineDependentEntityName(entityName));
+        return runner.getContext().getProcessor(Entities.class).stream()
+                .filter(Entities.byDtName(getEngineDependentEntityName(entityName)))
+                .findFirst()
+                .orElse(null);
     }
 
     private class ColumnDef {

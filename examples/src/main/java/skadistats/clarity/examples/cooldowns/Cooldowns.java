@@ -144,7 +144,10 @@ public class Cooldowns {
     @OnTickEnd
     public void onTickEnd(Context ctx, boolean synthetic) {
         if (pendingExpiration.isEmpty() || evEnd == null) return;
-        Entity rules = entities.getByDtName("CDOTAGamerulesProxy");
+        Entity rules = entities.stream()
+                .filter(Entities.byDtName("CDOTAGamerulesProxy"))
+                .findFirst()
+                .orElse(null);
         if (rules == null) return;
         if (gameTimePath == null) {
             gameTimePath = rules.getFieldPathForName("m_pGameRules.m_fGameTime");
