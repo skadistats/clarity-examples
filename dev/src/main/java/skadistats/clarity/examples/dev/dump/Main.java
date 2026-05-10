@@ -3,15 +3,15 @@ package skadistats.clarity.examples.dev.dump;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
 import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.csgo.s1.proto.CSGOS1NetMessages;
+import skadistats.clarity.wire.cs.csgo.proto.CsgoNetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
-import skadistats.clarity.examples.shared.Category;
-import skadistats.clarity.examples.shared.Example;
 
 @Example(name = "dump", description = "Dump all replay messages with optional content", category = Category.DEV)
 public class Main {
@@ -35,7 +35,7 @@ public class Main {
     private boolean isAudio(GeneratedMessage message) {
         return
                 message instanceof DOTAS1NetMessages.CSVCMsg_VoiceData
-                || message instanceof CSGOS1NetMessages.CSVCMsg_VoiceData
+                || message instanceof CsgoNetMessages.CSVCMsg_VoiceData
                 || message instanceof S2NetMessages.CSVCMsg_VoiceData;
     }
 

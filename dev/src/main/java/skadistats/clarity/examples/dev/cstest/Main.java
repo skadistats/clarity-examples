@@ -1,17 +1,16 @@
-package skadistats.clarity.examples.dev.csgo2test;
+package skadistats.clarity.examples.dev.cstest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.Clarity;
-import skadistats.clarity.model.csgo.PlayerInfoType;
-import skadistats.clarity.processor.runner.SimpleRunner;
-import skadistats.clarity.processor.stringtables.OnPlayerInfo;
-import skadistats.clarity.processor.stringtables.PlayerInfo;
-import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
+import skadistats.clarity.model.cs.PlayerInfoType;
+import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.processor.stringtables.OnPlayerInfo;
+import skadistats.clarity.source.MappedFileSource;
 
-@Example(name = "csgo2test", description = "Test various replay parsing modes (internal)", category = Category.DEV)
+@Example(name = "cstest", description = "Test various replay parsing modes (internal)", category = Category.DEV)
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
@@ -36,26 +35,26 @@ public class Main {
 
     private static final Replay DOTA_S1 = new Replay("DOTA_S1", "/home/spheenik/projects/replays/dota/s1/normal/271145478.dem");
     private static final Replay DOTA_S2 = new Replay("DOTA_S2", "/home/spheenik/projects/replays/dota/s2/297/7048355297.dem");
-    private static final Replay CSGO_S1 = new Replay("CSGO_S1", "/home/spheenik/projects/replays/csgo/s1/issue-271/astralis-vs-godsent-m1-nuke.dem");
-    private static final Replay CSGO_S2 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/prelaunch/bayes_demo.dem");
+    private static final Replay CSGO = new Replay("CSGO", "/home/spheenik/projects/replays/csgo/s1/issue-271/astralis-vs-godsent-m1-nuke.dem");
+    private static final Replay CS2 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/prelaunch/bayes_demo.dem");
 
 
-    private static final Replay B_1 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_esea_open-league-s49-eu_lilmix-roundsgg-240420241800game1.dem");
-    private static final Replay B_2 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_bleed-dms-260420241400game1.dem");
-    private static final Replay B_3 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1a.dem");
-    private static final Replay B_4 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1b.dem");
-    private static final Replay B_5 = new Replay("CSGO_S2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1c.dem");
+    private static final Replay B_1 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_esea_open-league-s49-eu_lilmix-roundsgg-240420241800game1.dem");
+    private static final Replay B_2 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_bleed-dms-260420241400game1.dem");
+    private static final Replay B_3 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1a.dem");
+    private static final Replay B_4 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1b.dem");
+    private static final Replay B_5 = new Replay("CS2", "/home/spheenik/projects/replays/csgo/s2/bayes_042024/ta_relog_res-cs2-regional-europe-3-2024_gaimin-gladiators-alternate-attax-260420241100game1c.dem");
 
 
     public static void main(String[] args) throws Exception {
-        //runDump(CSGO_S1);
+        //runDump(CSGO);
         runEntities(B_3);
-        //runGameEvents(DOTA_S1, DOTA_S2, CSGO_S1, CSGO_S2);
-        //runSpawnGroups(DOTA_S1, DOTA_S2, CSGO_S1, CSGO_S2);
-        //runResources(DOTA_S2, CSGO_S2);
-        //runGameEvents(CSGO_S2);
-        //runStringTables(CSGO_S1, CSGO_S2);
-        //runPlayerInfo(CSGO_S1, CSGO_S2);
+        //runGameEvents(DOTA_S1, DOTA_S2, CSGO, CS2);
+        //runSpawnGroups(DOTA_S1, DOTA_S2, CSGO, CS2);
+        //runResources(DOTA_S2, CS2);
+        //runGameEvents(CS2);
+        //runStringTables(CSGO, CS2);
+        //runPlayerInfo(CSGO, CS2);
         //runInfo(data);
     }
 

@@ -3,17 +3,17 @@ package skadistats.clarity.examples.dev.test;
 import com.google.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skadistats.clarity.examples.shared.Category;
+import skadistats.clarity.examples.shared.Example;
+import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
 import skadistats.clarity.source.MappedFileSource;
-import skadistats.clarity.wire.csgo.s1.proto.CSGOS1NetMessages;
+import skadistats.clarity.wire.cs.csgo.proto.CsgoNetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
-import skadistats.clarity.examples.shared.ReplayChooser;
-import skadistats.clarity.examples.shared.Category;
-import skadistats.clarity.examples.shared.Example;
 
 @UsesEntities
 @Example(name = "test", description = "Test message dispatch and seeking (internal)", category = Category.DEV)
@@ -23,7 +23,7 @@ public class Main {
 
     @OnMessage(GeneratedMessage.class)
     public void onMessage(Context ctx, GeneratedMessage message) {
-        if (message instanceof DOTAS1NetMessages.CSVCMsg_VoiceData || message instanceof CSGOS1NetMessages.CSVCMsg_VoiceData || message instanceof S2NetMessages.CSVCMsg_VoiceData) {
+        if (message instanceof DOTAS1NetMessages.CSVCMsg_VoiceData || message instanceof CsgoNetMessages.CSVCMsg_VoiceData || message instanceof S2NetMessages.CSVCMsg_VoiceData) {
             return;
         }
         log.info("{}: {}", ctx.getTick(), message.getClass().getSimpleName());
