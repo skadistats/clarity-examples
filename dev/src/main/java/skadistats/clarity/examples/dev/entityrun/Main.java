@@ -28,7 +28,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         try {
-            //ClarityPlatform.setBitStreamConstructor(data -> new BitStream32(new UnsafeBuffer.B32(data)));
             //System.out.println("press key to start"); System.in.read();
             new Main().run(args);
         } catch (Exception e) {
