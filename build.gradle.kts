@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    id("jacoco")
 }
 
 group = "com.skadistats"
@@ -55,5 +56,40 @@ tasks.register("verifyExampleNames") {
 subprojects {
     tasks.matching { it.name == "check" }.configureEach {
         dependsOn(rootProject.tasks.named("verifyExampleNames"))
+    }
+}
+
+val claritySrcRoot = file("../clarity")
+if (claritySrcRoot.isDirectory) {
+    tasks.register<JacocoReport>("coverageReport") {
+        description = "Aggregate JaCoCo report over parser classes for all *Run tasks executed with -PwithCoverage."
+        group = "verification"
+        dependsOn(gradle.includedBuild("clarity").task(":compileJava"))
+        executionData.setFrom(
+            fileTree(layout.buildDirectory.dir("jacoco")) { include("*.exec") }
+        )
+        classDirectories.setFrom(
+            files(claritySrcRoot.resolve("build/classes/java/main"))
+        )
+        sourceDirectories.setFrom(
+            files(
+                claritySrcRoot.resolve("src/main/java"),
+                claritySrcRoot.resolve("build/generated/sources/annotationProcessor/java/main"),
+            )
+        )
+        reports {
+            html.required.set(true)
+            xml.required.set(true)
+            csv.required.set(false)
+        }
+        doFirst {
+            if (executionData.files.none { it.exists() }) {
+                throw GradleException(
+                    "no exec files in ${layout.buildDirectory.dir("jacoco").get().asFile}. " +
+                        "Run an example with -PwithCoverage first, e.g. " +
+                        "./gradlew entityRunRun -PwithCoverage --args=\"<replay>\"."
+                )
+            }
+        }
     }
 }
