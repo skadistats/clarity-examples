@@ -56,6 +56,32 @@ The main method does the following:
 4. This starts the processing run. Your annotated method `onMessage()` will be called back whenever clarity finds an
    allchat-message in the replay.
 
+### Filtering entities by class
+
+If your processor only cares about a handful of entity classes (e.g. just
+players and gamerules), you can tell the runner to drop the rest before they
+are ever materialized. The runner accepts a `Predicate<DTClass>` via
+`withEntityFilter(...)` — entities whose class returns `false` are consumed
+from the wire (so the bitstream cursor stays aligned), but no Java-side
+`Entity` is allocated, no listeners fire, and `entities.getByIndex(id)`
+returns `null` for them:
+
+```java
+try (Source source = new MappedFileSource("replay.dem")) {
+    SimpleRunner runner = new SimpleRunner(source);
+    runner.withEntityFilter(dt -> {
+        var name = dt.getDtName();
+        return name.equals("CDOTAPlayer") || name.equals("CDOTAGamerulesProxy");
+    });
+    runner.runWith(processor);
+}
+```
+
+The filter must be set before `runWith(...)`; calling it after the parse has
+started throws `IllegalStateException`. Exceptions thrown from inside the
+predicate propagate and terminate the parse — the parser never swallows
+them or defaults to include/exclude.
+
 ### Building / running the examples
 
 All provided examples can be build with Gradle. The build process yields an "uno-jar", that is a jar 
@@ -296,6 +322,8 @@ public class Context {
     public float getMillisPerTick() {}
     // 7. raise an event yourself
     public <A extends Annotation, E extends Event<A>> E createEvent(Class<A> eventType) {}
+    // 8. inspect the entity filter set on the runner (null if none)
+    public Predicate<DTClass> getEntityFilter() {}
 }
 ```
 
@@ -307,4 +335,5 @@ public class Context {
 5. if the replay was recorded with Source 2, this will give you the game version
 6. returns the tick interval in milliseconds (useful for converting ticks to wall-clock time)
 7. this function can be used to create events yourself.
+8. returns the per-class entity filter the runner was configured with via `withEntityFilter(...)`, or `null` if no filter is set (the default).
 
