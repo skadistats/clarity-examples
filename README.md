@@ -320,10 +320,10 @@ public class Context {
     public int getGameVersion() {}
     // 6. query the tick interval in milliseconds
     public float getMillisPerTick() {}
-    // 7. raise an event yourself
-    public <A extends Annotation, E extends Event<A>> E createEvent(Class<A> eventType) {}
-    // 8. inspect the entity filter set on the runner (null if none)
+    // 7. inspect the entity filter set on the runner (null if none)
     public Predicate<DTClass> getEntityFilter() {}
+    // 8. raise an event yourself
+    public <A extends Annotation, E extends Event<A>> E createEvent(Class<A> eventType) {}
 }
 ```
 
@@ -334,6 +334,6 @@ public class Context {
 4. if the replay was recorded with Source 2, this will give you the build number of the server that recorded the replay
 5. if the replay was recorded with Source 2, this will give you the game version
 6. returns the tick interval in milliseconds (useful for converting ticks to wall-clock time)
-7. this function can be used to create events yourself.
-8. returns the per-class entity filter the runner was configured with via `withEntityFilter(...)`, or `null` if no filter is set (the default).
+7. returns the per-class entity filter the runner was configured with via `withEntityFilter(...)`, or `null` if no filter is set (the default).
+8. this function can be used to create events yourself.
 
