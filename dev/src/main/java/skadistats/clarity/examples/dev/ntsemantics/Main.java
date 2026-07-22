@@ -1,6 +1,6 @@
 package skadistats.clarity.examples.dev.ntsemantics;
 
-import com.google.protobuf.ByteString;
+import skadistats.clarity.protobuf.ByteString;
 import skadistats.clarity.io.bitstream.BitStream;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.entities.Entities;

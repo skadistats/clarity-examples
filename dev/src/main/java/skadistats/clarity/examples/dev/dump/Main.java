@@ -1,6 +1,6 @@
 package skadistats.clarity.examples.dev.dump;
 
-import com.google.protobuf.GeneratedMessage;
+import skadistats.clarity.protobuf.GeneratedMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.examples.shared.Category;

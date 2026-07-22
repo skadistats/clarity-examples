@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dev.pointerstats;
 
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.ZeroCopy;
+import skadistats.clarity.protobuf.CodedInputStream;
+import skadistats.clarity.protobuf.ZeroCopy;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 import skadistats.clarity.examples.shared.ReplayChooser;

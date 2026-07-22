@@ -1,6 +1,6 @@
 package skadistats.clarity.examples.dev.packetentitiesprobe;
 
-import com.google.protobuf.ByteString;
+import skadistats.clarity.protobuf.ByteString;
 import skadistats.clarity.io.bitstream.BitStream;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;

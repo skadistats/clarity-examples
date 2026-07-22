@@ -1,6 +1,6 @@
 package skadistats.clarity.examples.dev.packetentitiesmatch;
 
-import com.google.protobuf.ByteString;
+import skadistats.clarity.protobuf.ByteString;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.sendtables.DTClasses;

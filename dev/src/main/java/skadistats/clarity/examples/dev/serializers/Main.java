@@ -1,7 +1,7 @@
 package skadistats.clarity.examples.dev.serializers;
 
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.ZeroCopy;
+import skadistats.clarity.protobuf.CodedInputStream;
+import skadistats.clarity.protobuf.ZeroCopy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skadistats.clarity.examples.shared.Category;
