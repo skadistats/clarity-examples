@@ -8,5 +8,5 @@ repositories {
 }
 
 dependencies {
-    implementation("com.needhamsoftware.unojar:com.needhamsoftware.unojar.gradle.plugin:1.1.0")
+    implementation("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.6.1")
 }

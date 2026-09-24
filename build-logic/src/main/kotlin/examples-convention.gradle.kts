@@ -1,11 +1,13 @@
-import com.needhamsoftware.unojar.gradle.PackageUnoJarTask
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 
 plugins {
     id("examples-base")
-    id("com.needhamsoftware.unojar")
+    id("com.gradleup.shadow")
 }
+
+tasks.named("shadowJar") { enabled = false }
 
 val withCoverage = providers.gradleProperty("withCoverage").isPresent
 val coverageDir = rootProject.layout.buildDirectory.dir("jacoco")
@@ -33,12 +35,27 @@ if (srcRoot.isDirectory) {
                     coverageDir.map { it.file("$exampleName.exec").asFile }.get()
                 )
             }
-            tasks.register<PackageUnoJarTask>("${exampleName}Package") {
-                dependsOn("jar")
+            tasks.register<ShadowJar>("${exampleName}Package") {
                 archiveBaseName.set(exampleName)
                 archiveVersion.set("")
                 archiveClassifier.set("")
-                mainClass.set(fqMainClass)
+                from(sourceSets["main"].output)
+                configurations.set(listOf(project.configurations["runtimeClasspath"]))
+                manifest.attributes("Main-Class" to fqMainClass, "Multi-Release" to "true")
+                filesMatching(listOf("META-INF/services/**", "META-INF/clarity/providers.txt", "META-INF/annotations/**")) {
+                    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+                }
+                mergeServiceFiles()
+                append("META-INF/clarity/providers.txt")
+                append("META-INF/annotations/skadistats.clarity.examples.shared.Example")
+                exclude(
+                    "module-info.class",
+                    "META-INF/versions/*/module-info.class",
+                    "META-INF/INDEX.LIST",
+                    "META-INF/*.SF",
+                    "META-INF/*.DSA",
+                    "META-INF/*.RSA",
+                )
             }
         }
 }

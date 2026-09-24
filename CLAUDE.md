@@ -4,7 +4,7 @@ Example code for the Clarity replay parser. Gradle (Kotlin DSL), Java 21.
 
 ## Build / run
 ```bash
-./gradlew :<subproject>:<exampleName>Package   # uno-jar → <sub>/build/libs/
+./gradlew :<subproject>:<exampleName>Package   # fat jar (Shadow) → <sub>/build/libs/
 ./gradlew :<subproject>:<exampleName>Run --args "path/to/replay.dem"
 ./gradlew build
 ```

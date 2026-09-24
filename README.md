@@ -84,7 +84,7 @@ them or defaults to include/exclude.
 
 ### Building / running the examples
 
-All provided examples can be build with Gradle. The build process yields an "uno-jar", that is a jar 
+All provided examples can be build with Gradle. The build process yields a fat jar, that is a jar 
 containing all the dependencies, which can be called from the command line easily without having to 
 set a correct classpath. Alternatively, you can use Gradle to run an example directly.
 
@@ -107,9 +107,9 @@ Qualified form (always works):
     ./gradlew :examples:<exampleName>Package
     ./gradlew :dev:<exampleName>Package
 
-#### Running the built uno-jar
+#### Running the built jar
 
-Uno-jars are produced in the owning subproject's `build/libs/` (e.g. `examples/build/libs/allchat.jar`,
+Jars are produced in the owning subproject's `build/libs/` (e.g. `examples/build/libs/allchat.jar`,
 `dev/build/libs/dtinspector.jar`).
 
 Windows:
