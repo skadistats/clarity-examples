@@ -185,7 +185,7 @@ Follow the instructions above to build and run it with
 [Clarity Analyzer](https://github.com/spheenik/clarity-analyzer) is nifty little JavaFX Application 
 that lets you see all the entity data in the replay in real time.
  
-![Clarity Analyzer](https://raw.githubusercontent.com/spheenik/clarity-analyzer/master/screenshot.png)
+![Clarity Analyzer](images/clarity-analyzer.png)
 
 ### Showing the combat log
 
