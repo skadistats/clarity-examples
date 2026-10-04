@@ -27,7 +27,7 @@ import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 @Example(name = "test", description = "Test message dispatch and seeking (internal)", category = Category.DEV)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     @OnMessage(GeneratedMessage.class)
     public void onMessage(Context ctx, GeneratedMessage message) {

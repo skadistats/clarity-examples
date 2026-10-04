@@ -24,16 +24,16 @@ import skadistats.clarity.examples.shared.Example;
  * ({@code tick N, synthetic X, had M messages}) and throws if a synthetic tick had messages or a real tick had
  * none.</p>
  *
- * <p>Works with all supported engines. {@code main} uses {@link #run} with a {@link SimpleRunner}.
- * {@link #runControlled} does the same with a {@link ControllableRunner}, stepping through the replay with
- * {@code tick()}; it is not called from {@code main}.</p>
+ * <p>Works with all supported engines. By default {@code main} uses {@link #run} with a {@link SimpleRunner}.
+ * With the second argument {@code controlled} it uses {@link #runControlled} instead, which does the same with a
+ * {@link ControllableRunner}, stepping through the replay with {@code tick()}.</p>
  *
- * <p>Run: {@code ./gradlew :examples:tickRun --args "path/to/replay.dem"}</p>
+ * <p>Run: {@code ./gradlew :examples:tickRun --args "path/to/replay.dem [controlled]"}</p>
  */
 @Example(name = "tick", description = "Validate tick event semantics (start/end, synthetic)", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     private int tick;
     private int count;
@@ -93,9 +93,13 @@ public class Main {
         log.info("total time taken: {}s", (tMatch) / 1000.0);
     }
 
-
     public static void main(String[] args) throws Exception {
-        new Main().run(args);
+        Main main = new Main();
+        if (args.length > 1 && args[1].equals("controlled")) {
+            main.runControlled(args);
+        } else {
+            main.run(args);
+        }
     }
 
 }

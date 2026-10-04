@@ -30,7 +30,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "cooldowns", description = "Track ability cooldown events (start, reset, end)", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     // injects the runner context; getTick() returns the tick currently being processed
     @Insert

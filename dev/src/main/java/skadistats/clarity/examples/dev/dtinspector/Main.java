@@ -1,7 +1,5 @@
 package skadistats.clarity.examples.dev.dtinspector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.sendtables.DTClasses;
@@ -27,8 +25,6 @@ import skadistats.clarity.examples.shared.Example;
 @UsesDTClasses
 @Example(name = "dtinspector", description = "GUI browser for data table classes in replay", category = Category.DEV)
 public class Main {
-
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     public void run(String[] args) throws Exception {
         final Context ctx;

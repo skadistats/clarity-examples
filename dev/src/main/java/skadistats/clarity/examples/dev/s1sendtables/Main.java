@@ -32,7 +32,7 @@ import java.io.PrintStream;
 @Example(name = "s1sendtables", description = "Dump S1 ReceiveProps with type/flags/numBits for string-inline analysis", category = Category.DEV)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     private boolean dumped = false;
 

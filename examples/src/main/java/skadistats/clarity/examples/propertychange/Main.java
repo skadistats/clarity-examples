@@ -32,7 +32,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "propertychange", description = "Log property changes on hero life states", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     // Both patterns must match the whole name (full match, not a find): the DT class name of the entity and the
     // property name of the changed field path. Defaults are ".*". Clarity applies the filters before calling this method.

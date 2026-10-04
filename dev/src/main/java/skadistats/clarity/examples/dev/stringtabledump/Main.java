@@ -1,7 +1,5 @@
 package skadistats.clarity.examples.dev.stringtabledump;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.Runner;
@@ -26,8 +24,6 @@ import skadistats.clarity.examples.shared.Example;
 @UsesStringTable("*")
 @Example(name = "stringtabledump", description = "Extract and print all string tables", category = Category.DEV)
 public class Main {
-
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     private Set<String> names = new HashSet<>();
 

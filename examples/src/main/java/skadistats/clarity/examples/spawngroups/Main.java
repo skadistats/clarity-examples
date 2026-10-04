@@ -2,11 +2,8 @@ package skadistats.clarity.examples.spawngroups;
 
 import skadistats.clarity.protobuf.ByteString;
 import skadistats.clarity.protobuf.ZeroCopy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import skadistats.clarity.io.Util;
 import skadistats.clarity.io.bitstream.BitStream;
-import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
@@ -43,11 +40,8 @@ import skadistats.clarity.examples.shared.Example;
  *
  * <p>Run: {@code ./gradlew :examples:spawngroupsRun --args "path/to/replay.dem"}</p>
  */
-@UsesEntities
 @Example(name = "spawngroups", description = "Parse spawn group data from replay packets", category = Category.DOCS)
 public class Main {
-
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
     // Manifest layout: 1 bit compressed flag, 24 bit size, then the payload (LZSS-packed if flagged).
     private void parse(ByteString raw) throws IOException {

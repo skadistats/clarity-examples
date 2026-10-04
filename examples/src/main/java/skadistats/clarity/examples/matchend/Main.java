@@ -48,7 +48,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "matchend", description = "Display final match scoreboard with player stats", category = Category.DOCS)
 public class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
         String replay = ReplayChooser.choose(args);
@@ -81,7 +81,12 @@ public class Main {
     /** Chooses the property layout for the replay's engine and format, then prints the table. */
     private void showScoreboard() {
         boolean isSource1 = runner.getEngineType().getId() == EngineId.DOTA_S1;
-        boolean isEarlyBetaFormat = !isSource1 && getEntity("PlayerResource").getFieldPathForName("m_vecPlayerData") == null;
+        Entity playerResource = getEntity("PlayerResource");
+        if (playerResource == null) {
+            log.error("no PlayerResource entity found");
+            return;
+        }
+        boolean isEarlyBetaFormat = !isSource1 && !playerResource.hasProperty("m_vecPlayerData");
         if (isSource1 || isEarlyBetaFormat) {
             showTableWithColumns(
                     new DefaultResolver<Integer>("PlayerResource", "m_iPlayerTeams.%i"),
@@ -111,9 +116,9 @@ public class Main {
 
     /**
      * Prints one row per Radiant or Dire player. {@code teamResolver} yields the team of player slot {@code idx};
-     * the first column's resolver is evaluated for every slot until it throws, which ends the loop.
+     * slots are visited from 0 for as long as the team property exists and is set for them.
      */
-    private void showTableWithColumns(ValueResolver<Integer> teamResolver, ColumnDef... columnDefs) {
+    private void showTableWithColumns(DefaultResolver<Integer> teamResolver, ColumnDef... columnDefs) {
         TextTable.Builder b = new TextTable.Builder();
         for (int c = 0; c < columnDefs.length; c++) {
             b.addColumn(columnDefs[c].name, c == 0 ? TextTable.Alignment.LEFT : TextTable.Alignment.RIGHT);
@@ -124,18 +129,13 @@ public class Main {
         int pos = 0;
         int r = 0;
 
-        for (int idx = 0; idx < 256; idx++) {
-            try {
-                int newTeam = teamResolver.resolveValue(idx, team, pos);
-                if (newTeam != team) {
-                    team = newTeam;
-                    pos = 0;
-                } else {
-                    pos++;
-                }
-            } catch (Exception e) {
-                // when the team resolver throws an exception, this was the last index there was
-                break;
+        Integer newTeam;
+        for (int idx = 0; (newTeam = teamResolver.resolveValue(idx, team, pos)) != null; idx++) {
+            if (newTeam != team) {
+                team = newTeam;
+                pos = 0;
+            } else {
+                pos++;
             }
             if (team != 2 && team != 3) {
                 continue;
@@ -211,16 +211,23 @@ public class Main {
             this.pattern = pattern;
         }
 
+        /** Returns the value for the given slot, or {@code null} if the property does not exist or is unset. */
         @Override
         public V resolveValue(int index, int team, int pos) {
-            String fieldPathString = pattern
+            Entity entity = getEntity(compileEntityName(team));
+            FieldPath fieldPath = entity.getFieldPathForName(compilePattern(index, team, pos));
+            return fieldPath == null ? null : entity.getPropertyForFieldPath(fieldPath);
+        }
+
+        private String compilePattern(int index, int team, int pos) {
+            return pattern
                     .replaceAll("%i", Util.arrayIdxToString(index))
                     .replaceAll("%t", Util.arrayIdxToString(team))
                     .replaceAll("%p", Util.arrayIdxToString(pos));
-            String compiledName = entityName.replaceAll("%n", getTeamName(team));
-            Entity entity = getEntity(compiledName);
-            FieldPath fieldPath = entity.getFieldPathForName(fieldPathString);
-            return entity.getPropertyForFieldPath(fieldPath);
+        }
+
+        private String compileEntityName(int team) {
+            return entityName.replaceAll("%n", getTeamName(team));
         }
     }
 

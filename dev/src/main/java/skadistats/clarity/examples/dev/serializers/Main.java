@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 import skadistats.clarity.examples.shared.ReplayChooser;
-import skadistats.clarity.model.s2.FieldType;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.ControllableRunner;
@@ -20,8 +19,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Dumps the flattened serializers from {@code CDemoSendTables} of an S2 replay as an aligned text table.
@@ -35,33 +32,13 @@ import java.util.TreeSet;
 @Example(name = "serializers", description = "Dump flattened serializers from SendTables", category = Category.DEV)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     @OnMessage(Demo.CDemoSendTables.class)
     public void onSendTables(Context ctx, Demo.CDemoSendTables message) throws IOException {
         CodedInputStream cis = CodedInputStream.newInstance(ZeroCopy.extract(message.getData()));
         int size = cis.readRawVarint32();
         S2NetMessages.CSVCMsg_FlattenedSerializer fs = Packet.parse(S2NetMessages.CSVCMsg_FlattenedSerializer.class, ZeroCopy.wrap(cis.readRawBytes(size)));
-
-        Set<String> baseTypes = new TreeSet<>();
-        for (S2NetMessages.ProtoFlattenedSerializer_t s : fs.getSerializersList()) {
-            for (int fi : s.getFieldsIndexList()) {
-                S2NetMessages.ProtoFlattenedSerializerField_t f = fs.getFields(fi);
-                FieldType ft = new FieldType(fs.getSymbols(f.getVarTypeSym()));
-                if (!f.hasFieldSerializerNameSym()) {
-                    int l = 0;
-                    do {
-                        baseTypes.add(ft.getBaseType().toUpperCase());
-                        if ("CUTLVECTOR".equals(ft.getBaseType().toUpperCase())) {
-                            ft = ft.getGenericType();
-                        } else {
-                            ft = null;
-                        }
-                        l++;
-                    } while (l <= 1 && ft != null);
-                }
-            }
-        }
         dump(ctx, fs);
     }
 

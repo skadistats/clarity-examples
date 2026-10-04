@@ -35,7 +35,7 @@ public class Main {
         System.out.println(e);
     }
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();

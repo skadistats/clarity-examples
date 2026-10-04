@@ -19,7 +19,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "entityrun", description = "Baseline test of entity parsing path", category = Category.DEV)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     public void run(String[] args) throws Exception {
         long tStart = System.currentTimeMillis();

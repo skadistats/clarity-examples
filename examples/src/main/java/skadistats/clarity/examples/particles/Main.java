@@ -10,7 +10,6 @@ import skadistats.clarity.processor.entities.UsesEntities;
 import skadistats.clarity.processor.reader.OnMessage;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
-import skadistats.clarity.processor.stringtables.StringTables;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.wire.shared.demo.proto.DemoUserMessages;
 import skadistats.clarity.examples.shared.ReplayChooser;
@@ -22,14 +21,15 @@ import skadistats.clarity.examples.shared.Example;
  * user messages.
  *
  * <p>Demonstrates {@link OnMessage} with a message class, a user message that Clarity unpacks and delivers like any
- * other message, and {@link Insert} to receive the {@link Entities}, {@link StringTables} and {@link Context} objects
+ * other message, and {@link Insert} to receive the {@link Entities} and {@link Context} objects
  * as fields. Create and update-entity messages carry an entity handle, which is resolved with
  * {@link Entities#getByHandle(int)}; the log shows the entity's class name, or {@code NOT_FOUND} if no matching
  * entity exists. Event types without a dedicated formatter are logged with the message's {@code toString()}.
  *
  * <p>The message class is registered for Dota 2 (both engines), Counter-Strike 2 and Deadlock, so the example can run
- * on those replays. The code uses {@code ParticleAttachmentType}, a Source 1 enum, to decode the attach type of
- * update-entity messages, so the decoded names are only reliable for Source 1 data. Logs the total run time.
+ * on those replays. The attach type is a plain integer on the wire. For Source 1 engines (Dota 2 S1, CS:GO) it is
+ * decoded with {@code ParticleAttachmentType}; Clarity has no attachment enum for Source 2, so there the raw value is
+ * logged. Logs the total run time.
  *
  * <p>Run:
  * <pre>
@@ -40,15 +40,20 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "particles", description = "Parse and log particle manager events", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     // @Insert fields are filled by the runtime when the processor is registered.
     @Insert
     private Entities entities;
     @Insert
-    private StringTables stringTables;
-    @Insert
     private Context context;
+
+    private String attachTypeName(int attachType) {
+        return switch (context.getEngineType().getId()) {
+            case DOTA_S1, CSGO -> String.valueOf(ParticleAttachmentType.forId(attachType));
+            default -> String.valueOf(attachType);
+        };
+    }
 
     private int getTick() {
         return context.getTick();
@@ -104,8 +109,6 @@ public class Main {
     private void logCreate(DemoUserMessages.CUserMsg_ParticleManager message) {
         int entityHandle = message.getCreateParticle().getEntityHandle();
         // A handle is entity index plus serial; getByHandle returns null if the slot is empty or holds a different entity.
-//        int entityIndex = Handle.indexForHandle(entityHandle);
-//        int entitySerial = Handle.serialForHandle(entityHandle);
         Entity parent = entities.getByHandle(entityHandle);
         log.info("{} {} [index={}, entity={}({}), effect={}, attach={}]",
             getTick(),
@@ -114,9 +117,8 @@ public class Main {
             entityHandle,
             parent == null ? "NOT_FOUND" : parent.getDtClass().getDtName(),
             message.getCreateParticle().getParticleNameIndex(),
-            message.getCreateParticle().getAttachType()
+            attachTypeName(message.getCreateParticle().getAttachType())
         );
-        //log.info(message.toString());
     }
 
     private void logUpdate(DemoUserMessages.CUserMsg_ParticleManager message) {
@@ -129,7 +131,6 @@ public class Main {
             message.getUpdateParticle().getPosition().getY(),
             message.getUpdateParticle().getPosition().getZ()
         );
-        //log.info(message.toString());
     }
 
     private void logUpdateOrientation(DemoUserMessages.CUserMsg_ParticleManager message) {
@@ -148,7 +149,6 @@ public class Main {
             message.getUpdateParticleOrient().getUp().getY(),
             message.getUpdateParticleOrient().getUp().getZ()
         );
-        //log.info(message.toString());
     }
 
     private void logUpdateEnt(DemoUserMessages.CUserMsg_ParticleManager message) {
@@ -161,11 +161,10 @@ public class Main {
             entityHandle,
             parent == null ? "NOT_FOUND" : parent.getDtClass().getDtName(),
             message.getUpdateParticleEnt().getControlPoint(),
-            ParticleAttachmentType.forId(message.getUpdateParticleEnt().getAttachType()),
+            attachTypeName(message.getUpdateParticleEnt().getAttachType()),
             message.getUpdateParticleEnt().getAttachment(),
             message.getUpdateParticleEnt().getIncludeWearables()
         );
-        //log.info(message.toString());
     }
 
     private void logDestroy(DemoUserMessages.CUserMsg_ParticleManager message) {
@@ -175,7 +174,6 @@ public class Main {
             message.getIndex(),
             message.getDestroyParticle().getDestroyImmediately()
         );
-        //log.info(message.toString());
     }
 
     private void logRelease(DemoUserMessages.CUserMsg_ParticleManager message) {
@@ -184,7 +182,6 @@ public class Main {
             "PARTICLE_RELEASE",
             message.getIndex()
         );
-        //log.info(message.toString());
     }
 
     private void logUnhanded(DemoUserMessages.CUserMsg_ParticleManager message) {

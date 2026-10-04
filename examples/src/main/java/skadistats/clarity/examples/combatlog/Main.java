@@ -33,7 +33,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "combatlog", description = "Extract and format combat log from replay events", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     private final DateTimeFormatter GAMETIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 

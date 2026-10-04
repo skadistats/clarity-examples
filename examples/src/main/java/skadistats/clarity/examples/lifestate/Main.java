@@ -28,7 +28,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "lifestate", description = "Track entity spawn and death events in replay", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     // injects the runner context; getTick() returns the tick currently being processed
     @Insert

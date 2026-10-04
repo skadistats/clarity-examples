@@ -25,7 +25,7 @@ import skadistats.clarity.examples.shared.Example;
 @Example(name = "gameevent", description = "Print all game events from a replay", category = Category.DOCS)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     // no value(): matches all events
     @OnGameEvent

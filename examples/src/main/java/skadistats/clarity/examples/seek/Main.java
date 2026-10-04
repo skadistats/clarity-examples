@@ -22,20 +22,21 @@ import skadistats.clarity.examples.shared.Example;
  * source to the nearest preceding full packet / string table data and processes from there.</p>
  *
  * <p>The example performs {@code N_SEEKS} (1000) seeks to random ticks between 0 and the last tick and logs the
- * total time and the time per seek, as warnings. No entity data is printed. The example code is not
+ * total time and the time per seek. No entity data is printed. The example code is not
  * engine-specific; it needs a source that can be repositioned, such as {@link MappedFileSource}. For
  * CSGO, which does not allow full-packet seeking, a far-forward seek is processed forward from the current
  * position instead of from a full packet.</p>
  *
  * <p>Run: {@code ./gradlew :examples:seekRun --args "path/to/replay.dem"}</p>
  */
+// Registers the Entities processor so that every seek includes rebuilding the entity state.
 @UsesEntities
 @Example(name = "seek", description = "Benchmark random seeking performance on a replay", category = Category.DOCS)
 public class Main {
 
     private final int N_SEEKS = 1000;
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     public void runSeek(String[] args) throws Exception {
         String replay = ReplayChooser.choose(args);
@@ -50,12 +51,12 @@ public class Main {
                 long tStart = System.nanoTime();
                 while (i-- > 0) {
                     int nextTick = r.nextInt(lastTick);
-                    log.warn("seeking to {}", nextTick);
+                    log.info("seeking to {}", nextTick);
                     runner.seek(nextTick); // blocks until the end of nextTick is reached
                 }
                 long tTick = System.nanoTime() - tStart;
                 double tMs = tTick / 1000000.0d;
-                log.warn("{} seek operations took {}ms, {}ms/seek", N_SEEKS, tMs, tMs / N_SEEKS);
+                log.info("{} seek operations took {}ms, {}ms/seek", N_SEEKS, tMs, tMs / N_SEEKS);
             } finally {
                 // The runner thread does not end by itself: halt it and wait for it before the source is closed.
                 runner.halt();

@@ -27,7 +27,7 @@ import java.util.List;
 @Example(name = "classinfocmp", description = "Compare CDemoClassInfo vs CSVCMsg_ClassInfo class lists", category = Category.DEV)
 public class Main {
 
-    private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
+    private final Logger log = LoggerFactory.getLogger(Main.class);
 
     record ClassEntry(int classId, String name, String tableName) {}
 
