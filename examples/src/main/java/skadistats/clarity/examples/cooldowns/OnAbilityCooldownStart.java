@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
-@UsagePointMarker(value = UsagePointType.EVENT_LISTENER, parameterClasses = { Entity.class, Entity.class, Float.class })
+@UsagePointMarker(value = UsagePointType.EVENT_LISTENER)
 public @interface OnAbilityCooldownStart {
 
     interface Listener {

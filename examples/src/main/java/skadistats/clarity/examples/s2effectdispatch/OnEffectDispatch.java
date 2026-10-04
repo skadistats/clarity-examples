@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
-@UsagePointMarker(value = UsagePointType.EVENT_LISTENER, parameterClasses = { String.class, CMsgEffectData.class })
+@UsagePointMarker(value = UsagePointType.EVENT_LISTENER)
 public @interface OnEffectDispatch {
 
     interface Listener {
