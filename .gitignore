@@ -7,3 +7,4 @@ build/
 /baselines
 /bench-results
 .claude/
+/openspec/changes/add-entity-bindings-cs2-state/
