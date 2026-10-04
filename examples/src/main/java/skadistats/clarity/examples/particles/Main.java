@@ -17,12 +17,32 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Logs the particle effects that the game creates, updates and destroys, as reported by {@code CUserMsg_ParticleManager}
+ * user messages.
+ *
+ * <p>Demonstrates {@link OnMessage} with a message class, a user message that Clarity unpacks and delivers like any
+ * other message, and {@link Insert} to receive the {@link Entities}, {@link StringTables} and {@link Context} objects
+ * as fields. Create and update-entity messages carry an entity handle, which is resolved with
+ * {@link Entities#getByHandle(int)}; the log shows the entity's class name, or {@code NOT_FOUND} if no matching
+ * entity exists. Event types without a dedicated formatter are logged with the message's {@code toString()}.
+ *
+ * <p>The message class is registered for Dota 2 (both engines), Counter-Strike 2 and Deadlock, so the example can run
+ * on those replays. The code uses {@code ParticleAttachmentType}, a Source 1 enum, to decode the attach type of
+ * update-entity messages, so the decoded names are only reliable for Source 1 data. Logs the total run time.
+ *
+ * <p>Run:
+ * <pre>
+ * ./gradlew :examples:particlesRun --args "path/to/replay.dem"
+ * </pre>
+ */
 @UsesEntities
 @Example(name = "particles", description = "Parse and log particle manager events", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
+    // @Insert fields are filled by the runtime when the processor is registered.
     @Insert
     private Entities entities;
     @Insert
@@ -34,6 +54,7 @@ public class Main {
         return context.getTick();
     }
 
+    // Matches the exact message class; the handler is only called for particle manager messages.
     @OnMessage(DemoUserMessages.CUserMsg_ParticleManager.class)
     public void onMessage(DemoUserMessages.CUserMsg_ParticleManager message) {
         switch(message.getType()) {
@@ -82,6 +103,7 @@ public class Main {
 
     private void logCreate(DemoUserMessages.CUserMsg_ParticleManager message) {
         int entityHandle = message.getCreateParticle().getEntityHandle();
+        // A handle is entity index plus serial; getByHandle returns null if the slot is empty or holds a different entity.
 //        int entityIndex = Handle.indexForHandle(entityHandle);
 //        int entitySerial = Handle.serialForHandle(entityHandle);
         Entity parent = entities.getByHandle(entityHandle);

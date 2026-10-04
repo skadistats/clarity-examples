@@ -23,6 +23,15 @@ import java.io.PrintStream;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Dumps the flattened serializers from {@code CDemoSendTables} of an S2 replay as an aligned text table.
+ * <p>Writes {@code flattables_<gameVersion>.txt} in the working directory (the project root under Gradle):
+ * per serializer a header {@code name(version)} followed by one line per field with type (and encoder), name,
+ * send node, field serializer, encode flags, bit count, low and high value. The replay is advanced one tick
+ * with a {@link ControllableRunner} and halted. S2 only.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:serializersRun --args "path/to/replay.dem"}
+ */
 @Example(name = "serializers", description = "Dump flattened serializers from SendTables", category = Category.DEV)
 public class Main {
 

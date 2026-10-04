@@ -14,6 +14,16 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Structural probe of {@code CSVCMsg_PacketEntities} sub-fields (S2 replays), companion to
+ * {@code packetentitiesmatch}.
+ * <p>Tests whether {@code non_transmitted_entities} is {@code header_count} UBitVar deltas (including variants
+ * with 0 to 4 trailing bits) and whether {@code serialized_entities} is a UBitVar-delta or pure-varint stream:
+ * exact fit, monotonicity, index range, first-byte and varint-count histograms. Also writes the first large
+ * full frame to {@code /tmp/serialized_initial.bin} and {@code /tmp/nt_initial.bin}.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:packetentitiesprobeRun --args "path/to/replay.dem"}
+ */
 @Example(name = "packetentitiesprobe", description = "Probe PacketEntities structure (internal)", category = Category.DEV)
 public class Main {
 

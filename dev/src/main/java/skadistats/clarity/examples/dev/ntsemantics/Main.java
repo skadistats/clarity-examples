@@ -24,6 +24,16 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Analyses the {@code non_transmitted_entities} sub-message of {@code CSVCMsg_PacketEntities} (S2 replays).
+ * <p>The header is decoded as {@code header_count} pairs of (UBitVar index delta, 1 flag bit). After each
+ * update cycle the listed indices are classified against the entity events of that cycle: touched
+ * (created/updated/entered/left/deleted), active but not touched, or not active. For the first eight packets
+ * with more than one entry a detail dump is printed (counts, flag-versus-active, first 15 entries); the
+ * final summary gives the totals and percentages.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:ntsemanticsRun --args "path/to/replay.dem"}
+ */
 @UsesEntities
 @Example(name = "ntsemantics", description = "Analyze non-transmitted entity packet semantics", category = Category.DEV)
 public class Main {

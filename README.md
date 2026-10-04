@@ -4,12 +4,11 @@ This project contains example code for the [clarity replay parser](https://githu
 
 ## Project structure
 
-The build is split into five Gradle subprojects:
+The build is split into four Gradle subprojects:
 
 - **`examples/`** — teaching/showcase code you read to learn the Clarity API.
 - **`repro/`** — minimal reproducers for specific GitHub issues.
 - **`dev/`** — maintainer-only diagnostic tools, dumpers, and send-table inspectors.
-- **`bench/`** — throughput benchmarks built as `Main`-style apps (distinct from the JMH harness that lives in the root project's `src/jmh/`).
 - **`shared/`** — reusable components consumed by the example subprojects (for example, `ReplayChooser`). Not a directory-per-example tree.
 
 Each subproject has its own `src/main/java/` tree and auto-generates `<name>Run` / `<name>Package` Gradle tasks for every example directory it contains.
@@ -134,6 +133,10 @@ Qualified form (always works):
 
     ./gradlew :examples:<exampleName>Run --args "path/to/replay.dem"
 
+#### Launcher
+
+`./gradlew :shared:launcher` opens a window listing all examples; pick one and a replay to run it.
+
 
 ### Logging
 
@@ -141,6 +144,33 @@ Clarity uses the logback-library for logging. You can enable logging for certain
 `<subproject>/src/main/resources/logback.xml` (one copy per content subproject).
 
 ## Examples
+
+Every example has a class comment in its `Main.java` explaining what it demonstrates and how to run it.
+
+| Example | What it shows | Games |
+|---|---|---|
+| `allchat` | `@OnMessage` on a user message; the minimal processor | Source 2 |
+| `combatlog` | `@OnCombatLogEntry`, formatting combat log entries | Dota 2 (S1, S2) |
+| `cooldowns` | custom events with `@Provides` / `@Initializer`, entity lookups | Dota 2 (S2) |
+| `dumpmana` | `@OnEntityCreated` / `@OnEntityUpdated`, resolving a `FieldPath` by name | Dota 2 |
+| `gameevent` | `@OnGameEvent` for all game events | all |
+| `header` | `Clarity.headerForFile`, no runner | all except CS:GO (S1) |
+| `info` | `Clarity.infoForFile`, reading the file info record | all |
+| `lifestate` | custom spawn/dying/died events from `m_lifeState` changes | Dota 2 |
+| `livesource` | `LiveSource` on a replay that is still being written | all |
+| `matchend` | `ControllableRunner.seek` to the last tick, reading the scoreboard entities | Dota 2 (S1, S2) |
+| `metadata` | `Clarity.metadataForFile` on a Dota match metadata file | Dota 2 (S2) |
+| `modifiers` | `@OnModifierTableEntry` | Dota 2 |
+| `particles` | particle manager messages, `@Insert`, `Entities.getByHandle` | Dota 2, CS2, Deadlock |
+| `position` | hero positions from cell + vector properties, `@OnTickEnd` | Dota 2 (S2) |
+| `propertychange` | `@OnEntityPropertyChanged` with class and property patterns | Dota 2 (S2) |
+| `resources` | `Resources`: resolving model handles to resource paths | Source 2 |
+| `s1tempentities` | `@OnTempEntity` | Source 1 |
+| `s2dotatempentities` | Dota temp entity user messages | Dota 2 (S2) |
+| `s2effectdispatch` | a custom event resolving names through a string table | Source 2 |
+| `seek` | `ControllableRunner.seek` benchmark | all |
+| `spawngroups` | spawn group messages and manifests | Source 2 |
+| `tick` | `@OnTickStart` / `@OnTickEnd` and synthetic ticks | all |
 
 ### AllChat
 
@@ -239,7 +269,7 @@ Follow the instructions above to build and run it with
     <exampleName> = info
 
 
-### Send table inspection (Source 1)
+### Send table inspection
 
 Dota 2 is a game made with the Source engine from Valve. Source manages a set of networked entities
 which exist on the server and are propagated to the client. A lot of stuff you see in a dota match is a networked entity,

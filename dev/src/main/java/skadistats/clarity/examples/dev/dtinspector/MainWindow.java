@@ -11,6 +11,11 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 
+/**
+ * Window of the {@code dtinspector} tool: class tree on the left, property table of the selected class on
+ * the right. The table model is {@link TableModelS1} or {@link TableModelS2} depending on the engine.
+ * Closing the window exits the JVM.
+ */
 public class MainWindow {
 
     private JFrame frmNetpropertyViewer;

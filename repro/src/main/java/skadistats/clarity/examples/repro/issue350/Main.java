@@ -20,7 +20,10 @@ import skadistats.clarity.examples.shared.Example;
  * processor with entity listeners is attached. This Main attaches the same
  * two listeners they used (CCSGameRulesProxy.m_pGameRules.m_totalRoundsPlayed
  * and CCSPlayerController.m_iPawnHealth) and drives the demo through a
- * ControllableRunner.
+ * ControllableRunner, ticking until the end of the replay.
+ *
+ * Run: {@code ./gradlew :repro:issue350Run --args "path/to/cs2-replay.dem"}. Logs tick count, elapsed time
+ * and both listener counters; the issue is reproduced if the run does not finish.
  */
 @UsesEntities
 @Example(name = "issue350", description = "Reproduce hang with entity listeners in CS2", category = Category.REPRO)

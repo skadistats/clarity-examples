@@ -9,6 +9,12 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Parses a replay with the entity processor attached and no listeners, then logs the elapsed time.
+ * Baseline for the entity decoding path, e.g. for profiling or checking that a replay parses at all.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:entityrunRun --args "path/to/replay.dem"}
+ */
 @UsesEntities
 @Example(name = "entityrun", description = "Baseline test of entity parsing path", category = Category.DEV)
 public class Main {

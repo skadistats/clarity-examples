@@ -14,6 +14,16 @@ import skadistats.clarity.wire.shared.demo.proto.Demo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Checks whether the class list in {@code CDemoClassInfo} (demo-level message) equals the one in
+ * {@code CSVCMsg_ClassInfo} (net message) for a replay.
+ * <p>Both messages are captured during a {@link SimpleRunner} pass; classes are compared by position on
+ * class id, network/class name and table name. Logs {@code EQUAL}, or {@code DIFFERENT} plus one line per
+ * mismatch or extra entry. If only one of the two messages occurs in the replay, that is logged instead
+ * and no comparison happens.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:classinfocmpRun --args "path/to/replay.dem"}
+ */
 @Example(name = "classinfocmp", description = "Compare CDemoClassInfo vs CSVCMsg_ClassInfo class lists", category = Category.DEV)
 public class Main {
 

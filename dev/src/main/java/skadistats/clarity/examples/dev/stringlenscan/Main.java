@@ -16,6 +16,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * Scans every {@code .dem} file below {@code replays/} (relative to the working directory, symlinks
+ * followed) and reports the maximum string lengths seen in string tables and, for S2, in resource manifests.
+ * <p>The engine is derived from a {@code /s1/} or {@code /s2/} path segment. Reports max table-name length,
+ * per-table longest entry name (with engines and an example), tables without entries, and for S2 the longest
+ * resource directory, extension, name and full path. Replays that fail to parse are skipped with a message on
+ * stderr. Takes no arguments and no replay chooser; runtime is that of parsing all replays.
+ * <p>Run: {@code ./gradlew :dev:stringlenscanRun}
+ */
 @Example(name = "stringlenscan", description = "Scan all replays and report max string lengths in string tables and resources", category = Category.DEV)
 public class Main {
 

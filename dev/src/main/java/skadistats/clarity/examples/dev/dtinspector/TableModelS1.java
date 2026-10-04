@@ -6,6 +6,9 @@ import skadistats.clarity.model.s1.S1DTClass;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Table model listing the receive props of an {@link S1DTClass}: name, type, source, priority and flags.
+ */
 public class TableModelS1 extends AbstractTableModel {
     private static final long serialVersionUID = 2946867068203801119L;
 

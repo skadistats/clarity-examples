@@ -13,6 +13,19 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Prints hero mana and max mana of a Dota 2 replay whenever either value is created or changes.
+ *
+ * <p>Demonstrates the entity API: {@link OnEntityCreated} and {@link OnEntityUpdated} handlers,
+ * {@link UsesEntities} to have the entities processor registered, and reading properties through a
+ * {@link FieldPath} resolved once by name ({@link Entity#getFieldPathForName(String)}).
+ * Heroes are recognised by the DT class name prefix {@code CDOTA_Unit_Hero}. Each output line is
+ * {@code <class name> (<mana>/<maxMana>)}.
+ *
+ * <p>The property names {@code m_flMana} and {@code m_flMaxMana} are Dota 2 names.
+ *
+ * <p>Run: {@code ./gradlew :examples:dumpmanaRun --args "path/to/replay.dem"}
+ */
 @UsesEntities
 @Example(name = "dumpmana", description = "Print hero mana/max-mana values over time", category = Category.DOCS)
 public class Main {
@@ -26,6 +39,8 @@ public class Main {
         return e.getDtClass().getDtName().startsWith("CDOTA_Unit_Hero");
     }
 
+    // Resolving a name to a FieldPath is a lookup; do it once and reuse the path for reads and for
+    // comparing against the changed paths of an update.
     private void ensureFieldPaths(Entity e) {
         if (mana == null) {
             mana = e.getFieldPathForName("m_flMana");
@@ -33,6 +48,7 @@ public class Main {
         }
     }
 
+    // fires once per new entity, with its state already populated
     @OnEntityCreated
     public void onCreated(Entity e) {
         if (!isHero(e)) {
@@ -42,6 +58,7 @@ public class Main {
         System.out.format("%s (%s/%s)\n", e.getDtClass().getDtName(), e.getPropertyForFieldPath(mana), e.getPropertyForFieldPath(maxMana));
     }
 
+    // updatedPaths holds the field paths changed by the packet; only the first updateCount entries are valid
     @OnEntityUpdated
     public void onUpdated(Entity e, FieldPath[] updatedPaths, int updateCount) {
         if (!isHero(e)) {

@@ -16,6 +16,14 @@ import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
 
+/**
+ * Swing GUI browser for the data table classes ({@link DTClasses}) of a replay. Opens a window, so it needs a display.
+ * <p>The replay is parsed completely first. The left pane shows the class tree (S1 classes nested under
+ * their super class, S2 classes flat), the right pane a sortable property table for the selected class
+ * ({@link TableModelS1} or {@link TableModelS2}).
+ * <p>Arguments: {@code [replay]}. The JVM stays alive until the window is closed.
+ * <p>Run: {@code ./gradlew :dev:dtinspectorRun --args "path/to/replay.dem"}
+ */
 @UsesDTClasses
 @Example(name = "dtinspector", description = "GUI browser for data table classes in replay", category = Category.DEV)
 public class Main {

@@ -17,6 +17,12 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Prints the names of all string tables created while parsing a replay, then the {@code toString()} of
+ * each table in its final state.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:stringtabledumpRun --args "path/to/replay.dem"}
+ */
 @UsesStringTable("*")
 @Example(name = "stringtabledump", description = "Extract and print all string tables", category = Category.DEV)
 public class Main {

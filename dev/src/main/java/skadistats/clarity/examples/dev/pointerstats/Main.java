@@ -17,6 +17,15 @@ import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 import java.io.IOException;
 import java.util.TreeMap;
 
+/**
+ * Counts pointer fields in the flattened serializers of an S2 replay, bucketed by number of possible
+ * serializers (declared type plus polymorphic types).
+ * <p>Only {@code CDemoSendTables} is evaluated: the replay is advanced one tick with a
+ * {@link ControllableRunner} and halted. Prints each polymorphic pointer field (type, name, base serializer,
+ * alternatives), then one line per bucket and the total, headed by the game version.
+ * <p>Arguments: {@code [replay]}. S2 only.
+ * <p>Run: {@code ./gradlew :dev:pointerstatsRun --args "path/to/replay.dem"}
+ */
 @Example(name = "pointerstats", description = "Count pointer fields by polymorphic type count", category = Category.DEV)
 public class Main {
 

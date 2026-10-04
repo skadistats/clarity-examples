@@ -21,6 +21,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+/**
+ * Decodes every entry of the {@code instancebaseline} string table and writes a field-level trace per
+ * entity class.
+ * <p>After the replay has been parsed, each baseline entry (name {@code <classId>} or
+ * {@code <classId>:<suffix>}) is read with a {@link FieldReader} whose {@code FieldReader.Debug.STREAM} is
+ * redirected to {@code baselines/<buildNumber|latest>/<dtName>[_<suffix>].txt} (relative to the working
+ * directory, which Gradle sets to the project root). Decode failures and baselines that leave an unexpected
+ * number of unread bits ({@code OFF}) are noted in the file and logged.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:dumpbaselinesRun --args "path/to/replay.dem"}
+ */
 @UsesDTClasses
 @UsesStringTable("instancebaseline")
 @Example(name = "dumpbaselines", description = "Export entity baselines to text files", category = Category.DEV)

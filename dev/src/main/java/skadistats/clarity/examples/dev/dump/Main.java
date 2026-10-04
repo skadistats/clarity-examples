@@ -13,6 +13,14 @@ import skadistats.clarity.wire.cs.csgo.proto.CsgoNetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 
+/**
+ * Logs the class name of every message in a replay and, by default, its {@code toString()} text-format dump.
+ * <p>Voice data messages ({@code CSVCMsg_VoiceData}, all engines) are skipped unless {@code dumpAudio} is set.
+ * Works for S1 and S2 replays since it listens for {@link GeneratedMessage}. Output is very large for full
+ * replays; redirect it to a file. {@link #run(String, boolean, boolean)} is also used by {@code cstest}.
+ * <p>Arguments: {@code [replay]} ({@code main} uses {@code dumpAudio=false}, {@code dumpMessage=true}).
+ * <p>Run: {@code ./gradlew :dev:dumpRun --args "path/to/replay.dem"}
+ */
 @Example(name = "dump", description = "Dump all replay messages with optional content", category = Category.DEV)
 public class Main {
 

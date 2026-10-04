@@ -19,11 +19,25 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Entry point that lists every {@link Example}-annotated {@code Main} on the classpath and runs one of them
+ * in-process.
+ * <ul>
+ *   <li>With {@code args[0]} = example name: runs that example on a worker thread, forwarding the remaining
+ *       arguments (usually the replay path). Unknown name: lists the examples, exit code 1.</li>
+ *   <li>Without arguments: opens a Swing window (tree by {@link Category}, Run button, log pane); the examples'
+ *       stdout/stderr is mirrored into the log pane. Headless: prints usage, exit code 2. Examples started from
+ *       the window get no arguments, so they obtain the replay via {@link ReplayChooser}.</li>
+ * </ul>
+ * <p>Run: {@code ./gradlew :shared:launcher} or {@code ./gradlew :shared:launcher --args "<name> <replay.dem>"}.
+ * The {@code shared} project has the examples, repro and dev projects on its runtime classpath.
+ */
 public final class ExampleLauncher {
 
     private ExampleLauncher() {
     }
 
+    /** Launcher entry point; see the class documentation for argument handling. */
     public static void main(String[] args) {
         Map<String, ExampleEntry> registry = buildRegistry();
         if (registry.isEmpty()) {
@@ -77,6 +91,7 @@ public final class ExampleLauncher {
         System.setErr(new PrintStream(new TeeStream(originalErr, sink), true, StandardCharsets.UTF_8));
     }
 
+    /** Collects all {@link Example} classes into a name-sorted map; later entries with a duplicate name replace earlier ones. */
     static Map<String, ExampleEntry> buildRegistry() {
         Map<String, ExampleEntry> m = new TreeMap<>();
         for (Class<?> cls : ClassIndex.getAnnotated(Example.class)) {
@@ -87,6 +102,12 @@ public final class ExampleLauncher {
         return m;
     }
 
+    /**
+     * Invokes {@code entry}'s {@code main(String[])} reflectively on a new non-daemon thread named
+     * {@code example-<name>}. Exceptions are printed to stderr, not rethrown.
+     *
+     * @return the started thread
+     */
     static Thread runOnWorker(ExampleEntry entry, String[] args) {
         Thread t = new Thread(() -> {
             try {
@@ -114,6 +135,7 @@ public final class ExampleLauncher {
                 .forEach(e -> System.err.format("  [%s] %-24s %s%n", e.category(), e.name(), e.description()));
     }
 
+    /** Registry entry: the {@link Example} attributes plus the annotated class. */
     record ExampleEntry(String name, String description, Category category, Class<?> mainClass) {
         @Override
         public String toString() {

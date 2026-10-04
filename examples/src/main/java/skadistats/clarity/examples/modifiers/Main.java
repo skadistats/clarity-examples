@@ -11,9 +11,25 @@ import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
 
+/**
+ * Prints every modifier (buff/debuff) table entry of a Dota 2 replay.
+ *
+ * <p>Demonstrates {@link OnModifierTableEntry}, an event that Clarity raises for each entry with data in the
+ * {@code "ActiveModifiers"} string table, already decoded to a {@code CDOTAModifierBuffTableEntry} protobuf message.
+ * Each entry is printed with its protobuf {@code toString()}.
+ *
+ * <p>Dota 2 only; the processor is documented as Dota 2 and uses the Dota modifier message type. Logs the total run time.
+ *
+ * <p>Run:
+ * <pre>
+ * ./gradlew :examples:modifiersRun --args "path/to/replay.dem"
+ * </pre>
+ */
 @Example(name = "modifiers", description = "Print modifier/buff table entries from replay", category = Category.DOCS)
 public class Main {
 
+    // Handler signature: ([Context ctx,] CDOTAModifierBuffTableEntry entry). If an entry fails to parse, Clarity logs it
+    // and passes the incomplete message.
     @OnModifierTableEntry()
     public void onModifierEntry(DOTAModifiers.CDOTAModifierBuffTableEntry e) {
         System.out.println(e);

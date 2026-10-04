@@ -15,6 +15,21 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Prints the combat log of a Dota 2 replay as human-readable lines.
+ *
+ * <p>Demonstrates {@link OnCombatLogEntry}. The handler is called for each {@link CombatLogEntry}
+ * collected since the previous tick end. Clarity builds these entries from the {@code dota_combatlog}
+ * game event on Source 1 and from {@code CMsgDOTACombatLogEntry} messages on Source 2 and exposes
+ * both through {@link CombatLogEntry}, so the example works with both Dota 2 engines. The
+ * {@code switch} over {@link DOTACombatLog.DOTA_COMBATLOG_TYPES} formats each entry type; which
+ * accessors are meaningful (attacker, target, inflictor, value, ...) depends on the type, and
+ * types without a case are printed raw.
+ *
+ * <p>Output goes through the logger; the bracketed prefix is the game time of the entry.
+ *
+ * <p>Run: {@code ./gradlew :examples:combatlogRun --args "path/to/replay.dem"}
+ */
 @Example(name = "combatlog", description = "Extract and format combat log from replay events", category = Category.DOCS)
 public class Main {
 
@@ -22,6 +37,7 @@ public class Main {
 
     private final DateTimeFormatter GAMETIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
+    // Names can be null (e.g. no attacker); illusions share the name of their hero, so mark them.
     private String compileName(String name, boolean isIllusion) {
         return name != null ? name + (isIllusion ? " (Illusion)" : "") : "UNKNOWN";
     }
@@ -36,6 +52,7 @@ public class Main {
 
     @OnCombatLogEntry
     public void onCombatLogEntry(CombatLogEntry cle) {
+        // getTimestamp() is the game time in seconds (float); format it as HH:mm:ss.SSS
         Duration gameTimeMillis = Duration.ofMillis((int) (1000.0f * cle.getTimestamp()));
         LocalTime gameTime = LocalTime.MIDNIGHT.plus(gameTimeMillis);
         String time = "[" + GAMETIME_FORMATTER.format(gameTime) + "]";
@@ -383,6 +400,7 @@ public class Main {
                 break;
 
             default:
+                // entry types without a dedicated format: print type name, number and the raw entry
                 DOTACombatLog.DOTA_COMBATLOG_TYPES type = cle.getType();
                 log.info("{} ({}): {}", type.name(), type.getNumber(), cle);
                 break;

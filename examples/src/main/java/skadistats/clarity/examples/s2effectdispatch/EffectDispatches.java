@@ -30,18 +30,23 @@ import skadistats.clarity.wire.shared.s2.proto.S2TempEntities.CMsgTEEffectDispat
  * exists in S2 replays, so the {@code @OnMessage} handler is silently
  * inactive on S1 replays.</p>
  */
+// Declares that this class provides (raises) OnEffectDispatch.
 @Provides({ OnEffectDispatch.class })
+// Without this, the runtime does not track the EffectDispatch string table and OnStringTableCreated never fires for it.
 @UsesStringTable("EffectDispatch")
 public class EffectDispatches {
 
     private StringTable dispatchTable;
     private OnEffectDispatch.Event evDispatch;
 
+    // Called once per listener of OnEffectDispatch. Creating the event here, after all listeners are bound,
+    // gives an Event that calls them; if there are no listeners, evDispatch stays null and nothing is raised.
     @Initializer(OnEffectDispatch.class)
     public void initOnDispatch(final Context ctx, final EventListener<OnEffectDispatch> el) {
         evDispatch = ctx.createEvent(OnEffectDispatch.class);
     }
 
+    // Keep the table; entries added later are looked up in it at dispatch time.
     @OnStringTableCreated
     public void onStringTableCreated(int tableNum, StringTable table) {
         if ("EffectDispatch".equals(table.getName())) {
@@ -60,6 +65,7 @@ public class EffectDispatches {
                 kind = dispatchTable.getNameByIndex(idx);
             }
         }
+        // kind stays null if the table or index is missing.
         evDispatch.raise(kind, data);
     }
 }

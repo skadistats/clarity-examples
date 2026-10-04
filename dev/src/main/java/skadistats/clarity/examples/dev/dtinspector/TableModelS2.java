@@ -5,6 +5,10 @@ import skadistats.clarity.model.s2.S2DTClass;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Table model listing the serializer fields of an {@link S2DTClass}: index, name, type and encode flags.
+ * The model reports four columns; the fifth defined column ("Encoder") is never shown.
+ */
 public class TableModelS2 extends AbstractTableModel {
     private static final long serialVersionUID = 2946867068203801119L;
 

@@ -11,11 +11,28 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Prints ability and item cooldown starts, resets and expirations of a Dota 2 replay, as
+ * {@code <tick>: <ability class> on <owner class> cooldown started/reset/ended}.
+ *
+ * <p>Demonstrates consuming custom events: {@link OnAbilityCooldownStart},
+ * {@link OnAbilityCooldownReset} and {@link OnAbilityCooldownEnd} are annotations defined in this
+ * package and raised by the processor {@link Cooldowns}. This class only declares handlers;
+ * Clarity finds the providing processor through its {@code @Provides} annotation and instantiates it. The
+ * handlers are plain methods whose parameters follow the {@code Listener} interface of each
+ * annotation. Also shows {@code @Insert} of the {@link Context} to read the current tick.
+ *
+ * <p>Dota 2 Source 2 only: the end check reads the game time from the {@code CDOTAGamerulesProxy}
+ * entity.
+ *
+ * <p>Run: {@code ./gradlew :examples:cooldownsRun --args "path/to/replay.dem"}
+ */
 @Example(name = "cooldowns", description = "Track ability cooldown events (start, reset, end)", category = Category.DOCS)
 public class Main {
 
     private final Logger log = LoggerFactory.getLogger(Main.class.getPackage().getClass());
 
+    // injects the runner context; getTick() returns the tick currently being processed
     @Insert
     private Context ctx;
 

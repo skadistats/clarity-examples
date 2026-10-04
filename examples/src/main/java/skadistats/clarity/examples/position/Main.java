@@ -25,6 +25,28 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Prints the position of every player's hero whenever it changes, in a Dota 2 Source 2 replay.
+ *
+ * <p>Demonstrates {@link OnEntityUpdated} together with field paths resolved once and compared against the changed
+ * paths, instead of looking properties up by name on every update. Flow:
+ * <ol>
+ * <li>{@link OnDTClassesComplete}: look up the {@code CDOTA_PlayerResource} class in {@link DTClasses}.</li>
+ * <li>When the player resource entity is updated, check for each of the 10 player slots whether
+ * {@code m_vecPlayerTeamData.<i>.m_hSelectedHero} changed. If so, remember the hero entity that handle refers to.</li>
+ * <li>When any other entity is updated, check whether it is one of the remembered heroes and whether one of its
+ * {@code CBodyComponent.m_cellX/Y/Z} or {@code m_vecX/Y/Z} properties changed; if so print the position
+ * {@code cell * 128 + vec} per axis.</li>
+ * </ol>
+ *
+ * <p>Dota 2 Source 2 only (class {@code CDOTA_PlayerResource}, {@code CBodyComponent}, fixed 10 player slots).
+ * Logs the total run time.
+ *
+ * <p>Run:
+ * <pre>
+ * ./gradlew :examples:positionRun --args "path/to/replay.dem"
+ * </pre>
+ */
 @UsesEntities
 @Example(name = "position", description = "Track and log hero position updates throughout match", category = Category.DOCS)
 public class Main {
@@ -42,6 +64,7 @@ public class Main {
     private final HeroLookup[] heroLookup = new HeroLookup[10];
     private final List<Runnable> deferredActions = new ArrayList<>();
 
+    // Fires once the entity classes exist, so they can be looked up by name before any entity is created.
     @OnDTClassesComplete
     protected void onDtClassesComplete() {
         playerResourceClass = dtClasses.forDtName("CDOTA_PlayerResource");
@@ -56,6 +79,8 @@ public class Main {
         }
     }
 
+    // Fires after a packet was applied to an existing entity, with the field paths that changed. It is not raised for
+    // entity creation. Without a classPattern it is called for every entity.
     @OnEntityUpdated
     protected void onEntityUpdated(Entity e, FieldPath[] changedFieldPaths, int nChangedFieldPaths) {
         if (e.getDtClass() == playerResourceClass) {
@@ -64,6 +89,7 @@ public class Main {
                 PlayerResourceLookup lookup = playerLookup[p];
                 if (lookup.isSelectedHeroChanged(e, changedFieldPaths, nChangedFieldPaths)) {
                     int playerIndex = p;
+                    // The handle is resolved to an entity later, at the end of the tick, not inside this callback.
                     deferredActions.add(() -> {
                         int heroHandle = lookup.getSelectedHeroHandle(e);
                         System.out.format("Player %02d got assigned hero %d\n", playerIndex, heroHandle);
@@ -85,6 +111,7 @@ public class Main {
         }
     }
 
+    // Runs the actions queued during the tick's entity updates.
     @OnTickEnd
     protected void onTickEnd(boolean synthetic) {
         deferredActions.forEach(Runnable::run);
@@ -116,12 +143,14 @@ public class Main {
 
         private final FieldPath fpSelectedHero;
 
+        // The field path is resolved once per player; array elements are named with a four-digit index (for example 0003).
         private PlayerResourceLookup(Entity playerResource, int idx) {
             this.fpSelectedHero = playerResource.getFieldPathForName(
                     format("m_vecPlayerTeamData.%s.m_hSelectedHero", Util.arrayIdxToString(idx))
             );
         }
 
+        // changedFieldPaths holds the changed paths in its first nChangedFieldPaths entries.
         private boolean isSelectedHeroChanged(Entity playerResource, FieldPath[] changedFieldPaths, int nChangedFieldPaths) {
             for (int f = 0; f < nChangedFieldPaths; f++) {
                 FieldPath changedFieldPath = changedFieldPaths[f];
@@ -182,6 +211,7 @@ public class Main {
             );
         }
 
+        // Source 2 stores a position as a cell index plus an offset within the cell; one cell is 128 units wide.
         private float getPositionComponent(FieldPath fpCell, FieldPath fpVec) {
             int cell = heroEntity.getPropertyForFieldPath(fpCell);
             float vec = heroEntity.getPropertyForFieldPath(fpVec);

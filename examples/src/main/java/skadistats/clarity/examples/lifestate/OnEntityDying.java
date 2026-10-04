@@ -12,6 +12,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Set;
 
+/**
+ * Custom event raised by {@link SpawnsAndDeaths} when the {@code m_lifeState} of an entity changes to 1.
+ *
+ * <p>Handler signature: {@code void onX(Entity e)}.
+ *
+ * <p>The annotation is an event listener marker ({@link UsagePointType#EVENT_LISTENER}); the nested
+ * {@code Listener} interface defines the handler signature and the nested {@code Event} class is what
+ * the provider calls via {@code raise} to invoke all listeners, with a listener's exception routed to
+ * {@code handleListenerException}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
 @UsagePointMarker(value = UsagePointType.EVENT_LISTENER)

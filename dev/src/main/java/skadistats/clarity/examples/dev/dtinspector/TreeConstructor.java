@@ -13,6 +13,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Builds the Swing tree for the {@code dtinspector} class browser from {@link DTClasses}. Children are
+ * sorted by dt name. S1 classes are nested under their super class; S2 classes have no super class and
+ * appear directly below the (hidden) root.
+ */
 public class TreeConstructor {
 
     public static class TreePayload {

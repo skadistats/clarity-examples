@@ -10,6 +10,13 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Counts {@code CDemoFullPacket} messages (S2 replays) and prints tick info for them.
+ * <p>Prints the first five and then every 50th occurrence with its tick, followed by a summary with the total
+ * count and the first and last tick. Useful to see the full-packet (keyframe) spacing of a replay.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:fullpacketcountRun --args "path/to/replay.dem"}
+ */
 @Example(name = "fullpacketcount", description = "Count and log CDemoFullPacket occurrences", category = Category.DEV)
 public class Main {
 

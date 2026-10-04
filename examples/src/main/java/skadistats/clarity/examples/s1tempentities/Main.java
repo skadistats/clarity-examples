@@ -38,6 +38,12 @@ import skadistats.clarity.examples.shared.Example;
  *       {@code DT_TEExplosion}, {@code DT_TEDynamicLight}.</li>
  * </ul>
  *
+ * <p>Prints the histogram (DT class name, count) and the total run time through the logger at the end.
+ * Shows {@link OnTempEntity} with {@link SimpleRunner}. The event is only provided for the Source 1 engines
+ * (Dota 2 S1 and CSGO); on Source 2 replays no listener call ever happens.</p>
+ *
+ * <p>Run: {@code ./gradlew :examples:s1tempentitiesRun --args "path/to/replay.dem"}</p>
+ *
  * <p>For Source 2 (modern Dota 2, CS2, Deadlock), see the
  * {@code s2effectdispatch} and {@code s2dotatempentities} examples — S2
  * ships temp entities through entirely different mechanisms.</p>
@@ -49,6 +55,7 @@ public class Main {
 
     private final Map<String, Long> byDtClass = new TreeMap<>();
 
+    // Temp entities have no index/serial and are not tracked after this call; only their DT class and state are meaningful.
     @OnTempEntity
     public void onTempEntity(Entity e) {
         byDtClass.merge(e.getDtClass().getDtName(), 1L, Long::sum);

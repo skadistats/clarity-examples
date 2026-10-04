@@ -14,6 +14,22 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Checks the semantics of {@link OnTickStart} and {@link OnTickEnd}.
+ *
+ * <p>Both events carry a {@code synthetic} flag. A tick is synthetic if the replay has no data for that tick
+ * number; the runner raises start/end events for such ticks to step through the gap up to the next tick that has
+ * data. The example counts the messages seen between start and end of each tick (using {@link OnMessage} with the
+ * default {@code GeneratedMessage}, which matches every message), logs one line per tick
+ * ({@code tick N, synthetic X, had M messages}) and throws if a synthetic tick had messages or a real tick had
+ * none.</p>
+ *
+ * <p>Works with all supported engines. {@code main} uses {@link #run} with a {@link SimpleRunner}.
+ * {@link #runControlled} does the same with a {@link ControllableRunner}, stepping through the replay with
+ * {@code tick()}; it is not called from {@code main}.</p>
+ *
+ * <p>Run: {@code ./gradlew :examples:tickRun --args "path/to/replay.dem"}</p>
+ */
 @Example(name = "tick", description = "Validate tick event semantics (start/end, synthetic)", category = Category.DOCS)
 public class Main {
 
@@ -22,9 +38,10 @@ public class Main {
     private int tick;
     private int count;
 
+    // synthetic == true: no data for this tick number (gap between two data ticks).
     @OnTickStart
     public void onTickStart(Context ctx, boolean synthetic) {
-        tick = ctx.getTick();
+        tick = ctx.getTick(); // the runner's current tick number
         count = 0;
     }
 
@@ -39,6 +56,7 @@ public class Main {
         }
     }
 
+    // No value(): called for every decoded message.
     @OnMessage
     public void onMessage(Context ctx, GeneratedMessage message) {
         count++;
@@ -60,6 +78,7 @@ public class Main {
         String replay = ReplayChooser.choose(args);
         if (replay == null) return;
         try (MappedFileSource source = new MappedFileSource(replay)) {
+            // runWith leaves the runner at the end of tick 0; each tick() blocks until the end of the next tick.
             ControllableRunner runner = new ControllableRunner(source).runWith(this);
             try {
                 while (!runner.isAtEnd()) {

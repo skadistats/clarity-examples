@@ -12,6 +12,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Set;
 
+/**
+ * Custom event raised by {@link Cooldowns} when a cooldown starts or is extended.
+ *
+ * <p>Handler signature: {@code void onX(Entity ability, Entity owner, Float endTime)}. {@code owner} may be {@code null} if it cannot be resolved. {@code endTime} is the game time in seconds at which the cooldown expires.
+ *
+ * <p>The annotation is an event listener marker ({@link UsagePointType#EVENT_LISTENER}); the nested
+ * {@code Listener} interface defines the handler signature and the nested {@code Event} class is what
+ * the provider calls via {@code raise} to invoke all listeners, with a listener's exception routed to
+ * {@code handleListenerException}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
 @UsagePointMarker(value = UsagePointType.EVENT_LISTENER)

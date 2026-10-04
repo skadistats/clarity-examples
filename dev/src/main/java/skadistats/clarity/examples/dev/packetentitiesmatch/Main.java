@@ -22,6 +22,14 @@ import skadistats.clarity.examples.shared.ReplayChooser;
 import skadistats.clarity.examples.shared.Category;
 import skadistats.clarity.examples.shared.Example;
 
+/**
+ * Hypothesis tester for the {@code serialized_entities} field of {@code CSVCMsg_PacketEntities} (S2 replays).
+ * <p>The field is decoded as a plain varint sequence and each value is compared against the entities active
+ * after the update cycle: as handle, index, serial and class id, as cumulative-delta index, and as class id.
+ * Prints hit counts and rates per hypothesis. Output is a statistical summary, not a decoder.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:packetentitiesmatchRun --args "path/to/replay.dem"}
+ */
 @UsesEntities
 @UsesDTClasses
 @Example(name = "packetentitiesmatch", description = "Test hypotheses on PacketEntities encoding", category = Category.DEV)

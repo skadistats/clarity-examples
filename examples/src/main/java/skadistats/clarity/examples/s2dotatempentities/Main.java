@@ -40,6 +40,11 @@ import skadistats.clarity.examples.shared.Example;
  * fields directly. This example simply counts each kind and prints the
  * first projectile's payload as a sanity check.</p>
  *
+ * <p>Prints the first projectile's payload, then a histogram (message class name, count) and the total run
+ * time through the logger. Shows {@link OnMessage} selecting a message class, with {@link SimpleRunner}.</p>
+ *
+ * <p>Run: {@code ./gradlew :examples:s2dotatempentitiesRun --args "path/to/replay.dem"}</p>
+ *
  * <p>Only meaningful on Dota 2 Source 2 replays. The handlers will silently
  * not fire on CSGO/CS2/Deadlock replays since these messages do not exist
  * there.</p>
@@ -56,6 +61,7 @@ public class Main {
         counts.merge(m.getClass().getSimpleName(), 1L, Long::sum);
     }
 
+    // value() selects the exact message class; the handler parameter must be of that type.
     @OnMessage(CDOTAUserMsg_TE_Projectile.class)
     public void onProjectile(CDOTAUserMsg_TE_Projectile m) {
         count(m);

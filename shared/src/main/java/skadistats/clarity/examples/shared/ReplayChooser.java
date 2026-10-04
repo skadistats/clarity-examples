@@ -50,6 +50,15 @@ public final class ReplayChooser {
     private ReplayChooser() {
     }
 
+    /**
+     * Resolves the replay path using the cascade described in the class documentation.
+     *
+     * @param args the example's {@code main} arguments; only {@code args[0]} is considered (may be {@code null})
+     * @return absolute path of the replay, or {@code null} if the user cancelled the file dialog. In a
+     *         headless environment with no usable argument, environment variable or history the process exits
+     *         with status 2. In headless mode a history entry is reused without a dialog; only a chosen file
+     *         is written back to the history.
+     */
     public static String choose(String[] args) {
         if (args != null && args.length > 0 && isReadableFile(args[0])) {
             return absolute(args[0]);

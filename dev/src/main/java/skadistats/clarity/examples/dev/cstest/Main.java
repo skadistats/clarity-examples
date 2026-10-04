@@ -10,6 +10,14 @@ import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.processor.stringtables.OnPlayerInfo;
 import skadistats.clarity.source.MappedFileSource;
 
+/**
+ * Scratch driver that runs other tools against a hand-picked set of replays.
+ * <p>{@code main} ignores its arguments. It runs {@code runEntities(B_3)} (the {@code entityrun} tool on one
+ * hard-coded CS2 replay path); the other run methods (info, dump, particles, game events, spawn groups,
+ * resources, string tables, player info) are commented out in {@code main} and are enabled by editing the
+ * source. The replay constants are absolute paths on the maintainer's machine.
+ * <p>Run: {@code ./gradlew :dev:cstestRun}.
+ */
 @Example(name = "cstest", description = "Test various replay parsing modes (internal)", category = Category.DEV)
 public class Main {
 

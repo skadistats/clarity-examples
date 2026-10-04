@@ -30,7 +30,7 @@ import skadistats.clarity.examples.shared.Example;
  * Run with first arg = path to a .dem file, optional second arg "close" to
  * close the source after each iteration (control: should NOT leak).
  *
- * Tip: launch via `bash -c 'ulimit -n 256 && ./gradlew issue289Run --args ...'`
+ * Tip: launch via {@code bash -c 'ulimit -n 256 && ./gradlew issue289Run --args ...'}
  * to make the FD leak surface within seconds.
  */
 @Example(name = "issue289", description = "Reproduce FD leak in ControllableRunner", category = Category.REPRO)

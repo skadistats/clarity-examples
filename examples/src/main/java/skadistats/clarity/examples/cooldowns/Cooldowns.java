@@ -19,10 +19,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Provides custom events for ability/item cooldown transitions.
+ * Provider of the custom events {@link OnAbilityCooldownStart}, {@link OnAbilityCooldownReset} and
+ * {@link OnAbilityCooldownEnd}, for ability and item cooldown transitions in Dota 2.
  *
- * Watches the {@code m_fCooldown} property (the absolute game time at which
- * the cooldown expires) on every entity that has it. Two events are raised:
+ * <p>Watches the {@code m_fCooldown} property (the absolute game time at which
+ * the cooldown expires) on every entity that has it. Three events are raised:
  *
  * <ul>
  *   <li>{@link OnAbilityCooldownStart} — when {@code m_fCooldown} changes to
@@ -37,18 +38,28 @@ import java.util.Map;
  *       tick and firing for every pending cooldown whose end time has
  *       passed.</li>
  * </ul>
+ *
+ * <p>Pattern shown here: {@link Provides} declares the provided annotations, an {@link Initializer}
+ * per annotation creates its event via {@link Context#createEvent(Class)} when a listener exists
+ * (an event field stays {@code null} otherwise), and {@link Insert} injects the {@link Entities}
+ * processor. The game time for the end check is read from {@code CDOTAGamerulesProxy}
+ * ({@code m_pGameRules.m_fGameTime}), which is a Source 2 property path.
  */
 @UsesEntities
 @Provides({ OnAbilityCooldownStart.class, OnAbilityCooldownReset.class, OnAbilityCooldownEnd.class })
 public class Cooldowns {
 
+    // class id -> resolved field path (null value: the class has no such property)
     private final Map<Integer, FieldPath> cooldownPaths = new HashMap<>();
     private final Map<Integer, FieldPath> ownerPaths = new HashMap<>();
+    // entity index -> last seen m_fCooldown
     private final Map<Integer, Float> currentCooldown = new HashMap<>();
+    // entity index -> end time of the running cooldown, checked against game time at each tick end
     private final Map<Integer, Float> pendingExpiration = new HashMap<>();
 
     private FieldPath gameTimePath;
 
+    // injects the Entities processor (available because of @UsesEntities)
     @Insert
     private Entities entities;
 
@@ -56,6 +67,7 @@ public class Cooldowns {
     private OnAbilityCooldownReset.Event evReset;
     private OnAbilityCooldownEnd.Event evEnd;
 
+    // runs once per listener of the annotation; creates the event object that raises it
     @Initializer(OnAbilityCooldownStart.class)
     public void initOnStart(final Context ctx, final EventListener<OnAbilityCooldownStart> el) {
         evStart = ctx.createEvent(OnAbilityCooldownStart.class);
@@ -80,11 +92,13 @@ public class Cooldowns {
         }
     }
 
+    // entity indices are reused, so drop the cached state when an entity goes away
     @OnEntityDeleted
     public void onDeleted(Context ctx, Entity e) {
         clearCachedState(e);
     }
 
+    // updates may touch other properties only, so check that m_fCooldown is among the changed paths
     @OnEntityUpdated
     public void onUpdated(Context ctx, Entity e, FieldPath[] fieldPaths, int num) {
         FieldPath p = getFieldPathForEntity(e);
@@ -109,6 +123,7 @@ public class Cooldowns {
     private Entity resolveOwner(Entity e) {
         FieldPath op = ownerPaths.get(e.getDtClass().getClassId());
         if (op == null) return null;
+        // m_hOwnerEntity is an entity handle (index plus serial), not an index
         Integer handle = e.getPropertyForFieldPath(op);
         if (handle == null) return null;
         return entities.getByHandle(handle);
@@ -144,6 +159,7 @@ public class Cooldowns {
     @OnTickEnd
     public void onTickEnd(Context ctx, boolean synthetic) {
         if (pendingExpiration.isEmpty() || evEnd == null) return;
+        // expiry is not a property change, so compare the pending end times with the current game time
         Entity rules = entities.stream()
                 .filter(Entities.byDtName("CDOTAGamerulesProxy"))
                 .findFirst()

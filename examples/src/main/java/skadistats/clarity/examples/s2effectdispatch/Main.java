@@ -15,8 +15,16 @@ import skadistats.clarity.examples.shared.Example;
 /**
  * Demonstrates the {@link EffectDispatches} provider on a Source 2 replay.
  *
- * Counts effect dispatches by resolved handler name and prints a histogram
- * at the end of the run.
+ * <p>{@link OnEffectDispatch} is a custom event, not part of Clarity itself. {@link EffectDispatches} provides
+ * it, {@link OnEffectDispatch} defines its handler signature. This class listens to it, counts dispatches by
+ * resolved handler name ({@code <unresolved>} if the name could not be looked up) and logs a histogram and the
+ * total run time at the end.</p>
+ *
+ * <p>Shows how to add your own event to Clarity: the provider instance is passed to
+ * {@code runWith(...)} next to the listener object, so the runner registers both. Works with Source 2 replays only (Dota 2, CS2, Deadlock),
+ * as {@code CMsgTEEffectDispatch} does not exist in Source 1.</p>
+ *
+ * <p>Run: {@code ./gradlew :examples:s2effectdispatchRun --args "path/to/replay.dem"}</p>
  */
 @Example(name = "s2effectdispatch", description = "Count effect dispatch handlers in Source 2", category = Category.DOCS)
 public class Main {
@@ -25,6 +33,7 @@ public class Main {
 
     private final Map<String, Long> byKind = new TreeMap<>();
 
+    // Signature is defined by OnEffectDispatch.Listener: (String kind, CMsgEffectData data).
     @OnEffectDispatch
     public void onEffectDispatch(String kind, CMsgEffectData data) {
         byKind.merge(kind != null ? kind : "<unresolved>", 1L, Long::sum);
@@ -35,7 +44,7 @@ public class Main {
         String replay = ReplayChooser.choose(args);
         if (replay == null) return;
         try (MappedFileSource source = new MappedFileSource(replay)) {
-            new SimpleRunner(source).runWith(this, new EffectDispatches());
+            new SimpleRunner(source).runWith(this, new EffectDispatches()); // processor instances (listener and provider) are passed to the runner
         }
         long tMatch = System.currentTimeMillis() - tStart;
 

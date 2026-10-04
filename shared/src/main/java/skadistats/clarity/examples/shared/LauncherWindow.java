@@ -30,6 +30,12 @@ import java.awt.Insets;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * Main window of {@link ExampleLauncher}: a tree of examples grouped by {@link Category}, a detail pane with
+ * Run and Clear-log buttons, and a log pane fed by the redirected stdout/stderr. One example runs at a time;
+ * Run starts it via {@link ExampleLauncher#runOnWorker} without arguments and re-enables itself when the
+ * worker thread ends.
+ */
 final class LauncherWindow extends JFrame {
 
     private static final Map<Category, String> GROUP_LABELS = new EnumMap<>(Category.class);

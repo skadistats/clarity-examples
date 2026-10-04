@@ -15,6 +15,14 @@ import skadistats.clarity.wire.cs.csgo.proto.CsgoNetMessages;
 import skadistats.clarity.wire.dota.s1.proto.DOTAS1NetMessages;
 import skadistats.clarity.wire.shared.s2.proto.S2NetMessages;
 
+/**
+ * Exercises message dispatch and seeking with a {@link ControllableRunner}.
+ * <p>Logs {@code tick: MessageClass} for every message (voice data excluded), seeks to tick 30000, then back
+ * to tick 0, with entity processing enabled. Use it to check that seeking works on a replay; the replay must
+ * reach tick 30000.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:testRun --args "path/to/replay.dem"}
+ */
 @UsesEntities
 @Example(name = "test", description = "Test message dispatch and seeking (internal)", category = Category.DEV)
 public class Main {

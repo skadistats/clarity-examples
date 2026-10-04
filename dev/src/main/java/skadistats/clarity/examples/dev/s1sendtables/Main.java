@@ -19,6 +19,15 @@ import skadistats.clarity.source.MappedFileSource;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+/**
+ * Dumps all S1 {@code ReceiveProp}s with type, bit count, element count, flags and value range to a
+ * tab-separated file, for analysing string encoding in S1 send tables.
+ * <p>Written once, on {@code OnDTClassesComplete}, to {@code s1sendprops_<buildNumber>.txt} in the working
+ * directory (the project root under Gradle). One line per prop: dtClass, prop index, var name, type,
+ * numBits, numElements, flags (hex), low, high, dtName. S1 replays only; S2 classes are skipped.
+ * <p>Arguments: {@code [replay]}.
+ * <p>Run: {@code ./gradlew :dev:s1sendtablesRun --args "path/to/replay.dem"}
+ */
 @UsesDTClasses
 @Example(name = "s1sendtables", description = "Dump S1 ReceiveProps with type/flags/numBits for string-inline analysis", category = Category.DEV)
 public class Main {
