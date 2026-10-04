@@ -22,9 +22,9 @@ repositories {
 }
 
 dependencies {
-    api("com.skadistats:clarity:4.0.1")
+    api("com.skadistats:clarity:4.0.3")
     api("ch.qos.logback:logback-classic:1.5.20")
-    annotationProcessor("com.skadistats:clarity:4.0.1")
+    annotationProcessor("com.skadistats:clarity:4.0.3")
 
     jmhRuntimeOnly("ch.qos.logback:logback-classic:1.5.20")
 }
