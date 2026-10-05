@@ -16,9 +16,9 @@ repositories {
 }
 
 dependencies {
-    "api"("com.skadistats:clarity:5.0.0")
+    "api"("com.skadistats:clarity:5.0.1")
     "api"("ch.qos.logback:logback-classic:1.5.32")
     "api"("org.atteo.classindex:classindex:3.13")
-    "annotationProcessor"("com.skadistats:clarity:5.0.0")
+    "annotationProcessor"("com.skadistats:clarity:5.0.1")
     "annotationProcessor"("org.atteo.classindex:classindex:3.13")
 }
