@@ -16,7 +16,7 @@ any `<subproject>/src/main/java/.../<name>/Main.java`.
 ## Layout gotchas
 - Convention plugins live in `build-logic/` (composite included build) —
   **not** `buildSrc/`.
-- `replays/` → `/home/spheenik/projects/replays`. Examples take a replay
+- `replays/` → `../replays`, i.e. `~/projects/clarity/replays`. Examples take a replay
   path as first arg. (Replay-picking guidance lives in memory.)
 
 ## Subprojects
